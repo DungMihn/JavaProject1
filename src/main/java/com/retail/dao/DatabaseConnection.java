@@ -16,29 +16,18 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DatabaseConnection {
-    private static final String CONFIG_FILE = "/Users/macbookprom1/NetBeansProjects/RetailManagementSystem/src/resources/config.properties";
-
+    private static final String url = "jdbc:sqlserver://localhost:1433;databaseName=sales_mangement;encrypt=true;trustServerCertificate=true";
+    private static final String user = "sa"; 
+    private static final String password = "Dung12345!";
+    
     public static Connection getConnection() {
         Connection conn = null;
-        Properties properties = new Properties();
-
         try {
-            // Đọc file config.properties
-            FileInputStream fis = new FileInputStream(CONFIG_FILE);
-            properties.load(fis);
-
-            // Lấy thông tin từ file
-            String url = properties.getProperty("db.url");
-            String user = properties.getProperty("db.user");
-            String password = properties.getProperty("db.password");
-
-            // Kết nối đến database
+            // Không cần `Class.forName()` nếu dùng Maven
             conn = DriverManager.getConnection(url, user, password);
-            System.out.println("✅ Kết nối MySQL thành công!");
-        } catch (IOException e) {
-            System.out.println("❌ Lỗi đọc file cấu hình: " + e.getMessage());
+            System.out.println("✅ Kết nối SQL Server thành công!");
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi kết nối MySQL: " + e.getMessage());
+            System.out.println("❌ Lỗi kết nối SQL Server: " + e.getMessage());
         }
         return conn;
     }

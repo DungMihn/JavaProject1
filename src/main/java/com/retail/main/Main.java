@@ -20,7 +20,7 @@ public class Main {
         InvoiceDAO invoiceDAO = new InvoiceDAO();
 
         // Thêm khách hàng mới
-        Customer newCustomer = new Customer(0, "Nguyễn Văn A", "0987654321", "a@gmail.com", "Hà Nội");
+        Customer newCustomer = new Customer(6, "Nguyễn Văn B", "09dđ543d002ddđ1", "ddddddddđda@gmail.com", "Hà Nội");
         customerDAO.addCustomer(newCustomer);
 
         // Lấy danh sách khách hàng
