@@ -4,6 +4,7 @@
  */
 package com.retail.dao;
 import com.retail.model.Product;
+import com.retail.model.Inventory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,28 +17,48 @@ import java.util.List;
  * @author Admin
  */
 public class ProductDAOImpl implements ProductDAO{
-    private static final String INSERT_PRODUCT = "INSERT INTO Product (name, category, price, unit, stock_quantity, barcode, supplier_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_PRODUCTS = "SELECT * FROM Product";
+    private static final String INSERT_PRODUCT = "INSERT INTO Product (name, category, price, unit, barcode, supplier_id) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL_PRODUCTS = "EXEC GetProductInventory;";
     private static final String SEARCH_PRODUCT = "SELECT * FROM Product WHERE name LIKE ? OR category LIKE ?";
     private static final String UPDATE_PRODUCT = "UPDATE Product SET name=?, category=?, price=?, unit=?, stock_quantity=?, barcode=?, supplier_id=? WHERE product_id=?";
     private static final String DELETE_PRODUCT = "DELETE FROM Product WHERE product_id=?";
-    private static final String GET_PRODUCT_BY_ID = "SELECT * FROM Product WHERE product_id = ?";
+    private static final String GET_PRODUCT_BY_ID = "EXEC GetProductInventoryById @product_id = ?";
+    
+    private final InventoryDAOImpl inventoryDAO = new InventoryDAOImpl();
+    
     @Override
     public void addProduct(Product product) {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(INSERT_PRODUCT)) {
-            pstmt.setString(1, product.getName());
-            pstmt.setString(2, product.getCategory());
-            pstmt.setDouble(3, product.getPrice());
-            pstmt.setString(4, product.getUnit());
-            pstmt.setInt(5, product.getStockQuantity());
-            pstmt.setString(6, product.getBarcode());
-            pstmt.setInt(7, product.getSupplierId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("❌ Lỗi thêm sản phẩm: " + e.getMessage());
+        
+    String generatedColumns[] = { "product_id" }; // Để lấy ID vừa insert
+
+    try (Connection con = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = con.prepareStatement(INSERT_PRODUCT, generatedColumns)) {
+
+        // Thêm sản phẩm vào bảng Product
+        pstmt.setString(1, product.getName());
+        pstmt.setString(2, product.getCategory());
+        pstmt.setDouble(3, product.getPrice());
+        pstmt.setString(4, product.getUnit());
+        pstmt.setString(5, product.getBarcode());
+        pstmt.setInt(6, product.getSupplierId());
+        pstmt.executeUpdate();
+
+        // Lấy product_id vừa tạo
+        try (ResultSet rs = pstmt.getGeneratedKeys()) {
+            if (rs.next()) {
+                int productId = rs.getInt(1);
+                System.out.println("✅ Thêm sản phẩm thành công với ID: " + productId);
+
+                // Tạo tồn kho với product_id vừa lấy được
+                inventoryDAO.addInventory(new Inventory(productId, product.getStockQuantity()));
+            }
         }
+
+    } catch (SQLException e) {
+        System.out.println("❌ Lỗi thêm sản phẩm: " + e.getMessage());
     }
+}
+
 
     @Override
     public void updateProduct(Product product) {
@@ -83,16 +104,15 @@ public class ProductDAOImpl implements ProductDAO{
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return new Product(
-                        rs.getInt("product_id"),
-                        rs.getString("name"),
-                        rs.getString("category"),
-                        rs.getDouble("price"),
-                        rs.getString("unit"),
-                        rs.getInt("supplier_id"),
-                        rs.getInt("stock_quantity"),
-                        rs.getString("barcode")
-                );
+                    rs.getInt("product_id");
+                    rs.getString("product_name");
+                    rs.getString("category");
+                    rs.getDouble("price");
+                    rs.getString("unit");
+                    rs.getInt("supplier_id");
+                    rs.getInt("stock_quantity");
+                    rs.getString("barcode");
+                    rs.getString("supplier_name");
             }
         } catch (SQLException e) {
             System.out.println("❌ Lỗi khi lấy thông tin hóa đơn: " + e.getMessage());
@@ -110,11 +130,12 @@ public class ProductDAOImpl implements ProductDAO{
             while (rs.next()) {
                 Product product = new Product(
                     rs.getInt("product_id"),
-                    rs.getString("name"),
+                    rs.getString("product_name"),
                     rs.getString("category"),
                     rs.getDouble("price"),
                     rs.getString("unit"),
-                    rs.getInt("supplier_id"),
+                    rs.getInt("supplier_id"),   
+                    rs.getString("supplier_name"),
                     rs.getInt("stock_quantity"),
                     rs.getString("barcode")
                     
@@ -146,6 +167,7 @@ public class ProductDAOImpl implements ProductDAO{
                     rs.getDouble("price"),
                     rs.getString("unit"),
                     rs.getInt("supplierId"),
+                    rs.getString("supplierName"),
                     rs.getInt("stock_quantity"),
                     rs.getString("barcode")
                 ));

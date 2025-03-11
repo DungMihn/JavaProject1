@@ -20,6 +20,12 @@ public class Inventory {
     public Inventory() {
     }
 
+    public Inventory(int productId, int stockQuantity) {
+        this.productId = productId;
+        this.stockQuantity = stockQuantity;
+    }
+
+    
     public Inventory(int inventoryId, int productId, int stockQuantity, LocalDateTime lastUpdated) {
         this.inventoryId = inventoryId;
         this.productId = productId;

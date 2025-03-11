@@ -15,11 +15,17 @@ public class InventoryController {
     private final InventoryService inventoryService = new InventoryService();
 
     // Thêm tồn kho mới
-    public void addInventory(int productId, int stockQuantity) {
-        Inventory inventory = new Inventory();
-        inventory.setProductId(productId);
-        inventory.setStockQuantity(stockQuantity);
-        inventoryService.addInventory(inventory);
+    public boolean addInventory(int productId, int stockQuantity) {
+        try {
+            Inventory inventory = new Inventory();
+            inventory.setProductId(productId);
+            inventory.setStockQuantity(stockQuantity);
+            inventoryService.addInventory(inventory);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+        
     }
 
     // Lấy danh sách tồn kho

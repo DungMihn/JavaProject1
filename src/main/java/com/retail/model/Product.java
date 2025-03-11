@@ -15,22 +15,26 @@ public class Product {
     private double price;
     private String unit;
     private int supplierId;
+    private String supplierName;
     private int stockQuantity;
     private String barcode;
     
     public Product() {
     }
 
-    public Product(int productId, String name, String category, double price, String unit, int supplierId, int stockQuantity, String barcode) {
+    public Product(int productId, String name, String category, double price, String unit, int supplierId, String supplierName, int stockQuantity, String barcode) {
         this.productId = productId;
         this.name = name;
         this.category = category;
         this.price = price;
         this.unit = unit;
         this.supplierId = supplierId;
+        this.supplierName = supplierName;
         this.stockQuantity = stockQuantity;
         this.barcode = barcode;
     }
+
+
      
     public int getProductId() {
         return productId;
@@ -94,6 +98,14 @@ public class Product {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     

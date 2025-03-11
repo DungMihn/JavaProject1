@@ -15,17 +15,15 @@ public class ProductController {
     private final ProductService productService = new ProductService();
 
     // Thêm sản phẩm mới
-    public void addProduct(String name, String category, double price, String unit, int stockQuantity, String barcode, int supplierId) {
-        Product product = new Product();
-        product.setName(name);
-        product.setCategory(category);
-        product.setPrice(price);
-        product.setUnit(unit);
-        product.setStockQuantity(stockQuantity);
-        product.setBarcode(barcode);
-        product.setSupplierId(supplierId);
-        productService.addProduct(product);
-    }
+    public boolean addProduct(Product product) {
+        try {
+             productService.addProduct(product);
+             return true;
+        } catch (Exception e) {
+            return false;
+        }
+   
+}
 
     // Lấy danh sách sản phẩm
     public List<Product> getAllProducts() {

@@ -17,8 +17,8 @@ import java.util.List;
  * @author Admin
  */
 public class InventoryDAOImpl implements InventoryDAO{
-    private static final String INSERT_INVENTORY = "INSERT INTO Inventory (product_id, stock_quantity, last_updated) VALUES (?, ?, ?)";
-    private static final String SELECT_ALL_INVENTORIES = "SELECT * FROM Inventory";
+    private static final String INSERT_INVENTORY = "INSERT INTO Inventory (product_id, stock_quantity) VALUES (?, ?)";
+    private static final String SELECT_ALL_INVENTORIES = "EXEC GetProductInventory;";
     private static final String SELECT_INVENTORY_BY_ID = "SELECT * FROM Inventory WHERE inventory_id = ?";
     private static final String SELECT_INVENTORY_BY_PRODUCT_ID = "SELECT * FROM Inventory WHERE product_id = ?";
     private static final String UPDATE_INVENTORY = "UPDATE Inventory SET product_id = ?, stock_quantity = ?, last_updated = ? WHERE inventory_id = ?";
@@ -31,7 +31,6 @@ public class InventoryDAOImpl implements InventoryDAO{
              PreparedStatement pstmt = conn.prepareStatement(INSERT_INVENTORY)) {
             pstmt.setInt(1, inventory.getProductId());
             pstmt.setInt(2, inventory.getStockQuantity());
-            pstmt.setObject(3, inventory.getLastUpdated());
             pstmt.executeUpdate();
             System.out.println("✅ Thêm tồn kho thành công!");
         } catch (SQLException e) {
@@ -83,25 +82,27 @@ public class InventoryDAOImpl implements InventoryDAO{
 
     @Override
     public List<Inventory> getAllInventories() {
-        List<Inventory> inventoryList = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(SELECT_ALL_INVENTORIES);
-             ResultSet rs = pstmt.executeQuery()) {
+    List<Inventory> inventoryList = new ArrayList<>();
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(SELECT_ALL_INVENTORIES);
+         ResultSet rs = pstmt.executeQuery()) {
 
-            while (rs.next()) {
-                Inventory inventory = new Inventory(
-                        rs.getInt("inventory_id"),
-                        rs.getInt("product_id"),
-                        rs.getInt("stock_quantity"),
-                        rs.getObject("last_updated", LocalDateTime.class)
-                );
-                inventoryList.add(inventory);
-            }
-        } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy danh sách tồn kho: " + e.getMessage());
+        while (rs.next()) {
+            Inventory inventory = new Inventory(
+                rs.getInt("inventory_id"),
+                rs.getInt("product_id"),
+                rs.getInt("stock_quantity"),
+                rs.getObject("last_updated", LocalDateTime.class) // ❌ Xóa dấu phẩy ở đây
+            );
+
+            inventoryList.add(inventory);
         }
-        return inventoryList;
+    } catch (SQLException e) {
+        System.out.println("❌ Lỗi khi lấy danh sách tồn kho: " + e.getMessage());
     }
+    return inventoryList;
+}
+
 
     @Override
     public void updateInventory(Inventory inventory) {

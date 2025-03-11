@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class StockEntryDAOImpl implements StockEntryDAO{
  private static final String INSERT_STOCK_ENTRY = "INSERT INTO Stock_Entry (product_id, supplier_id, quantity, purchase_price, entry_date) VALUES (?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_STOCK_ENTRIES = "SELECT * FROM Stock_Entry";
+    private static final String SELECT_ALL_STOCK_ENTRIES = "EXEC GetStockEntryDetails;";
     private static final String UPDATE_STOCK_ENTRY = "UPDATE Stock_Entry SET product_id = ?, supplier_id = ?, quantity = ?, purchase_price = ?, entry_date = ? WHERE stock_entry_id = ?";
     private static final String DELETE_STOCK_ENTRY = "DELETE FROM Stock_Entry WHERE stock_entry_id = ?";
     private static final String GET_STOCK_ENTRY_BY_ID = "SELECT * FROM Stock_Entry WHERE stock_entry_id = ?";
@@ -103,6 +103,7 @@ public class StockEntryDAOImpl implements StockEntryDAO{
                 StockEntry stockEntry = new StockEntry(
                         rs.getInt("stock_entry_id"),
                         rs.getInt("product_id"),
+                        rs.getString("product_name"),
                         rs.getInt("supplier_id"),
                         rs.getInt("quantity"),
                         rs.getDouble("purchase_price"),
