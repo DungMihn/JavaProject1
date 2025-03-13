@@ -39,4 +39,24 @@ public class ProductController {
     public void deleteProduct(int productId) {
         productService.deleteProduct(productId);
     }
+    //
+     public List<Product> getProductsBySupplierId(int supplierId){
+        return productService.getProductsBySupplierId(supplierId); 
+    }
+     //
+     public int addProductWithStockEntry(String productName, int supplierId) {
+        return productService.addProductWithStockEntry(productName,supplierId);
+    }
+    //
+    public Product getProductByName(String productName) {
+        return productService.getProductByName(productName);
+    }
+    //
+        public List<Product> searchProductInInventory(String keyword){
+        return productService.searchProductInInventory(keyword);
+    }
+    //
+         public boolean updateStockQuantity(int productId, int quantityChange) {
+        return productService.updateStockQuantity(productId, quantityChange);
+    }
 }

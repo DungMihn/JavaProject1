@@ -4,16 +4,18 @@
  */
 package com.retail.view;
 
-
 import com.retail.controller.ProductController;
 import com.retail.controller.StockEntryController;
+import com.retail.controller.StockEntryDetailController;
 import com.retail.controller.SupplierController;
 import com.retail.model.ComboBoxItem;
 import com.retail.model.Product;
 import com.retail.model.StockEntry;
+import com.retail.model.StockEntryDetail;
 import com.retail.model.Supplier;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
@@ -35,40 +37,60 @@ import javax.swing.SwingUtilities;
  * @author Admin
  */
 public class AddStockEntryFrame extends javax.swing.JFrame {
+
     private StockEntryManagement parentFrame; // Tham chiếu đến StockEntryManagement
 
-
     private ProductController productController;
+    private int supplierId; // Thêm biến supplierId
     StockEntryController stockEntryController;
+    StockEntryDetailController stockEntryDetailController;
     private SupplierController supplierController;
     private List<ComboBoxItem> productItems;
     private JList<ComboBoxItem> suggestionList;
 
+    private List<StockEntryDetail> tempStockEntryDetails; // Danh sách tạm thời các chi tiết nhập hàng
+    private StockEntry currentStockEntry; // Hóa đơn nhập hàng hiện tại
 
     /**
      * Creates new form AddStockEntryFrame
+     *
      * @param parentFrame
+     * @param supplierId
      */
-    public AddStockEntryFrame(StockEntryManagement parentFrame) {
+    public AddStockEntryFrame(StockEntryManagement parentFrame, int supplierId) {
         this.parentFrame = parentFrame;
+        this.supplierId = supplierId;
+        // Đặt frame vào giữa màn hình
+        // Đặt kích thước cố định nếu chưa có
+        setSize(800, 600); // Hoặc bất kỳ kích thước phù hợp
+
+        // Căn giữa chính xác màn hình
+        setLocation(
+                (Toolkit.getDefaultToolkit().getScreenSize().width - getWidth()) / 2,
+                (Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2
+        );
         initComponents();
         productController = new ProductController();
         supplierController = new SupplierController();
         stockEntryController = new StockEntryController();
+        stockEntryDetailController = new StockEntryDetailController();
 
         // Khởi tạo suggestionList
         suggestionList = new JList<>();
         suggestionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jPopupMenu1 = new javax.swing.JPopupMenu();
 
-        loadSuppliersIntoComboBox();
+        // Khởi tạo danh sách tạm thời
+        tempStockEntryDetails = new ArrayList<>();
+        currentStockEntry = null;
+
         loadProductsIntoAutoComplete();
         setupAutoCompleteListener();
-        
+
     }
 
     private void loadProductsIntoAutoComplete() {
-        List<Product> products = productController.getAllProducts();
+        List<Product> products = productController.getProductsBySupplierId(supplierId);
         productItems = new ArrayList<>();
 
         for (Product product : products) {
@@ -76,6 +98,7 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         }
 
         System.out.println("✅ Danh sách sản phẩm: " + productItems);
+
     }
 
     private void setupAutoCompleteListener() {
@@ -110,13 +133,12 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
             }
         });
 
-        productNameTextField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                jPopupMenu1.setVisible(true);
-            }
-        });
-
+//        productNameTextField.addFocusListener(new FocusAdapter() {
+//            @Override
+//            public void focusLost(FocusEvent e) {
+//                jPopupMenu1.setVisible(false);
+//            }
+//        });
         suggestionList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -126,20 +148,21 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
                     System.out.println("🛒 Sản phẩm đã chọn: ID = " + selectedValue.getId() + ", Name = " + selectedValue.getName());
                 }
                 jPopupMenu1.setVisible(false);
+                SwingUtilities.invokeLater(() -> suggestionList.requestFocusInWindow());
             }
         });
         suggestionList.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        ComboBoxItem selectedValue = suggestionList.getSelectedValue();
-                        if (selectedValue != null) {
-                            productNameTextField.setText(selectedValue.getName());
-                            jPopupMenu1.setVisible(false);
-                        }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    ComboBoxItem selectedValue = suggestionList.getSelectedValue();
+                    if (selectedValue != null) {
+                        productNameTextField.setText(selectedValue.getName());
+                        jPopupMenu1.setVisible(false);
                     }
                 }
-            });
+            }
+        });
     }
 
     private void showSuggestionPopup(List<ComboBoxItem> suggestions) {
@@ -166,22 +189,10 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
 
         jPopupMenu1.add(scrollPane);
         jPopupMenu1.show(productNameTextField, 0, productNameTextField.getHeight() + 5);
-         // Trả lại focus ngay lập tức để tiếp tục nhập mà không cần click lại
-            SwingUtilities.invokeLater(() -> productNameTextField.requestFocusInWindow());
+        // Trả lại focus ngay lập tức để tiếp tục nhập mà không cần click lại
+//            SwingUtilities.invokeLater(() -> productNameTextField.requestFocusInWindow());
     }
 
-    private void loadSuppliersIntoComboBox() {
-        List<Supplier> suppliers = supplierController.getAllSuppliers();
-        supplierComboBox.removeAllItems();
-
-        for (Supplier supplier : suppliers) {
-            supplierComboBox.addItem(new ComboBoxItem(supplier.getSupplierId(), supplier.getName()));
-        }
-    }
-    
-
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -193,27 +204,29 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
 
         jLabel5 = new javax.swing.JLabel();
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         productNameTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         priceTextField = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        supplierComboBox = new javax.swing.JComboBox<>();
         addStockEntryBtn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cancelBtn = new javax.swing.JButton();
         quantityTextField = new javax.swing.JTextField();
+        saveStockEntryBtn = new javax.swing.JButton();
 
         jLabel5.setText("jLabel5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 153, 51));
-        jLabel2.setText("Tên sản phẩm");
+        jLabel2.setText("Sản phẩm");
 
         productNameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -235,20 +248,10 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 153, 51));
-        jLabel9.setText("Nhà cung cấp");
-
-        supplierComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                supplierComboBoxActionPerformed(evt);
-            }
-        });
-
-        addStockEntryBtn.setBackground(new java.awt.Color(0, 153, 51));
+        addStockEntryBtn.setBackground(new java.awt.Color(0, 153, 0));
         addStockEntryBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         addStockEntryBtn.setForeground(new java.awt.Color(255, 255, 255));
-        addStockEntryBtn.setText("Thêm");
+        addStockEntryBtn.setText("+ Thêm");
         addStockEntryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addStockEntryBtnActionPerformed(evt);
@@ -260,7 +263,7 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Thêm bản ghi nhập kho");
+        jLabel1.setText("Thông tin nhập kho");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -288,64 +291,86 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
             }
         });
 
+        saveStockEntryBtn.setBackground(new java.awt.Color(204, 0, 51));
+        saveStockEntryBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        saveStockEntryBtn.setForeground(new java.awt.Color(255, 255, 255));
+        saveStockEntryBtn.setText("Hoàn tất");
+        saveStockEntryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveStockEntryBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                    .addComponent(priceTextField)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(65, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(cancelBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addStockEntryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addComponent(saveStockEntryBtn)
+                .addGap(27, 27, 27))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(112, 112, 112)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(81, 81, 81)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(89, 89, 89)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(priceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addStockEntryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveStockEntryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(459, Short.MAX_VALUE)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(cancelBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(addStockEntryBtn)
-                .addGap(34, 34, 34))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(106, 106, 106)
-                        .addComponent(priceTextField))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(67, 67, 67)
-                        .addComponent(quantityTextField))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(34, 34, 34)
-                        .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28))
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(priceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addStockEntryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -355,40 +380,60 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_priceTextFieldActionPerformed
 
-    private void supplierComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_supplierComboBoxActionPerformed
-
     private void addStockEntryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStockEntryBtnActionPerformed
-        
-        // Lấy tên sản phẩm từ text field
-            String productName = productNameTextField.getText().trim();
 
-            // Tìm productId tương ứng trong danh sách productItems
-            ComboBoxItem selectedProduct = productItems.stream()
-                    .filter(item -> item.getName().equalsIgnoreCase(productName))
-                    .findFirst()
-                    .orElse(null);
+        String productName = productNameTextField.getText().trim();
+        int quantity;
+        double purchasePrice;
 
-        int productId = selectedProduct.getId();
-            
-        ComboBoxItem selectedSupplier = (ComboBoxItem) supplierComboBox.getSelectedItem();
-        int supplierId = selectedSupplier.getId();
-        int quantity = Integer.parseInt(quantityTextField.getText());
-        double purchasePrice = Double.parseDouble(priceTextField.getText());
         try {
-            stockEntryController.addStockEntry(productId, supplierId, quantity , purchasePrice);
-            JOptionPane.showMessageDialog(this, "Added inventory successfully!");
-            if (parentFrame != null) {
-            parentFrame.loadStockEntryData();
-    }
-
-    this.dispose(); // Đóng cửa sổ sau khi thêm xong
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, "Failed to add inventory!");
+            quantity = Integer.parseInt(quantityTextField.getText());
+            purchasePrice = Double.parseDouble(priceTextField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Số lượng hoặc giá nhập không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        
-        
+
+        ComboBoxItem selectedProduct = productItems.stream()
+                .filter(item -> item.getName().equalsIgnoreCase(productName))
+                .findFirst()
+                .orElse(null);
+        int productId;
+        if (selectedProduct == null) {
+            // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới vào bảng Product
+            productId = productController.addProductWithStockEntry(productName, supplierId);
+            if (productId == -1) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi thêm sản phẩm mới!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Thêm sản phẩm mới vào danh sách productItems
+            ComboBoxItem newProduct = new ComboBoxItem(productId, productName);
+            productItems.add(newProduct);
+
+            // Cập nhật danh sách gợi ý
+            loadProductsIntoAutoComplete();
+        } else {
+            // Nếu sản phẩm đã tồn tại, lấy productId
+            productId = selectedProduct.getId();
+        }
+
+        // Tạo một StockEntryDetail mới
+        StockEntryDetail detail = new StockEntryDetail();
+        detail.setProductId(productId);
+        detail.setQuantity(quantity);
+        detail.setPurchasePrice(purchasePrice);
+
+        // Thêm vào danh sách tạm thời
+        tempStockEntryDetails.add(detail);
+
+        // Xóa các trường đã điền để nhập tiếp
+        productNameTextField.setText("");
+        quantityTextField.setText("");
+        priceTextField.setText("");
+
+        JOptionPane.showMessageDialog(this, "Đã thêm sản phẩm vào danh sách nhập hàng!");
+
 
     }//GEN-LAST:event_addStockEntryBtnActionPerformed
 
@@ -400,14 +445,46 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_cancelBtnActionPerformed
 
+    private void saveStockEntryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveStockEntryBtnActionPerformed
+
+        if (tempStockEntryDetails.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Danh sách nhập hàng trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int employeeId = 1; // Giả sử nhân viên có ID = 1
+
+        StockEntry stockEntry = new StockEntry();
+        stockEntry.setSupplierId(supplierId); // Sử dụng supplierId đã truyền
+        stockEntry.setEmployeeId(employeeId);
+
+        try {
+            int stockEntryId = stockEntryController.addStockEntry(stockEntry);
+
+            for (StockEntryDetail detail : tempStockEntryDetails) {
+                detail.setStockEntryId(stockEntryId);
+                stockEntryDetailController.addStockEntryDetail(detail);
+            }
+
+            JOptionPane.showMessageDialog(this, "Nhập hàng thành công!");
+            if (parentFrame != null) {
+                parentFrame.loadStockEntryData();
+            }
+            this.dispose();
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi nhập hàng: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_saveStockEntryBtnActionPerformed
+
     public static void main(String[] args) {
-         try {
+        try {
             System.setOut(new java.io.PrintStream(System.out, true, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             System.out.println("Lỗi khi đặt encoding UTF-8!");
         }
-         
-         
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -418,12 +495,12 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JTextField priceTextField;
     private javax.swing.JTextField productNameTextField;
     private javax.swing.JTextField quantityTextField;
-    private javax.swing.JComboBox<ComboBoxItem> supplierComboBox;
+    private javax.swing.JButton saveStockEntryBtn;
     // End of variables declaration//GEN-END:variables
 }

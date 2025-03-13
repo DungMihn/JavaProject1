@@ -6,13 +6,14 @@ package com.retail.dao;
 
 import com.retail.model.StockEntry;
 import java.util.List;
+import java.util.Map;
 /**
  *
  * @author Admin
  */
 public interface StockEntryDAO {
     // Thêm một bản ghi nhập kho mới
-    void addStockEntry(StockEntry stockEntry);
+    int addStockEntry(StockEntry stockEntry);
 
     // Lấy thông tin nhập kho theo ID
     StockEntry getStockEntryById(int stockEntryId);
@@ -25,4 +26,7 @@ public interface StockEntryDAO {
 
     // Xóa một bản ghi nhập kho
     void deleteStockEntry(int stockEntryId);
+    
+    Map<String, Object> getStockEntryDetails(int stockEntryId);
+    
 }

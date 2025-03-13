@@ -58,7 +58,7 @@ public class InventoryController {
     }
 
     // Cập nhật số lượng tồn kho
-    public void updateStockQuantity(int productId, int newQuantity) {
-        inventoryService.updateStockQuantity(productId, newQuantity);
+    public boolean updateStockQuantity(int productId, int newQuantity) {
+        return inventoryService.updateStockQuantity(productId, newQuantity);
     }
 }

@@ -34,6 +34,18 @@ public class Product {
         this.barcode = barcode;
     }
 
+    public Product(int productId, String name, String category, double price, String unit, int supplierId, int stockQuantity, String barcode) {
+        this.productId = productId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.unit = unit;
+        this.supplierId = supplierId;
+        this.stockQuantity = stockQuantity;
+        this.barcode = barcode;
+    }
+
+    
 
      
     public int getProductId() {

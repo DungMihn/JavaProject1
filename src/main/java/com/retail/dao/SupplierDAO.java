@@ -12,7 +12,7 @@ import java.util.List;
  * @author Admin
  */
 public interface SupplierDAO {
-    void addSupplier(Supplier supplier);
+    boolean addSupplier(Supplier supplier);
     void updateSupplier(Supplier supplier);
     void deleteSupplier(int supplierId);
     Supplier getSupplierById(int supplierId);

@@ -11,53 +11,31 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Admin
  */
-public class StockEntry {
-    private int stockEntryId;       
-    private int productId;
-    private String productName;
-    private int supplierId;        
-    private int quantity;           
-    private double purchasePrice;   
-    private LocalDateTime entryDate; 
 
-    // Constructor
+ public class StockEntry {
+    private int stockEntryId;
+    private int supplierId;
+    private int employeeId;
+    private LocalDateTime entryDate;
+
+    // Constructors
     public StockEntry() {
     }
 
-    public StockEntry(int stockEntryId, int productId, int supplierId, int quantity, double purchasePrice, LocalDateTime entryDate) {
+    public StockEntry(int stockEntryId, int supplierId, int employeeId, LocalDateTime entryDate) {
         this.stockEntryId = stockEntryId;
-        this.productId = productId;
         this.supplierId = supplierId;
-        this.quantity = quantity;
-        this.purchasePrice = purchasePrice;
+        this.employeeId = employeeId;
         this.entryDate = entryDate;
     }
 
-    public StockEntry(int stockEntryId, int productId, String productName, int supplierId, int quantity, double purchasePrice, LocalDateTime entryDate) {
-        this.stockEntryId = stockEntryId;
-        this.productId = productId;
-        this.productName = productName;
-        this.supplierId = supplierId;
-        this.quantity = quantity;
-        this.purchasePrice = purchasePrice;
-        this.entryDate = entryDate;
-    }
-    
-
+    // Getters and Setters
     public int getStockEntryId() {
         return stockEntryId;
     }
 
     public void setStockEntryId(int stockEntryId) {
         this.stockEntryId = stockEntryId;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public int getSupplierId() {
@@ -68,38 +46,20 @@ public class StockEntry {
         this.supplierId = supplierId;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getEntryDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return entryDate.format(formatter);
     }
 
     public void setEntryDate(LocalDateTime entryDate) {
         this.entryDate = entryDate;
     }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-    
-    
 }

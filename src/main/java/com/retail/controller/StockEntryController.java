@@ -8,6 +8,7 @@ import com.retail.model.StockEntry;
 import com.retail.service.StockEntryService;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -16,11 +17,9 @@ import java.util.List;
 public class StockEntryController {
     private final StockEntryService stockEntryService = new StockEntryService();
 
-
     // Thêm nhập kho mới
-    public void addStockEntry(int productId, int supplierId, int quantity, double purchasePrice) {
-        StockEntry stockEntry = new StockEntry(0, productId, supplierId, quantity, purchasePrice, LocalDateTime.now());
-        stockEntryService.addStockEntry(stockEntry);
+    public int addStockEntry(StockEntry stockEntry) {
+        return stockEntryService.addStockEntry(stockEntry);
     }
 
     // Lấy thông tin nhập kho theo ID
@@ -34,13 +33,16 @@ public class StockEntryController {
     }
 
     // Cập nhật nhập kho
-    public void updateStockEntry(int stockEntryId, int productId, int supplierId, int quantity, double purchasePrice) {
-        StockEntry stockEntry = new StockEntry(stockEntryId, productId, supplierId, quantity, purchasePrice, LocalDateTime.now());
+    public void updateStockEntry(StockEntry stockEntry) {
         stockEntryService.updateStockEntry(stockEntry);
     }
 
     // Xóa nhập kho
     public void deleteStockEntry(int stockEntryId) {
         stockEntryService.deleteStockEntry(stockEntryId);
+    }
+    
+    public Map<String, Object> getStockEntryDetails(int stockEntryId) {
+        return stockEntryService.getStockEntryDetails(stockEntryId);
     }
 }

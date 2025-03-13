@@ -11,11 +11,48 @@
         <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>com.retail.JavaProject1Dieu</exec.mainClass>
     </properties>
+    <repositories>
+        <repository>
+            <id>jaspersoft-repo</id>
+            <url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <!-- Driver kết nối SQL Server -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>12.4.2.jre11</version>  <!-- Kiểm tra phiên bản mới nhất -->
+            <version>12.4.2.jre11</version>
+        </dependency>
+
+        <!-- Dynamic Jasper (cập nhật lên 5.3.1) -->
+        <dependency>
+            <groupId>ar.com.fdvs</groupId>
+            <artifactId>DynamicJasper</artifactId>
+            <version>5.3.1</version>
+        </dependency>
+
+        <!-- Thay thế iText bằng itextpdf nếu cần -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.21.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.27</version>
         </dependency>
     </dependencies>
+
 </project>

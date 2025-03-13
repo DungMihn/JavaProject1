@@ -29,5 +29,5 @@ public interface InventoryDAO {
     void deleteInventory(int inventoryId);
 
     // Cập nhật số lượng tồn kho cho một sản phẩm
-    void updateStockQuantity(int productId, int newQuantity);
+    boolean updateStockQuantity(int productId, int newQuantity);
 }

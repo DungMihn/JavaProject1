@@ -24,18 +24,27 @@ public class SupplierDAOImpl implements SupplierDAO{
     private static final String UPDATE_SUPPLIER = "UPDATE Supplier SET name = ?, contact_name = ?, phone = ?, email = ?, address = ? WHERE supplier_id = ?";
 
     @Override
-    public void addSupplier(Supplier supplier) {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(ADD_SUPPLIER)) {
-            pstmt.setString(1, supplier.getName());
-            pstmt.setString(2, supplier.getContactName());
-            pstmt.setString(3, supplier.getPhone());
-            pstmt.setString(4, supplier.getEmail());
-            pstmt.setString(5, supplier.getAddress());
-            pstmt.executeUpdate();
+    public boolean addSupplier(Supplier supplier) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(ADD_SUPPLIER, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, supplier.getName());
+            stmt.setString(2, supplier.getContactName());
+            stmt.setString(3, supplier.getPhone());
+            stmt.setString(4, supplier.getEmail());
+            stmt.setString(5, supplier.getAddress());
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        supplier.setSupplierId(rs.getInt(1)); // Lấy ID tự sinh
+                        return true;
+                    }
+                }
+            }
         } catch (SQLException e) {
-             System.out.println("❌ Lỗi thêm nhà cung cấp: " + e.getMessage());
+             System.out.println("❌ Lỗi khi thêm supplier: " + e.getMessage());
         }
+        return false;
     }
 
     @Override

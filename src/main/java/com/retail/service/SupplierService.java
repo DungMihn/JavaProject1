@@ -15,9 +15,8 @@ public class SupplierService {
      private final SupplierDAOImpl supplierDAO = new SupplierDAOImpl();
 
     // Thêm nhà cung cấp mới
-    public void addSupplier(Supplier supplier) {
-        supplierDAO.addSupplier(supplier);
-        System.out.println("✅ Nhà cung cấp đã được thêm thành công!");
+    public boolean addSupplier(Supplier supplier) {
+        return supplierDAO.addSupplier(supplier);
     }
 
     // Lấy danh sách tất cả nhà cung cấp

@@ -15,14 +15,8 @@ public class SupplierController {
     private final SupplierService supplierService = new SupplierService();
 
     // Thêm nhà cung cấp mới
-    public void addSupplier(String name, String contactName, String phone, String email, String address) {
-        Supplier supplier = new Supplier();
-        supplier.setName(name);
-        supplier.setContactName(contactName);
-        supplier.setPhone(phone);
-        supplier.setEmail(email);
-        supplier.setAddress(address);
-        supplierService.addSupplier(supplier);
+    public boolean addSupplier(Supplier supplier) {
+        return supplierService.addSupplier(supplier);
     }
 
     // Lấy danh sách nhà cung cấp

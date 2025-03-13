@@ -16,5 +16,9 @@ public interface ProductDAO {
     void deleteProduct(int productId);
     Product getProductById(int productId);
     List<Product> getAllProducts();
-    List<Product> searchProducts(String keyword);
+    List<Product> searchProductInInventory(String keyword);
+    List<Product> getProductsBySupplierId(int supplierId);
+    public int addProductWithStockEntry(String productName, int supplierId);
+    public Product getProductByName(String productName);
+    public boolean updateStockQuantity(int productId, int quantityChange);
 }

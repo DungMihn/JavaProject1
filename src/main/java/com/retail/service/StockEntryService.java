@@ -7,6 +7,7 @@ package com.retail.service;
 import com.retail.dao.StockEntryDAOImpl;
 import com.retail.model.StockEntry;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -16,9 +17,8 @@ public class StockEntryService {
     private final StockEntryDAOImpl stockEntryDAO = new StockEntryDAOImpl();
 
     // Thêm nhập kho mới
-    public void addStockEntry(StockEntry stockEntry) {
-        stockEntryDAO.addStockEntry(stockEntry);
-        System.out.println("✅ Nhập kho đã được thêm thành công!");
+     public int addStockEntry(StockEntry stockEntry) {
+        return stockEntryDAO.addStockEntry(stockEntry);
     }
 
     // Lấy danh sách tất cả nhập kho
@@ -42,4 +42,11 @@ public class StockEntryService {
         stockEntryDAO.deleteStockEntry(stockEntryId);
         System.out.println("✅ Nhập kho đã được xóa thành công!");
     }
+    
+
+
+    public Map<String, Object> getStockEntryDetails(int stockEntryId) {
+        return stockEntryDAO.getStockEntryDetails(stockEntryId);
+    }
+
 }

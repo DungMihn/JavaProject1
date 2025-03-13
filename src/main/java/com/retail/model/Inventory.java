@@ -5,6 +5,7 @@
 package com.retail.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -12,7 +13,8 @@ import java.time.LocalDateTime;
  */
 public class Inventory {
     private int inventoryId;      
-    private int productId;         
+    private int productId;  
+    private String productName; 
     private int stockQuantity;     
     private LocalDateTime lastUpdated; 
     
@@ -29,6 +31,14 @@ public class Inventory {
     public Inventory(int inventoryId, int productId, int stockQuantity, LocalDateTime lastUpdated) {
         this.inventoryId = inventoryId;
         this.productId = productId;
+        this.stockQuantity = stockQuantity;
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Inventory(int inventoryId, int productId, String productName, int stockQuantity, LocalDateTime lastUpdated) {
+        this.inventoryId = inventoryId;
+        this.productId = productId;
+        this.productName = productName;
         this.stockQuantity = stockQuantity;
         this.lastUpdated = lastUpdated;
     }
@@ -57,12 +67,22 @@ public class Inventory {
         this.stockQuantity = stockQuantity;
     }
 
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+    public String getLastUpdated() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return lastUpdated.format(formatter);
+//        return lastUpdated;
     }
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
     
     

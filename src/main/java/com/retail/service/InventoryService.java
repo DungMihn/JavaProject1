@@ -48,8 +48,9 @@ public class InventoryService {
     }
 
     // Cập nhật số lượng tồn kho
-    public void updateStockQuantity(int productId, int newQuantity) {
-        inventoryDAO.updateStockQuantity(productId, newQuantity);
-        System.out.println("✅ Số lượng tồn kho đã được cập nhật thành công!");
+    public boolean updateStockQuantity(int productId, int quantityChange) {
+        return inventoryDAO.updateStockQuantity(productId, quantityChange);
     }
+    
+    
 }

@@ -37,4 +37,26 @@ public class ProductService {
         productDAO.deleteProduct(productId);
         System.out.println("✅ Sản phẩm đã được xóa thành công!");
     }
+    
+    //
+    public List<Product> getProductsBySupplierId(int supplierId){
+        return productDAO.getProductsBySupplierId(supplierId); 
+    }
+    
+   //
+    public int addProductWithStockEntry(String productName, int supplierId) {
+        return productDAO.addProductWithStockEntry(productName,supplierId);
+    }
+    //
+    public Product getProductByName(String productName) {
+        return productDAO.getProductByName(productName);
+    }
+    //
+    public List<Product> searchProductInInventory(String keyword){
+        return productDAO.searchProductInInventory(keyword);
+    }
+    //
+    public boolean updateStockQuantity(int productId, int quantityChange) {
+        return productDAO.updateStockQuantity(productId, quantityChange);
+    }
 }
