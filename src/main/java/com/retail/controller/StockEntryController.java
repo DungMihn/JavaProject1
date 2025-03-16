@@ -33,8 +33,8 @@ public class StockEntryController {
     }
 
     // Cập nhật nhập kho
-    public void updateStockEntry(StockEntry stockEntry) {
-        stockEntryService.updateStockEntry(stockEntry);
+    public boolean updateStockEntry(StockEntry stockEntry) {
+        return stockEntryService.updateStockEntry(stockEntry);
     }
 
     // Xóa nhập kho

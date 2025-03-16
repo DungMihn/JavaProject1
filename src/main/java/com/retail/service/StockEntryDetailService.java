@@ -32,9 +32,8 @@ public class StockEntryDetailService {
     }
 
     // Cập nhật thông tin chi tiết nhập kho
-    public void updateStockEntryDetail(StockEntryDetail stockEntryDetail) {
-        stockEntryDetailDAO.updateStockEntryDetail(stockEntryDetail);
-        System.out.println("✅ Chi tiết nhập kho đã được cập nhật thành công!");
+    public boolean updateStockEntryDetail(StockEntryDetail stockEntryDetail) {
+        return stockEntryDetailDAO.updateStockEntryDetail(stockEntryDetail);
     }
 
     // Xóa chi tiết nhập kho theo ID
@@ -46,5 +45,10 @@ public class StockEntryDetailService {
     // Lấy danh sách chi tiết nhập kho theo ID của StockEntry
     public List<StockEntryDetail> getStockEntryDetailsByStockEntryId(int stockEntryId) {
         return stockEntryDetailDAO.getStockEntryDetailsByStockEntryId(stockEntryId);
+    }
+    
+    //
+    public StockEntryDetail getStockEntryDetailByStockEntryIdAndProductId(int stockEntryId, int productId){
+        return stockEntryDetailDAO.getStockEntryDetailByStockEntryIdAndProductId(stockEntryId, productId);
     }
 }

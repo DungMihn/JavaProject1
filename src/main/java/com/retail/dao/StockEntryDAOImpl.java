@@ -26,17 +26,17 @@ import java.util.List;
 import java.util.Map;
 
 public class StockEntryDAOImpl implements StockEntryDAO {
+
     private static final String INSERT_STOCK_ENTRY = "{CALL sp_AddStockEntry(?, ?, ?)}";
     private static final String SELECT_ALL_STOCK_ENTRIES = "SELECT * FROM StockEntry";
-     private static final String GET_STOCK_ENTRY_DETAILS = "{CALL sp_GetStockEntryDetails(?)}";
+    private static final String GET_STOCK_ENTRY_DETAILS = "{CALL sp_GetStockEntryDetails(?)}";
     private static final String DELETE_STOCK_ENTRY = "DELETE FROM StockEntry WHERE stock_entry_id = ?";
     private static final String GET_STOCK_ENTRY_BY_ID = "{CALL GetStockEntryById(?)}";
     private static final String UPDATE_STOCK_ENTRY = "UPDATE StockEntry SET supplier_id = ?, employee_id = ? WHERE stock_entry_id = ?";
 
     @Override
     public int addStockEntry(StockEntry stockEntry) {
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall(INSERT_STOCK_ENTRY)) {
+        try (Connection conn = DatabaseConnection.getConnection(); CallableStatement cstmt = conn.prepareCall(INSERT_STOCK_ENTRY)) {
 
             cstmt.setInt(1, stockEntry.getSupplierId());
             cstmt.setInt(2, stockEntry.getEmployeeId());
@@ -56,11 +56,9 @@ public class StockEntryDAOImpl implements StockEntryDAO {
         return -1; // Trả về -1 nếu có lỗi
     }
 
-
     @Override
     public void deleteStockEntry(int stockEntryId) {
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(DELETE_STOCK_ENTRY)) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(DELETE_STOCK_ENTRY)) {
             pstmt.setInt(1, stockEntryId);
             pstmt.executeUpdate();
             System.out.println("✅ Xóa nhập kho thành công!");
@@ -71,31 +69,36 @@ public class StockEntryDAOImpl implements StockEntryDAO {
 
     @Override
     public StockEntry getStockEntryById(int stockEntryId) {
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall(GET_STOCK_ENTRY_BY_ID)) {
-            cstmt.setInt(1, stockEntryId);
-            ResultSet rs = cstmt.executeQuery();
+        StockEntry stockEntry = null;
+        String query = "{CALL GetStockEntryById(?)}"; // Giả sử có stored procedure GetStockEntryById
 
-            if (rs.next()) {
-                return new StockEntry(
-                        rs.getInt("stock_entry_id"),
-                        rs.getInt("supplier_id"),
-                        rs.getInt("employee_id"),
-                        rs.getObject("entry_date", LocalDateTime.class)
-                );
+        try (Connection conn = DatabaseConnection.getConnection(); CallableStatement cstmt = conn.prepareCall(query)) {
+
+            cstmt.setInt(1, stockEntryId);
+
+            // Thực thi stored procedure
+            try (ResultSet rs = cstmt.executeQuery()) {
+                if (rs.next()) {
+                    stockEntry = new StockEntry();
+                    stockEntry.setStockEntryId(rs.getInt("stock_entry_id"));
+                    stockEntry.setEmployeeId(rs.getInt("employee_id"));
+                    stockEntry.setSupplierId(rs.getInt("supplier_id"));
+                    stockEntry.setEntryDate(rs.getTimestamp("entry_date").toLocalDateTime());
+                    stockEntry.setEmployeeName(rs.getString("employee_name"));
+                    stockEntry.setSupplierName(rs.getString("supplier_name"));
+                }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy thông tin nhập kho: " + e.getMessage());
+            System.out.println("❌ Lỗi khi lấy thông tin nhập hàng: " + e.getMessage());
         }
-        return null;
+
+        return stockEntry;
     }
 
     @Override
     public List<StockEntry> getAllStockEntries() {
         List<StockEntry> stockEntries = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(SELECT_ALL_STOCK_ENTRIES)) {
+        try (Connection conn = DatabaseConnection.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(SELECT_ALL_STOCK_ENTRIES)) {
 
             while (rs.next()) {
                 StockEntry stockEntry = new StockEntry(
@@ -112,37 +115,29 @@ public class StockEntryDAOImpl implements StockEntryDAO {
         return stockEntries;
     }
 
-    
-
     @Override
-    public void updateStockEntry(StockEntry stockEntry) {
-    try (Connection conn = DatabaseConnection.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(UPDATE_STOCK_ENTRY)) {
+    public boolean updateStockEntry(StockEntry stockEntry) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(UPDATE_STOCK_ENTRY)) {
 
-        pstmt.setInt(1, stockEntry.getSupplierId()); // Cập nhật supplier_id
-        pstmt.setInt(2, stockEntry.getEmployeeId()); // Cập nhật employee_id
-        pstmt.setInt(3, stockEntry.getStockEntryId()); // Điều kiện WHERE
+            pstmt.setInt(1, stockEntry.getSupplierId()); // Cập nhật supplier_id
+            pstmt.setInt(2, stockEntry.getEmployeeId()); // Cập nhật employee_id
+            pstmt.setInt(3, stockEntry.getStockEntryId()); // Điều kiện WHERE
 
-        int affectedRows = pstmt.executeUpdate();
-        if (affectedRows > 0) {
-            System.out.println("✅ Cập nhật nhập kho thành công!");
-        } else {
-            System.out.println("⚠️ Không tìm thấy bản ghi nhập kho để cập nhật!");
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi cập nhật nhập kho: " + e.getMessage());
         }
-
-    } catch (SQLException e) {
-        System.out.println("❌ Lỗi cập nhật nhập kho: " + e.getMessage());
+        return false;
     }
-}
 
-    
     @Override
     public Map<String, Object> getStockEntryDetails(int stockEntryId) {
         Map<String, Object> result = new HashMap<>();
         List<Map<String, Object>> details = new ArrayList<>();
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall(GET_STOCK_ENTRY_DETAILS)) {
+        try (Connection conn = DatabaseConnection.getConnection(); CallableStatement cstmt = conn.prepareCall(GET_STOCK_ENTRY_DETAILS)) {
 
             cstmt.setInt(1, stockEntryId);
 
@@ -183,4 +178,3 @@ public class StockEntryDAOImpl implements StockEntryDAO {
         return result;
     }
 }
-

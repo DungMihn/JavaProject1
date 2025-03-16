@@ -18,6 +18,7 @@ public class Product {
     private String supplierName;
     private int stockQuantity;
     private String barcode;
+    private double purchasePrice;
     
     public Product() {
     }
@@ -44,6 +45,20 @@ public class Product {
         this.stockQuantity = stockQuantity;
         this.barcode = barcode;
     }
+
+    public Product(int productId, String name, String category, double price, String unit, int supplierId, int stockQuantity, String barcode, double purchasePrice) {
+        this.productId = productId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.unit = unit;
+        this.supplierId = supplierId;
+        this.stockQuantity = stockQuantity;
+        this.barcode = barcode;
+        this.purchasePrice = purchasePrice;
+    }
+
+
 
     
 
@@ -118,6 +133,14 @@ public class Product {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
     

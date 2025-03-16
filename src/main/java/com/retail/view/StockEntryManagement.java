@@ -51,7 +51,7 @@ public final class StockEntryManagement extends javax.swing.JFrame {
 
         stockEntryTable.setModel(defaulTableModel);
 
-        defaulTableModel.addColumn("Inventory Id");
+        defaulTableModel.addColumn("StockEntry Id");
         defaulTableModel.addColumn("Entry Date");
 
         loadStockEntryData();
@@ -151,9 +151,12 @@ public final class StockEntryManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        stockEntryTable.setMaximumSize(new java.awt.Dimension(2147483647, 200));
-        stockEntryTable.setPreferredSize(new java.awt.Dimension(500, 150));
         stockEntryTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        stockEntryTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                stockEntryTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(stockEntryTable);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -373,6 +376,7 @@ public final class StockEntryManagement extends javax.swing.JFrame {
 
     }//GEN-LAST:event_viewStockEntryBtnActionPerformed
 
+    
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu2ActionPerformed
@@ -386,6 +390,19 @@ public final class StockEntryManagement extends javax.swing.JFrame {
         inventoryManagement.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void stockEntryTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stockEntryTableMouseClicked
+       if (evt.getClickCount() == 2) { // Kiểm tra ấn đúp chuột
+        int row = stockEntryTable.getSelectedRow();
+        if (row != -1) { // Đảm bảo có hàng được chọn
+            // Lấy stockEntryId từ cột đầu tiên của hàng được chọn
+            int stockEntryId = Integer.parseInt(stockEntryTable.getValueAt(row, 0).toString());
+
+            // Mở cửa sổ EditStockEntryFrame với stockEntryId tương ứng
+            new EditStockEntryFrame(this, stockEntryId).setVisible(true);
+        }
+    }
+    }//GEN-LAST:event_stockEntryTableMouseClicked
 
 
     /**

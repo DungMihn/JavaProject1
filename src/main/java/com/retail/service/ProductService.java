@@ -44,8 +44,8 @@ public class ProductService {
     }
     
    //
-    public int addProductWithStockEntry(String productName, int supplierId) {
-        return productDAO.addProductWithStockEntry(productName,supplierId);
+    public int addProductWithStockEntry(String productName, int supplierId, String unit, String category, String barcode, double purchasePrice, double price) {
+        return productDAO.addProductWithStockEntry(productName, supplierId, unit, category, barcode, purchasePrice, price);
     }
     //
     public Product getProductByName(String productName) {

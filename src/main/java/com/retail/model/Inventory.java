@@ -12,12 +12,13 @@ import java.time.format.DateTimeFormatter;
  * @author Admin
  */
 public class Inventory {
-    private int inventoryId;      
-    private int productId;  
-    private String productName; 
-    private int stockQuantity;     
-    private LocalDateTime lastUpdated; 
-    
+
+    private int inventoryId;
+    private int productId;
+    private String productName;
+    private int stockQuantity;
+    private LocalDateTime lastUpdated;
+
     // Constructor
     public Inventory() {
     }
@@ -27,7 +28,6 @@ public class Inventory {
         this.stockQuantity = stockQuantity;
     }
 
-    
     public Inventory(int inventoryId, int productId, int stockQuantity, LocalDateTime lastUpdated) {
         this.inventoryId = inventoryId;
         this.productId = productId;
@@ -67,10 +67,16 @@ public class Inventory {
         this.stockQuantity = stockQuantity;
     }
 
-    public String getLastUpdated() {
+    public String getLastUpdatedString() {
+        if (lastUpdated == null) {
+            return "N/A"; // Trả về "N/A" nếu lastUpdated là null
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return lastUpdated.format(formatter);
-//        return lastUpdated;
+    }
+    
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
     }
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
@@ -84,6 +90,5 @@ public class Inventory {
     public void setProductName(String productName) {
         this.productName = productName;
     }
-    
-    
+
 }

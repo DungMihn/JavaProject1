@@ -5,6 +5,7 @@
 package com.retail.dao;
 
 import com.retail.model.Inventory;
+import com.retail.model.Product;
 import java.util.List;
 /**
  *
@@ -30,4 +31,14 @@ public interface InventoryDAO {
 
     // Cập nhật số lượng tồn kho cho một sản phẩm
     boolean updateStockQuantity(int productId, int newQuantity);
+    
+    //
+    public List<Inventory> searchInventoryByProductName(String productName);
+    
+    //
+    public List<Product> getLowStockProducts();
+    //
+    public void showLowStockWarning();
+    //
+    public List<Inventory> getInventoryReport(String startDate, String endDate);
 }

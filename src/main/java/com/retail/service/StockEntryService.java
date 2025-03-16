@@ -6,6 +6,7 @@ package com.retail.service;
 
 import com.retail.dao.StockEntryDAOImpl;
 import com.retail.model.StockEntry;
+import com.retail.model.StockEntryDetail;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +33,8 @@ public class StockEntryService {
     }
 
     // Cập nhật thông tin nhập kho
-    public void updateStockEntry(StockEntry stockEntry) {
-        stockEntryDAO.updateStockEntry(stockEntry);
-        System.out.println("✅ Nhập kho đã được cập nhật thành công!");
+    public boolean updateStockEntry(StockEntry stockEntry) {
+        return stockEntryDAO.updateStockEntry(stockEntry);
     }
 
     // Xóa nhập kho theo ID
@@ -48,5 +48,6 @@ public class StockEntryService {
     public Map<String, Object> getStockEntryDetails(int stockEntryId) {
         return stockEntryDAO.getStockEntryDetails(stockEntryId);
     }
+    
 
 }

@@ -23,6 +23,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.UnsupportedEncodingException;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,12 +36,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
  * @author Admin
  */
 public class AddStockEntryFrame extends javax.swing.JFrame {
+    
+     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=GroceryStoreDB;encrypt=true;trustServerCertificate=true";
+    private static final String USER = "bookoff";
+    private static final String PASSWORD = "123456789";
 
     private StockEntryManagement parentFrame; // Tham chiếu đến StockEntryManagement
 
@@ -58,6 +68,7 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
      * @param supplierId
      */
     public AddStockEntryFrame(StockEntryManagement parentFrame, int supplierId) {
+        
         this.parentFrame = parentFrame;
         this.supplierId = supplierId;
         // Đặt frame vào giữa màn hình
@@ -105,18 +116,23 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         productNameTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
+                String text = productNameTextField.getText().trim();
+
+                // Nếu người dùng xóa tên sản phẩm
+                if (text.isEmpty()) {
+                    resetProductFields(); // Đặt lại các trường về giá trị mặc định
+                    jPopupMenu1.setVisible(false);
+                    return;
+                }
+
+                // Nếu người dùng nhấn Enter và chọn sản phẩm từ danh sách gợi ý
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     ComboBoxItem selectedValue = suggestionList.getSelectedValue();
                     if (selectedValue != null) {
                         productNameTextField.setText(selectedValue.getName());
                         jPopupMenu1.setVisible(false);
+                        autoFillProductFields(selectedValue.getId()); // Điền thông tin sản phẩm
                     }
-                }
-                System.out.println("Key released: " + productNameTextField.getText());
-                String text = productNameTextField.getText().trim();
-                if (text.isEmpty()) {
-                    jPopupMenu1.setVisible(false);
-                    return;
                 }
 
                 // Lọc danh sách gợi ý
@@ -125,6 +141,7 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
                         .collect(Collectors.toList());
 
                 if (filtered.isEmpty()) {
+                    resetProductFields(); // Đặt lại các trường về giá trị mặc định
                     jPopupMenu1.setVisible(false);
                     return;
                 }
@@ -133,12 +150,6 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
             }
         });
 
-//        productNameTextField.addFocusListener(new FocusAdapter() {
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                jPopupMenu1.setVisible(false);
-//            }
-//        });
         suggestionList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -146,11 +157,14 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
                 if (selectedValue != null) {
                     productNameTextField.setText(selectedValue.getName());
                     System.out.println("🛒 Sản phẩm đã chọn: ID = " + selectedValue.getId() + ", Name = " + selectedValue.getName());
+                    // Tự động điền thông tin sản phẩm khi chọn từ danh sách gợi ý
+                    autoFillProductFields(selectedValue.getId());
                 }
                 jPopupMenu1.setVisible(false);
                 SwingUtilities.invokeLater(() -> suggestionList.requestFocusInWindow());
             }
         });
+
         suggestionList.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -159,10 +173,36 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
                     if (selectedValue != null) {
                         productNameTextField.setText(selectedValue.getName());
                         jPopupMenu1.setVisible(false);
+                        // Tự động điền thông tin sản phẩm khi chọn từ danh sách gợi ý
+                        autoFillProductFields(selectedValue.getId());
                     }
                 }
             }
         });
+    }
+
+    private void autoFillProductFields(int productId) {
+        Product product = productController.getProductById(productId);
+        if (product != null) {
+            // Điền thông tin sản phẩm vào các trường
+            barcodeTextField.setText(product.getBarcode());
+            unitComboBox.setSelectedItem(product.getUnit());
+            categoryComboBox.setSelectedItem(product.getCategory());
+            priceTextField.setText(String.valueOf(product.getPurchasePrice()));
+        } else {
+            // Nếu không tìm thấy sản phẩm, xóa các trường
+            barcodeTextField.setText("");
+            unitComboBox.setSelectedIndex(0);
+            categoryComboBox.setSelectedIndex(0);
+            priceTextField.setText("");
+        }
+    }
+
+    private void resetProductFields() {
+        barcodeTextField.setText(""); // Đặt lại mã vạch
+        unitComboBox.setSelectedIndex(0); // Đặt lại đơn vị về giá trị đầu tiên trong combobox
+        categoryComboBox.setSelectedIndex(0); // Đặt lại danh mục về giá trị đầu tiên trong combobox
+        priceTextField.setText(""); // Đặt lại giá nhập
     }
 
     private void showSuggestionPopup(List<ComboBoxItem> suggestions) {
@@ -216,6 +256,12 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         cancelBtn = new javax.swing.JButton();
         quantityTextField = new javax.swing.JTextField();
         saveStockEntryBtn = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        categoryComboBox = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        unitComboBox = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        barcodeTextField = new javax.swing.JTextField();
 
         jLabel5.setText("jLabel5");
 
@@ -270,7 +316,7 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(150, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(111, 111, 111))
         );
@@ -301,22 +347,26 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 153, 51));
+        jLabel7.setText("Loại");
+
+        categoryComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đồ Uống", "Bánh Kẹo", "Chăm Sóc Nhà Cửa", "Chăm Sóc Cá Nhân", "Gia Vị", "Thực Phẩm Đóng Hộp", "Thực Phẩm", "Gạo", "Mì Ăn Liền" }));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 153, 51));
+        jLabel8.setText("Đơn vị");
+
+        unitComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kg", "Gói", "Chai", "Hộp", "Lon", "Tuýp" }));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 153, 51));
+        jLabel10.setText("Mã vạch");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(89, 89, 89)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-                    .addComponent(priceTextField)
-                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(65, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(cancelBtn)
@@ -325,11 +375,35 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addComponent(saveStockEntryBtn)
                 .addGap(27, 27, 27))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(27, 27, 27)
+                        .addComponent(barcodeTextField)
+                        .addGap(71, 71, 71))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel2))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(priceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(unitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(65, Short.MAX_VALUE))))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,15 +412,27 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(81, 81, 81)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(unitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(89, 89, 89)
+                .addGap(28, 28, 28)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(barcodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(priceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addGap(39, 39, 39)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addStockEntryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -356,21 +442,20 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(459, Short.MAX_VALUE)))
+                    .addContainerGap(467, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -383,6 +468,9 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
     private void addStockEntryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStockEntryBtnActionPerformed
 
         String productName = productNameTextField.getText().trim();
+        String barcode = barcodeTextField.getText().trim();
+        String unit = (String) unitComboBox.getSelectedItem();
+        String category = (String) categoryComboBox.getSelectedItem();
         int quantity;
         double purchasePrice;
 
@@ -394,14 +482,17 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
             return;
         }
 
+        // Tìm sản phẩm trong danh sách gợi ý
         ComboBoxItem selectedProduct = productItems.stream()
                 .filter(item -> item.getName().equalsIgnoreCase(productName))
                 .findFirst()
                 .orElse(null);
+
         int productId;
         if (selectedProduct == null) {
             // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới vào bảng Product
-            productId = productController.addProductWithStockEntry(productName, supplierId);
+            double price = purchasePrice * 1.2; // Tính giá bán với lợi nhuận 20%
+            productId = productController.addProductWithStockEntry(productName, supplierId, unit, category, barcode, purchasePrice, price);
             if (productId == -1) {
                 JOptionPane.showMessageDialog(this, "Lỗi khi thêm sản phẩm mới!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -429,11 +520,11 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
 
         // Xóa các trường đã điền để nhập tiếp
         productNameTextField.setText("");
+        barcodeTextField.setText("");
         quantityTextField.setText("");
         priceTextField.setText("");
 
         JOptionPane.showMessageDialog(this, "Đã thêm sản phẩm vào danh sách nhập hàng!");
-
 
     }//GEN-LAST:event_addStockEntryBtnActionPerformed
 
@@ -459,24 +550,72 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         stockEntry.setEmployeeId(employeeId);
 
         try {
+            // Thêm StockEntry và lấy stock_entry_id vừa tạo
             int stockEntryId = stockEntryController.addStockEntry(stockEntry);
 
+            // Thêm các chi tiết nhập hàng (StockEntryDetail)
             for (StockEntryDetail detail : tempStockEntryDetails) {
                 detail.setStockEntryId(stockEntryId);
                 stockEntryDetailController.addStockEntryDetail(detail);
             }
 
+            
+
             JOptionPane.showMessageDialog(this, "Nhập hàng thành công!");
             if (parentFrame != null) {
-                parentFrame.loadStockEntryData();
+                parentFrame.loadStockEntryData(); // Cập nhật lại dữ liệu trên giao diện chính
             }
-            this.dispose();
+            this.dispose(); // Đóng cửa sổ hiện tại
+            
+            // Xuất báo cáo PDF sau khi thêm thành công
+            generateAndOpenStockEntryReport(stockEntryId);
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi nhập hàng: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
 
 
     }//GEN-LAST:event_saveStockEntryBtnActionPerformed
+
+    private void generateAndOpenStockEntryReport(int stockEntryId) {
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            // Gọi stored procedure để lấy thông tin chi tiết
+            CallableStatement cstmt = connection.prepareCall("{call sp_GetStockEntryDetails(?)}");
+            cstmt.setInt(1, stockEntryId);
+
+            // Thực thi stored procedure
+            boolean hasResults = cstmt.execute();
+
+            // Xử lý ResultSet đầu tiên (thông tin chung của StockEntry)
+            if (hasResults) {
+                ResultSet rsGeneral = cstmt.getResultSet();
+                String entryDate = null;
+                String supplierName = null;
+                String employeeName = null;
+                String totalPrice = null;
+
+                if (rsGeneral.next()) {
+                    entryDate = rsGeneral.getString("entry_date");
+                    supplierName = rsGeneral.getString("supplier_name");
+                    employeeName = rsGeneral.getString("employee_name");
+                    double totalPriceDouble = rsGeneral.getDouble("total_price");
+                    int totalPriceInt = (int) totalPriceDouble; // Bỏ phần thập phân
+                    totalPrice = String.valueOf(totalPriceInt);
+                }
+
+                // Xử lý ResultSet thứ hai (thông tin chi tiết của StockEntryDetail)
+                if (cstmt.getMoreResults()) {
+                    ResultSet rsDetails = cstmt.getResultSet();
+
+                    // Tạo báo cáo PDF từ cả hai ResultSet
+                    StockEntryReportGenerator reportGenerator = new StockEntryReportGenerator();
+                    reportGenerator.generateReport(entryDate, supplierName, employeeName, totalPrice, rsDetails, stockEntryId);
+
+                }
+            }
+        } catch (SQLException | JRException e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi tạo báo cáo: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+    }
 
     public static void main(String[] args) {
         try {
@@ -489,12 +628,17 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addStockEntryBtn;
+    private javax.swing.JTextField barcodeTextField;
     private javax.swing.JButton cancelBtn;
+    private javax.swing.JComboBox<String> categoryComboBox;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
@@ -502,5 +646,6 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
     private javax.swing.JTextField productNameTextField;
     private javax.swing.JTextField quantityTextField;
     private javax.swing.JButton saveStockEntryBtn;
+    private javax.swing.JComboBox<String> unitComboBox;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,6 +5,7 @@
 package com.retail.controller;
 
 import com.retail.model.Inventory;
+import com.retail.model.Product;
 import com.retail.service.InventoryService;
 import java.util.List;
 /**
@@ -60,5 +61,23 @@ public class InventoryController {
     // Cập nhật số lượng tồn kho
     public boolean updateStockQuantity(int productId, int newQuantity) {
         return inventoryService.updateStockQuantity(productId, newQuantity);
+    }
+    //
+    public List<Inventory> searchInventoryByProductName(String productName){
+        return inventoryService.searchInventoryByProductName(productName);
+    }
+        //
+    public List<Product> getLowStockProducts(){
+        return inventoryService.getLowStockProducts();
+    }
+    
+    //
+    public void showLowStockWarning(){
+        inventoryService.showLowStockWarning();
+    }
+    
+    //
+    public List<Inventory> getInventoryReport(String startDate, String endDate){
+        return inventoryService.getInventoryReport(startDate, endDate);
     }
 }

@@ -9,16 +9,42 @@ import com.retail.controller.ProductController;
 import com.retail.model.Inventory;
 import com.retail.model.Product;
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
  * @author Admin
  */
 public class InventoryManagement extends javax.swing.JFrame {
+
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=GroceryStoreDB;encrypt=true;trustServerCertificate=true";
+    private static final String USER = "bookoff";
+    private static final String PASSWORD = "123456789";
 
     InventoryController inventoryController;
     private ProductController productController;
@@ -49,6 +75,38 @@ public class InventoryManagement extends javax.swing.JFrame {
         defaulTableModel.addColumn("Last Updated");
 
         loadInventoryData();
+
+        // Thêm sự kiện click cho warningLabel
+        warningLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                showLowStockProductsPopup(evt);
+            }
+        });
+    }
+
+    private void showLowStockProductsPopup(java.awt.event.MouseEvent evt) {
+        // Lấy danh sách sản phẩm gần hết hàng
+        List<Product> lowStockProducts = inventoryController.getLowStockProducts();
+
+        // Xóa các mục cũ trong JPopupMenu
+        jPopupMenu1.removeAll();
+
+        if (lowStockProducts.isEmpty()) {
+            // Nếu không có sản phẩm nào gần hết hàng, hiển thị thông báo
+            JMenuItem noItem = new JMenuItem("Không có sản phẩm nào gần hết hàng!");
+            noItem.setEnabled(false);
+            jPopupMenu1.add(noItem);
+        } else {
+            // Thêm các sản phẩm gần hết hàng vào JPopupMenu
+            for (Product product : lowStockProducts) {
+                JMenuItem item = new JMenuItem(product.getName() + " (Còn lại: " + product.getStockQuantity() + ")");
+                jPopupMenu1.add(item);
+            }
+        }
+
+        // Hiển thị JPopupMenu tại vị trí của warningLabel
+        jPopupMenu1.show(warningLabel, evt.getX(), evt.getY());
     }
 
     /**
@@ -60,20 +118,23 @@ public class InventoryManagement extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jPanel2 = new javax.swing.JPanel();
         addInventoryBtn = new javax.swing.JButton();
-        editProductBtn = new javax.swing.JButton();
-        deleteStockEntryBtn = new javax.swing.JButton();
-        goHomeBtn = new javax.swing.JButton();
+        editInventoryBtn = new javax.swing.JButton();
+        deleteInventoryBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         inventoryTable = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        goHomeBtn = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         exportStockBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         findProductNameTextField = new javax.swing.JTextField();
+        warningLabel = new javax.swing.JLabel();
+        exportReportInventory = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -93,33 +154,23 @@ public class InventoryManagement extends javax.swing.JFrame {
             }
         });
 
-        editProductBtn.setBackground(new java.awt.Color(0, 153, 51));
-        editProductBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        editProductBtn.setForeground(new java.awt.Color(255, 255, 255));
-        editProductBtn.setText("Chỉnh sửa");
-        editProductBtn.addActionListener(new java.awt.event.ActionListener() {
+        editInventoryBtn.setBackground(new java.awt.Color(0, 153, 51));
+        editInventoryBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        editInventoryBtn.setForeground(new java.awt.Color(255, 255, 255));
+        editInventoryBtn.setText("Chỉnh sửa");
+        editInventoryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editProductBtnActionPerformed(evt);
+                editInventoryBtnActionPerformed(evt);
             }
         });
 
-        deleteStockEntryBtn.setBackground(new java.awt.Color(0, 153, 51));
-        deleteStockEntryBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        deleteStockEntryBtn.setForeground(new java.awt.Color(255, 255, 255));
-        deleteStockEntryBtn.setText("Xóa");
-        deleteStockEntryBtn.addActionListener(new java.awt.event.ActionListener() {
+        deleteInventoryBtn.setBackground(new java.awt.Color(0, 153, 51));
+        deleteInventoryBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        deleteInventoryBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteInventoryBtn.setText("Xóa");
+        deleteInventoryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteStockEntryBtnActionPerformed(evt);
-            }
-        });
-
-        goHomeBtn.setBackground(new java.awt.Color(0, 153, 51));
-        goHomeBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        goHomeBtn.setForeground(new java.awt.Color(255, 255, 255));
-        goHomeBtn.setText("Home");
-        goHomeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                goHomeBtnActionPerformed(evt);
+                deleteInventoryBtnActionPerformed(evt);
             }
         });
 
@@ -148,6 +199,15 @@ public class InventoryManagement extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("QUẢN LÝ KHO");
 
+        goHomeBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        goHomeBtn.setForeground(new java.awt.Color(0, 153, 0));
+        goHomeBtn.setText("Home");
+        goHomeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                goHomeBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -155,13 +215,17 @@ public class InventoryManagement extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(goHomeBtn)
+                .addGap(29, 29, 29))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(goHomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -184,6 +248,23 @@ public class InventoryManagement extends javax.swing.JFrame {
             }
         });
 
+        warningLabel.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        warningLabel.setForeground(new java.awt.Color(255, 51, 51));
+        warningLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warningIcon.jpg"))); // NOI18N
+        warningLabel.setText("Cảnh báo hết hàng!");
+        warningLabel.setComponentPopupMenu(jPopupMenu1);
+        warningLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        exportReportInventory.setBackground(new java.awt.Color(0, 153, 51));
+        exportReportInventory.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        exportReportInventory.setForeground(new java.awt.Color(255, 255, 255));
+        exportReportInventory.setText("Báo cáo tồn kho");
+        exportReportInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportReportInventoryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -197,21 +278,27 @@ public class InventoryManagement extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(addInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(editProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(deleteStockEntryBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(goHomeBtn)
-                        .addGap(26, 26, 26))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(exportStockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(0, 438, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(exportReportInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(findProductNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(addInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(editInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(deleteInventoryBtn)
+                        .addGap(366, 366, 366)
+                        .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addComponent(jSeparator1)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
@@ -225,12 +312,16 @@ public class InventoryManagement extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                     .addComponent(addInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteStockEntryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(goHomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(editInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(exportStockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(exportStockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(exportReportInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
                         .addComponent(findProductNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -239,7 +330,7 @@ public class InventoryManagement extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -277,7 +368,9 @@ public class InventoryManagement extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -303,47 +396,70 @@ public class InventoryManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_goHomeBtnActionPerformed
 
-    private void deleteStockEntryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStockEntryBtnActionPerformed
+    private void deleteInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteInventoryBtnActionPerformed
+        int selectedRow = inventoryTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    }//GEN-LAST:event_deleteStockEntryBtnActionPerformed
+        int inventoryId = (int) inventoryTable.getValueAt(selectedRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa sản phẩm này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            inventoryController.deleteInventory(inventoryId);
+            loadInventoryData(); // Refresh the table
+        }
+    }//GEN-LAST:event_deleteInventoryBtnActionPerformed
 
-    private void editProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProductBtnActionPerformed
-
-    }//GEN-LAST:event_editProductBtnActionPerformed
+    private void editInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editInventoryBtnActionPerformed
+//         int selectedRow = inventoryTable.getSelectedRow();
+//    if (selectedRow == -1) {
+//        JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//        return;
+//    }
+//
+//    int productId = (int) inventoryTable.getValueAt(selectedRow, 0);
+//    Product product = productController.getProductById(productId);
+//    if (product != null) {
+//        EditProductFrame editProductFrame = new EditProductFrame(product, this);
+//        editProductFrame.setVisible(true);
+    }//GEN-LAST:event_editInventoryBtnActionPerformed
 
     private void addInventoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addInventoryBtnActionPerformed
-
+//        AddInventoryFrame addInventoryFrame = new AddInventoryFrame(this);
+//    addInventoryFrame.setVisible(true);
     }//GEN-LAST:event_addInventoryBtnActionPerformed
 
     private void findProductNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findProductNameTextFieldActionPerformed
         String keyword = findProductNameTextField.getText().trim();
-        if (keyword.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
-        // Gọi hàm tìm kiếm sản phẩm
-        List<Product> products = productController.searchProductInInventory(keyword);
-
-        // Hiển thị kết quả trong bảng inventoryTable
         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ
 
-        for (Product product : products) {
-            model.addRow(new Object[]{
-                product.getProductId(),
-                product.getName(),
-                product.getStockQuantity()
-            });
+        if (keyword.isEmpty()) {
+            // Nếu keyword rỗng, tải lại toàn bộ dữ liệu từ Inventory
+            loadInventoryData();
+        } else {
+            // Nếu có keyword, tìm kiếm sản phẩm
+            List<Inventory> inventories = inventoryController.searchInventoryByProductName(keyword);
+
+            // Hiển thị kết quả trong bảng inventoryTable
+            for (Inventory inventory : inventories) {
+                model.addRow(new Object[]{
+                    inventory.getInventoryId(),
+                    inventory.getProductName(),
+                    inventory.getStockQuantity(),
+                    inventory.getLastUpdatedString(),});
+            }
         }
     }//GEN-LAST:event_findProductNameTextFieldActionPerformed
 
     private void inventoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inventoryMouseClicked
-        
+
     }//GEN-LAST:event_inventoryMouseClicked
 
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
-        
+
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
@@ -352,19 +468,208 @@ public class InventoryManagement extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenu2MouseClicked
 
+    private void exportReportInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportReportInventoryActionPerformed
+        // Tạo một mảng chứa các tùy chọn báo cáo
+        String[] options = {"Theo ngày", "Theo tuần", "Theo tháng"};
+
+        // Hiển thị hộp thoại lựa chọn
+        int choice = JOptionPane.showOptionDialog(
+                this,
+                "Chọn loại báo cáo tồn kho:",
+                "Báo cáo tồn kho",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        //Xử lý lựa chọn
+        switch (choice) {
+            case 0 ->
+                generateDailyReport(); // Báo cáo theo ngày
+            case 1 ->
+                generateWeeklyReport(); // Báo cáo theo tuần
+            case 2 ->
+                generateMonthlyReport(); // Báo cáo theo tháng
+            default -> {
+            }
+        }
+    }//GEN-LAST:event_exportReportInventoryActionPerformed
+
+    private void generateDailyReport() {
+        // Lấy ngày hiện tại
+        LocalDate today = LocalDate.now();
+
+        // Định dạng ngày bắt đầu và ngày kết thúc
+        String startDate = today.toString(); // Ngày bắt đầu là hôm nay (ví dụ: "2025-03-14")
+        String endDate = today.plusDays(1).toString(); // Ngày kết thúc là ngày tiếp theo (ví dụ: "2025-03-15")
+
+        // Thông tin khoảng thời gian báo cáo
+        String timeRange = "BÁO CÁO TỒN KHO NGÀY " + today.toString();
+
+        // Lấy dữ liệu tồn kho từ cơ sở dữ liệu
+        List<Inventory> inventoryReport = inventoryController.getInventoryReport(startDate, endDate);
+
+        // Tạo báo cáo PDF
+        generateInventoryReportPDF(inventoryReport, "bÁO CÁO tỒN KHO THEO NGÀY", timeRange);
+    }
+
+    private void generateWeeklyReport() {
+        // Lấy ngày đầu tuần và cuối tuần
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY); // Ngày đầu tuần (thứ Hai)
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);   // Ngày cuối tuần (Chủ Nhật)
+
+        // Định dạng ngày bắt đầu và ngày kết thúc
+        String startDate = startOfWeek.toString(); // Ngày đầu tuần (ví dụ: "2025-03-10")
+        String endDate = endOfWeek.plusDays(1).toString(); // Ngày cuối tuần + 1 ngày (ví dụ: "2025-03-16")
+
+        // Thông tin khoảng thời gian báo cáo
+        String timeRange = "BÁO CÁO TỒN KHO TỪ NGÀY " + startOfWeek.toString() + " ĐẾN NGÀY " + endOfWeek.toString();
+
+        // Lấy dữ liệu tồn kho từ cơ sở dữ liệu
+        List<Inventory> inventoryReport = inventoryController.getInventoryReport(startDate, endDate);
+
+        // Tạo báo cáo PDF
+        generateInventoryReportPDF(inventoryReport, "BÁO CÁO TỒN KHO THEO TUẦN", timeRange);
+    }
+
+    private void generateMonthlyReport() {
+        // Lấy ngày đầu tháng và cuối tháng
+        LocalDate today = LocalDate.now();
+        LocalDate startOfMonth = today.withDayOfMonth(1); // Ngày đầu tháng
+        LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth()); // Ngày cuối tháng
+
+        // Định dạng ngày bắt đầu và ngày kết thúc
+        String startDate = startOfMonth.toString(); // Ngày đầu tháng (ví dụ: "2025-03-01")
+        String endDate = endOfMonth.plusDays(1).toString(); // Ngày cuối tháng + 1 ngày (ví dụ: "2025-04-01")
+
+        // Thông tin khoảng thời gian báo cáo
+        String timeRange = "BÁO CÁO TỒN KHO TỪ NGÀY " + startOfMonth.toString() + " ĐẾN NGÀY " + endOfMonth.toString();
+
+        // Lấy dữ liệu tồn kho từ cơ sở dữ liệu
+        List<Inventory> inventoryReport = inventoryController.getInventoryReport(startDate, endDate);
+
+        // Tạo báo cáo PDF
+        generateInventoryReportPDF(inventoryReport, "BÁO CÁO TỒN KHO THEO THÁNG", timeRange);
+    }
+
+    private void generateInventoryReportPDF(List<Inventory> inventoryReport, String reportTitle, String timeRange) {
+        if (inventoryReport.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không có dữ liệu để tạo báo cáo!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Chuyển đổi danh sách Inventory thành ResultSet
+            ResultSet rs = convertInventoryListToResultSet(inventoryReport);
+
+            // Kiểm tra xem ResultSet có dữ liệu không
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Không có dữ liệu để tạo báo cáo!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Đưa con trỏ về đầu ResultSet
+            rs.beforeFirst();
+
+            // Tạo JasperDesign bằng cách sử dụng lớp InventoryReportDesignGenerator
+            InventoryReportDesignGenerator designGenerator = new InventoryReportDesignGenerator();
+            JasperDesign jasperDesign = designGenerator.createInventoryReportDesign(reportTitle, timeRange);
+
+            // Tạo JasperPrint từ JasperReport và dữ liệu
+            JRResultSetDataSource dataSource = new JRResultSetDataSource(rs);
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), dataSource);
+
+            // Kiểm tra xem JasperPrint có trang nào không
+            if (jasperPrint.getPages().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không có dữ liệu để hiển thị trong báo cáo!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Xuất file PDF
+            String filePath = "InventoryReport_" + System.currentTimeMillis() + ".pdf";
+            JasperExportManager.exportReportToPdfFile(jasperPrint, filePath);
+
+            // Hiển thị báo cáo
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (JRException | SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tạo báo cáo: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private ResultSet convertInventoryListToResultSet(List<Inventory> inventoryReport) throws SQLException {
+        // Tạo một CachedRowSet
+        CachedRowSet rowSet = RowSetProvider.newFactory().createCachedRowSet();
+
+        // Thiết lập loại ResultSet (hỗ trợ cuộn và chỉ đọc)
+        rowSet.setType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+        rowSet.setConcurrency(ResultSet.CONCUR_UPDATABLE);
+
+        rowSet.setCommand(
+                "SELECT i.inventory_id, p.name AS product_name, i.stock_quantity, i.last_updated "
+                + "FROM inventory i "
+                + "JOIN product p ON i.product_id = p.product_id "
+                + "WHERE 1=0"
+        );
+
+        // Kết nối đến cơ sở dữ liệu để thiết lập cấu trúc của ResultSet
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            rowSet.execute(connection);
+        }
+
+        // Định dạng ngày theo dd/MM/yyyy
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // Thêm dữ liệu vào CachedRowSet
+        for (Inventory inventory : inventoryReport) {
+            rowSet.moveToInsertRow(); // Di chuyển con trỏ đến hàng chèn
+            rowSet.updateInt("inventory_id", inventory.getInventoryId());
+            rowSet.updateString("product_name", inventory.getProductName());
+            rowSet.updateInt("stock_quantity", inventory.getStockQuantity());
+
+            // Chuyển lastUpdated sang định dạng dd/MM/yyyy
+            if (inventory.getLastUpdated() != null) {
+                String formattedDate = inventory.getLastUpdated().format(formatter);
+                rowSet.updateString("last_updated", formattedDate); // Lưu dưới dạng chuỗi
+            } else {
+                rowSet.updateNull("last_updated");
+            }
+
+            rowSet.insertRow(); // Chèn hàng vào CachedRowSet
+            rowSet.moveToCurrentRow(); // Di chuyển con trỏ về hàng hiện tại
+        }
+
+        // Di chuyển con trỏ về đầu ResultSet
+        rowSet.beforeFirst();
+        return rowSet;
+    }
+
     void loadInventoryData() {
         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ
 
         List<Inventory> inventories = inventoryController.getAllInventories();
+        boolean hasLowStock = false; // Biến kiểm tra xem có sản phẩm nào sắp hết hàng không
+
         for (Inventory inventory : inventories) {
             model.addRow(new Object[]{
                 inventory.getInventoryId(),
                 inventory.getProductName(),
                 inventory.getStockQuantity(),
-                inventory.getLastUpdated()
+                inventory.getLastUpdatedString()
             });
+
+            // Kiểm tra nếu stock_quantity dưới ngưỡng cảnh báo
+            if (inventory.getStockQuantity() <= 10) { // Ngưỡng cảnh báo là 10
+                hasLowStock = true;
+            }
         }
+
+        // Hiển thị hoặc ẩn warningLabel dựa trên kết quả kiểm tra
+        warningLabel.setVisible(hasLowStock);
     }
 
     /**
@@ -409,8 +714,9 @@ public class InventoryManagement extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addInventoryBtn;
-    private javax.swing.JButton deleteStockEntryBtn;
-    private javax.swing.JButton editProductBtn;
+    private javax.swing.JButton deleteInventoryBtn;
+    private javax.swing.JButton editInventoryBtn;
+    private javax.swing.JButton exportReportInventory;
     private javax.swing.JButton exportStockBtn;
     private javax.swing.JTextField findProductNameTextField;
     private javax.swing.JButton goHomeBtn;
@@ -423,7 +729,9 @@ public class InventoryManagement extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel warningLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -15,7 +15,9 @@ import java.time.format.DateTimeFormatter;
  public class StockEntry {
     private int stockEntryId;
     private int supplierId;
+    private String supplierName;
     private int employeeId;
+    private String employeeName;
     private LocalDateTime entryDate;
 
     // Constructors
@@ -62,4 +64,22 @@ import java.time.format.DateTimeFormatter;
     public void setEntryDate(LocalDateTime entryDate) {
         this.entryDate = entryDate;
     }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+    
+    
 }

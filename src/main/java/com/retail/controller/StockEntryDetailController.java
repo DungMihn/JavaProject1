@@ -38,12 +38,16 @@ public class StockEntryDetailController {
     }
 
     // Cập nhật chi tiết nhập kho
-    public void updateStockEntryDetail(StockEntryDetail stockEntryDetail) {
-        stockEntryDetailService.updateStockEntryDetail(stockEntryDetail);
+    public boolean updateStockEntryDetail(StockEntryDetail stockEntryDetail) {
+        return stockEntryDetailService.updateStockEntryDetail(stockEntryDetail);
     }
 
     // Xóa chi tiết nhập kho
     public void deleteStockEntryDetail(int stockEntryDetailId) {
         stockEntryDetailService.deleteStockEntryDetail(stockEntryDetailId);
+    }
+    //
+     public StockEntryDetail getStockEntryDetailByStockEntryIdAndProductId(int stockEntryId, int productId){
+        return stockEntryDetailService.getStockEntryDetailByStockEntryIdAndProductId(stockEntryId, productId);
     }
 }

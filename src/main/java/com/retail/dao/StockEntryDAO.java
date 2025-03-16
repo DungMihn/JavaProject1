@@ -22,7 +22,7 @@ public interface StockEntryDAO {
     List<StockEntry> getAllStockEntries();
 
     // Cập nhật thông tin nhập kho
-    void updateStockEntry(StockEntry stockEntry);
+    boolean updateStockEntry(StockEntry stockEntry);
 
     // Xóa một bản ghi nhập kho
     void deleteStockEntry(int stockEntryId);

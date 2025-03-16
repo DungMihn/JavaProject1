@@ -105,7 +105,7 @@ public class StockEntryReportGenerator {
 
         // Thêm tiêu đề "BẢNG GHI NHẬP HÀNG" (in đậm và to)
         JRDesignStaticText titleText = new JRDesignStaticText();
-        titleText.setText("BẢNG GHI NHẬP HÀNG - ID: " + stockEntryId);
+        titleText.setText("PHIẾU NHẬP KHO - ID: " + stockEntryId);
         titleText.setX(10);
         titleText.setY(5); // Điều chỉnh vị trí y để phù hợp với chiều cao của band
         titleText.setWidth(500);
