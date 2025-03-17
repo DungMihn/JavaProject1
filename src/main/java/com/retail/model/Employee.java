@@ -6,32 +6,50 @@ package com.retail.model;
 
 /**
  *
- * @author macbookprom1
+ * @author ADMIN
  */
+import java.time.LocalDateTime;
+
 public class Employee {
-    private int employeeId;
+    private String employeeID;
     private String name;
     private String phone;
     private String role;
+    private LocalDateTime createdAt;
 
-    public Employee(int employeeId, String name, String phone, String role) {
-        this.employeeId = employeeId;
+    public Employee(String employeeID, String name, String phone, String role, LocalDateTime createdAt) {
+        this.employeeID = employeeID;
         this.name = name;
         this.phone = phone;
         this.role = role;
+        this.createdAt = createdAt;
     }
 
-    // Getters và Setters
-    public int getEmployeeId() { return employeeId; }
-    public void setEmployeeId(int employeeId) { this.employeeId = employeeId; }
-    
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-    
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-}
+    public Employee() {
+        
+    }
 
+    public String getEmployeeID() { return employeeID; }
+    public String getName() { return name; }
+    public String getPhone() { return phone; }
+    public String getRole() { return role; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setPhone(String phone){
+        this.phone = phone;
+    }
+    public void setRole(String role){
+        this.role = role;
+    }
+    public void setCreate_At(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    // Getters và Setters
+
+    @Override
+    public String toString() {
+        return "ID: " + employeeID + ", Name: " + name + ", Phone: " + phone + ", Role: " + role + ", Created At: " + createdAt;
+    }
+}

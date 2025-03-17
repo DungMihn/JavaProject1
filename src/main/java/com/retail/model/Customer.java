@@ -6,37 +6,60 @@ package com.retail.model;
 
 /**
  *
- * @author macbookprom1
+ * @author ADMIN
  */
+import java.time.LocalDateTime;
 
 public class Customer {
-    private int customerId;
+    private String customerID;
     private String name;
+    private String address;
     private String phone;
     private String email;
-    private String address;
+    private LocalDateTime createdAt;
 
-    public Customer(int customerId, String name, String phone, String email, String address) {
-        this.customerId = customerId;
+    public Customer(String customerID, String name, String address, String phone, String email, LocalDateTime createdAt) {
+        this.customerID = customerID;
         this.name = name;
+        this.address = address;
         this.phone = phone;
         this.email = email;
-        this.address = address;
+        this.createdAt = createdAt;
     }
 
-    // Getters và Setters
-    public int getCustomerId() { return customerId; }
-    public void setCustomerId(int customerId) { this.customerId = customerId; }
+    public Customer() {
+        
+    }
 
+    public String getCustomerID() { return customerID; }
     public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
     public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public String getPhone() { return phone; }
+    public String getEmail() { return email; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setAddress(String address){
+        this.address = address;
+    }
+    public void setPhone(String phone){
+        this.phone = phone;
+    }
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public void setCreate_At(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    // Getters và Setters
+
+    @Override
+    public String toString() {
+        return "ID: " + customerID + ", Name: " + name + ", Address: " + address +
+                ", Phone: " + phone + ", Email: " + email + ", Created At: " + createdAt;
+    }
 }
+
+
+

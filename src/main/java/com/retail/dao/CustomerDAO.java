@@ -1,101 +1,95 @@
-///*
-// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
-// */
-//package com.retail.dao;
-//
-///**
-// *
-// * @author macbookprom1
-// */
-//import com.retail.model.Customer;
-//import java.sql.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class CustomerDAO {
-//    private static final String INSERT_CUSTOMER = "INSERT INTO Customer (name, phone, email, address) VALUES (?, ?, ?, ?)";
-//    private static final String SELECT_ALL_CUSTOMERS = "SELECT * FROM Customer";
-//
-//    public void addCustomer(Customer customer) {
-//        try (Connection conn = DatabaseConnection.getConnection();
-//             PreparedStatement pstmt = conn.prepareStatement(INSERT_CUSTOMER)) {
-//            pstmt.setString(1, customer.getName());
-//            pstmt.setString(2, customer.getPhone());
-//            pstmt.setString(3, customer.getEmail());
-//            pstmt.setString(4, customer.getAddress());
-//            pstmt.executeUpdate();
-//            System.out.println("✅ Thêm khách hàng thành công!");
-//        } catch (SQLException e) {
-//            System.out.println("❌ Lỗi thêm khách hàng: " + e.getMessage());
-//        }
-//    }
-//
-//    public List<Customer> getAllCustomers() {
-//        List<Customer> customers = new ArrayList<>();
-//        try (Connection conn = DatabaseConnection.getConnection();
-//             Statement stmt = conn.createStatement();
-//             ResultSet rs = stmt.executeQuery(SELECT_ALL_CUSTOMERS)) {
-//            while (rs.next()) {
-//                customers.add(new Customer(
-//                    rs.getInt("customer_id"),
-//                    rs.getString("name"),
-//                    rs.getString("phone"),
-//                    rs.getString("email"),
-//                    rs.getString("address")
-//                ));
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("❌ Lỗi truy vấn khách hàng: " + e.getMessage());
-//        }
-//        return customers;
-//    }
-//}
-//
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.retail.dao;
 
+/**
+ *
+ * @author ADMIN
+ */
+
+
+
+
+import com.retail.ConnectDB;
 import com.retail.model.Customer;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDAO {
-//    private static final String ADD_CUSTOMER_PROC = "{CALL AddCustomer(?, ?, ?, ?)}";
-    private static final String ADD_CUSTOMER_PROC = "EXEC AddCustomer ?, ?, ?, ?";
-    private static final String GET_ALL_CUSTOMERS_PROC = "{CALL GetAllCustomers()}";
-
-    public void addCustomer(Customer customer) {
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall(ADD_CUSTOMER_PROC)) {
-            cstmt.setString(1, customer.getName());
-            cstmt.setString(2, customer.getPhone());
-            cstmt.setString(3, customer.getEmail());
-            cstmt.setString(4, customer.getAddress());
-            cstmt.execute();
-            System.out.println("✅ Thêm khách hàng thành công!");
-        } catch (SQLException e) {
-            System.out.println("❌ Lỗi thêm khách hàng: " + e.getMessage());
-        }
-    }
-
     public List<Customer> getAllCustomers() {
         List<Customer> customers = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall(GET_ALL_CUSTOMERS_PROC);
-             ResultSet rs = cstmt.executeQuery()) {
+        String query = "SELECT * FROM Customer";
+
+        try (Connection conn = ConnectDB.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 customers.add(new Customer(
-                    rs.getInt("customer_id"),
-                    rs.getString("name"),
-                    rs.getString("phone"),
-                    rs.getString("email"),
-                    rs.getString("address")
+                        rs.getString("Customer_ID"),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getString("Email"),
+                        rs.getObject("created_at", LocalDateTime.class)
                 ));
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi truy vấn khách hàng: " + e.getMessage());
+            System.out.println("Loi: " + e.getMessage());
         }
         return customers;
     }
+
+    public boolean insertCustomer(Customer customer) {
+    String query = "INSERT INTO Customer (Name, Address, Phone, Email) VALUES (?, ?, ?, ?)";
+    try (Connection conn = ConnectDB.connect();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setString(1, customer.getName());
+        pstmt.setString(2, customer.getAddress());
+        pstmt.setString(3, customer.getPhone());
+        pstmt.setString(4, customer.getEmail());       
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.out.println("Loi: " + e.getMessage());
+        return false;
+    }
 }
+
+    public boolean updateCustomer(Customer customer) {
+        String query = "UPDATE Customer SET Name = ?, Address = ?, Phone = ?, Email = ? WHERE CustomerID = ?";
+        try (Connection conn = ConnectDB.connect();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, customer.getName());
+            pstmt.setString(2, customer.getAddress());
+            pstmt.setString(3, customer.getPhone());
+            pstmt.setString(4, customer.getEmail());
+            pstmt.setString(5, customer.getCustomerID());
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Loi: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteCustomer(String customerID) {
+        String query = "DELETE FROM Customer WHERE Customer_ID = ?";
+        try (Connection conn = ConnectDB.connect();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, customerID);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Loi: " + e.getMessage());
+            return false;
+        }
+    }
+}
+
+
+
+
+
+
+
