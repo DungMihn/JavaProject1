@@ -13,8 +13,10 @@ import java.util.List;
  */
 public interface SupplierDAO {
     boolean addSupplier(Supplier supplier);
-    void updateSupplier(Supplier supplier);
-    void deleteSupplier(int supplierId);
+    boolean updateSupplier(Supplier supplier);
+    boolean deleteSupplier(int supplierId);
     Supplier getSupplierById(int supplierId);
     List<Supplier> getAllSuppliers();
+    public List<Supplier> searchSuppliersByName(String keyword);
+    public int getNextSupplierId();
 }

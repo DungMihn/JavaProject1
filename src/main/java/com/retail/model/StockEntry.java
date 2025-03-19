@@ -11,14 +11,15 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Admin
  */
+public class StockEntry {
 
- public class StockEntry {
     private int stockEntryId;
     private int supplierId;
     private String supplierName;
     private int employeeId;
     private String employeeName;
     private LocalDateTime entryDate;
+    private Double totalPrice;
 
     // Constructors
     public StockEntry() {
@@ -29,6 +30,16 @@ import java.time.format.DateTimeFormatter;
         this.supplierId = supplierId;
         this.employeeId = employeeId;
         this.entryDate = entryDate;
+    }
+
+    public StockEntry(int stockEntryId, int supplierId, String supplierName, int employeeId, String employeeName, LocalDateTime entryDate, Double totalPrice) {
+        this.stockEntryId = stockEntryId;
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
+        this.entryDate = entryDate;
+        this.totalPrice = totalPrice;
     }
 
     // Getters and Setters
@@ -57,7 +68,7 @@ import java.time.format.DateTimeFormatter;
     }
 
     public String getEntryDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return entryDate.format(formatter);
     }
 
@@ -80,6 +91,13 @@ import java.time.format.DateTimeFormatter;
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
-    
-    
+
+    public int getTotalPrice() {
+        return totalPrice.intValue();
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
 }

@@ -7,11 +7,13 @@ package com.retail.controller;
 import com.retail.model.Supplier;
 import com.retail.service.SupplierService;
 import java.util.List;
+
 /**
  *
  * @author Admin
  */
 public class SupplierController {
+
     private final SupplierService supplierService = new SupplierService();
 
     // Thêm nhà cung cấp mới
@@ -30,19 +32,21 @@ public class SupplierController {
     }
 
     // Cập nhật thông tin nhà cung cấp
-    public void updateSupplier(int supplierId, String name, String contactName, String phone, String email, String address) {
-        Supplier supplier = new Supplier();
-        supplier.setSupplierId(supplierId);
-        supplier.setName(name);
-        supplier.setContactName(contactName);
-        supplier.setPhone(phone);
-        supplier.setEmail(email);
-        supplier.setAddress(address);
-        supplierService.updateSupplier(supplier);
+    public boolean updateSupplier(Supplier supplier) {
+
+        return supplierService.updateSupplier(supplier);
     }
 
     // Xóa nhà cung cấp
-    public void deleteSupplier(int supplierId) {
-        supplierService.deleteSupplier(supplierId);
+    public boolean deleteSupplier(int supplierId) {
+        return supplierService.deleteSupplier(supplierId);
+    }
+
+    public List<Supplier> searchSuppliersByName(String keyword) {
+        return supplierService.searchSuppliersByName(keyword);
+    }
+
+    public int getNextSupplierId() {
+        return supplierService.getNextSupplierId();
     }
 }

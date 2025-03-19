@@ -9,7 +9,7 @@ package com.retail.model;
  * @author Admin
  */
 public class ComboBoxItem {
-    private int id;
+    private Integer id;
     private String name;
 
 
@@ -27,9 +27,10 @@ public class ComboBoxItem {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
+    
 
     @Override
     public String toString() {

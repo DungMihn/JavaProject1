@@ -55,6 +55,7 @@ public class StockEntryReportGenerator {
         jasperDesign.setRightMargin(40);
         jasperDesign.setTopMargin(50);
         jasperDesign.setBottomMargin(50);
+        jasperDesign.setSummaryNewPage(false);
 
         // Thêm các trường (fields) vào JasperDesign
         addFields(jasperDesign);
@@ -228,8 +229,9 @@ public class StockEntryReportGenerator {
     }
 
     private JRDesignBand createSummaryBand(String totalPrice) {
+
         JRDesignBand summaryBand = new JRDesignBand();
-        summaryBand.setHeight(40); // Tăng chiều cao của summaryBand lên 40
+        summaryBand.setHeight(50); // Tăng chiều cao của summaryBand lên 40
 
         // Thêm dòng tổng giá tiền
         JRDesignStaticText totalLabel = new JRDesignStaticText();
@@ -249,7 +251,9 @@ public class StockEntryReportGenerator {
         totalField.setY(10); // Điều chỉnh vị trí y để phù hợp với chiều cao của band
         totalField.setWidth(200);
         totalField.setHeight(20);
-        totalField.setExpression(new JRDesignExpression("\"" + totalPrice + " VND\""));
+        int total = (int) Double.parseDouble(totalPrice);
+        totalField.setExpression(new JRDesignExpression("\"" + String.format("%,d", total) + " VND\""));
+
         totalField.setFontName("Arial");
         totalField.setBold(Boolean.TRUE); // Làm đậm giá trị
         totalField.setHorizontalTextAlign(HorizontalTextAlignEnum.RIGHT);

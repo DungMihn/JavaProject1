@@ -67,7 +67,7 @@ public class InventoryReportDesignGenerator {
         timeRangeText.setFontName("Arial");
         timeRangeText.setBold(Boolean.TRUE);
         timeRangeText.setHeight(25); // Tăng chiều cao của tiêu đề
-        timeRangeText.setFontSize(18f); // Cỡ chữ lớn
+        timeRangeText.setFontSize(12f); // Cỡ chữ lớn
         timeRangeText.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
         timeRangeText.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
         timeRangeBand.addElement(timeRangeText);

@@ -6,7 +6,7 @@ package com.retail.controller;
 
 import com.retail.model.StockEntry;
 import com.retail.service.StockEntryService;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +15,7 @@ import java.util.Map;
  * @author Admin
  */
 public class StockEntryController {
+
     private final StockEntryService stockEntryService = new StockEntryService();
 
     // Thêm nhập kho mới
@@ -41,8 +42,21 @@ public class StockEntryController {
     public void deleteStockEntry(int stockEntryId) {
         stockEntryService.deleteStockEntry(stockEntryId);
     }
-    
+
     public Map<String, Object> getStockEntryDetails(int stockEntryId) {
         return stockEntryService.getStockEntryDetails(stockEntryId);
+    }
+
+    public int getNextStockEntryId() {
+        return stockEntryService.getNextStockEntryId();
+    }
+
+    public boolean isStockEntryExist(int stockEntryId) {
+        return stockEntryService.isStockEntryExist(stockEntryId);
+    }
+
+    //
+    public List<StockEntry> getFilteredStockEntries(Integer supplierId, LocalDate fromDate, LocalDate toDate) {
+        return stockEntryService.getFilteredStockEntries(supplierId, fromDate, toDate);
     }
 }

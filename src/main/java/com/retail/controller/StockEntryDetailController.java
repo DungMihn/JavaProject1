@@ -18,8 +18,8 @@ public class StockEntryDetailController {
     private final StockEntryDetailService stockEntryDetailService = new StockEntryDetailService();
 
     // Thêm chi tiết nhập kho mới
-    public void addStockEntryDetail(StockEntryDetail stockEntryDetail) {
-        stockEntryDetailService.addStockEntryDetail(stockEntryDetail);
+    public boolean addStockEntryDetail(StockEntryDetail stockEntryDetail) {
+        return stockEntryDetailService.addStockEntryDetail(stockEntryDetail);
     }
 
     // Lấy thông tin chi tiết nhập kho theo ID
@@ -49,5 +49,9 @@ public class StockEntryDetailController {
     //
      public StockEntryDetail getStockEntryDetailByStockEntryIdAndProductId(int stockEntryId, int productId){
         return stockEntryDetailService.getStockEntryDetailByStockEntryIdAndProductId(stockEntryId, productId);
+    }
+     //
+     public boolean deleteStockEntryDetailByProductId(int stockEntryId, int productId){
+        return stockEntryDetailService.deleteStockEntryDetailByProductId(stockEntryId, productId);
     }
 }

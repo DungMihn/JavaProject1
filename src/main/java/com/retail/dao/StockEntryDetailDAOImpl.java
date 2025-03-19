@@ -13,7 +13,6 @@ import com.retail.model.StockEntryDetail;
  *
  * @author Admin
  */
-
 public class StockEntryDetailDAOImpl implements StockEntryDetailDAO {
 
     private static final String INSERT_STOCK_ENTRY_DETAIL = "INSERT INTO Stock_Entry_Detail (stock_entry_id, product_id, quantity, purchase_price) VALUES (?, ?, ?, ?)";
@@ -21,9 +20,10 @@ public class StockEntryDetailDAOImpl implements StockEntryDetailDAO {
     private static final String DELETE_STOCK_ENTRY_DETAIL = "DELETE FROM Stock_Entry_Detail WHERE stock_entry_detail_id = ?";
     private static final String GET_STOCK_ENTRY_DETAIL_BY_ID = "SELECT * FROM Stock_Entry_Detail WHERE stock_entry_detail_id = ?";
     private static final String GET_ALL_STOCK_ENTRY_DETAILS = "SELECT * FROM Stock_Entry_Detail";
+    private static final String DELETE_STOCK_ENTRY_DETAIL_BY_PRODUCT_ID = "DELETE FROM StockEntryDetail WHERE stock_entry_id = ? AND product_id = ?";
 
     @Override
-    public void addStockEntryDetail(StockEntryDetail stockEntryDetail) {
+    public boolean addStockEntryDetail(StockEntryDetail stockEntryDetail) {
         try (Connection conn = DatabaseConnection.getConnection(); CallableStatement cstmt = conn.prepareCall("{CALL sp_AddStockEntryDetail(?, ?, ?, ?)}")) {
 
             cstmt.setInt(1, stockEntryDetail.getStockEntryId());
@@ -31,11 +31,15 @@ public class StockEntryDetailDAOImpl implements StockEntryDetailDAO {
             cstmt.setInt(3, stockEntryDetail.getQuantity());
             cstmt.setDouble(4, stockEntryDetail.getPurchasePrice());
 
-            cstmt.execute();
-            System.out.println("✅ Thêm chi tiết nhập kho thành công!");
+            int affectedRows = cstmt.executeUpdate();
+            System.out.println("🚀 Số dòng bị ảnh hưởng: " + affectedRows);
+
+            return affectedRows > 0;
+
         } catch (SQLException e) {
             System.out.println("❌ Lỗi thêm chi tiết nhập kho: " + e.getMessage());
         }
+        return true;
     }
 
     @Override
@@ -168,5 +172,26 @@ public class StockEntryDetailDAOImpl implements StockEntryDetailDAO {
         }
 
         return detail;
+    }
+
+    @Override
+    public boolean deleteStockEntryDetailByProductId(int stockEntryId, int productId) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(DELETE_STOCK_ENTRY_DETAIL_BY_PRODUCT_ID)) {
+
+            pstmt.setInt(1, stockEntryId);
+            pstmt.setInt(2, productId);
+            int affectedRows = pstmt.executeUpdate();
+            pstmt.executeUpdate();
+
+            pstmt.executeUpdate();
+
+            System.out.println("✅ Xóa chi tiết nhập kho thành công!");
+
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi xóa chi tiết nhập kho: " + e.getMessage());
+        }
+        return false;
     }
 }

@@ -7,12 +7,15 @@ package com.retail.controller;
 import com.retail.model.Inventory;
 import com.retail.model.Product;
 import com.retail.service.InventoryService;
+import java.time.LocalDate;
 import java.util.List;
+
 /**
  *
  * @author Admin
  */
 public class InventoryController {
+
     private final InventoryService inventoryService = new InventoryService();
 
     // Thêm tồn kho mới
@@ -26,7 +29,7 @@ public class InventoryController {
         } catch (Exception e) {
             return false;
         }
-        
+
     }
 
     // Lấy danh sách tồn kho
@@ -62,22 +65,29 @@ public class InventoryController {
     public boolean updateStockQuantity(int productId, int newQuantity) {
         return inventoryService.updateStockQuantity(productId, newQuantity);
     }
+
     //
-    public List<Inventory> searchInventoryByProductName(String productName){
+    public List<Inventory> searchInventoryByProductName(String productName) {
         return inventoryService.searchInventoryByProductName(productName);
     }
-        //
-    public List<Product> getLowStockProducts(){
+    //
+
+    public List<Product> getLowStockProducts() {
         return inventoryService.getLowStockProducts();
     }
-    
+
     //
-    public void showLowStockWarning(){
+    public void showLowStockWarning() {
         inventoryService.showLowStockWarning();
     }
-    
+
     //
-    public List<Inventory> getInventoryReport(String startDate, String endDate){
+    public List<Inventory> getInventoryReport(String startDate, String endDate) {
         return inventoryService.getInventoryReport(startDate, endDate);
+    }
+
+    //
+    public List<Inventory> getFilteredInventories(LocalDate fromDate, LocalDate toDate) {
+        return inventoryService.getFilteredInventories(fromDate, toDate);
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface StockEntryDetailDAO {
     // Thêm một bản ghi nhập kho mới
-    void addStockEntryDetail(StockEntryDetail stockEntry);
+    boolean addStockEntryDetail(StockEntryDetail stockEntry);
 
     // Lấy thông tin nhập kho theo ID
     StockEntryDetail getStockEntryDetailById(int stockEntryId);
@@ -32,4 +32,7 @@ public interface StockEntryDetailDAO {
     
     //
     public StockEntryDetail getStockEntryDetailByStockEntryIdAndProductId(int stockEntryId, int productId);
+    
+    //
+    boolean deleteStockEntryDetailByProductId(int stockEntryId , int productId);
 }

@@ -130,7 +130,6 @@ public class InventoryManagement extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         goHomeBtn = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        exportStockBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         findProductNameTextField = new javax.swing.JTextField();
         warningLabel = new javax.swing.JLabel();
@@ -229,16 +228,6 @@ public class InventoryManagement extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        exportStockBtn.setBackground(new java.awt.Color(0, 153, 51));
-        exportStockBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        exportStockBtn.setForeground(new java.awt.Color(255, 255, 255));
-        exportStockBtn.setText("Xuất kho");
-        exportStockBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportStockBtnActionPerformed(evt);
-            }
-        });
-
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Tìm kiếm sản phẩm");
 
@@ -278,8 +267,7 @@ public class InventoryManagement extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(exportStockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(124, 124, 124)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(0, 438, Short.MAX_VALUE)
@@ -310,17 +298,16 @@ public class InventoryManagement extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(addInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(addInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(deleteInventoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(19, 19, 19)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(exportStockBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(exportReportInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(exportReportInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
@@ -375,22 +362,6 @@ public class InventoryManagement extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void exportStockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportStockBtnActionPerformed
-        int selectedRow = inventoryTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Lấy thông tin sản phẩm đã chọn
-        int productId = (int) inventoryTable.getValueAt(selectedRow, 0);
-        String productName = (String) inventoryTable.getValueAt(selectedRow, 1);
-        int currentStockQuantity = (int) inventoryTable.getValueAt(selectedRow, 2);
-
-        ExportInventoryFrame exportFrame = new ExportInventoryFrame(productId, productName, currentStockQuantity, this); // Truyền this (frame cha) vào
-        exportFrame.setVisible(true);
-    }//GEN-LAST:event_exportStockBtnActionPerformed
 
     private void goHomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goHomeBtnActionPerformed
         // TODO add your handling code here:
@@ -647,7 +618,7 @@ public class InventoryManagement extends javax.swing.JFrame {
         return rowSet;
     }
 
-    void loadInventoryData() {
+    private void loadInventoryData() {
         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ
 
@@ -717,7 +688,6 @@ public class InventoryManagement extends javax.swing.JFrame {
     private javax.swing.JButton deleteInventoryBtn;
     private javax.swing.JButton editInventoryBtn;
     private javax.swing.JButton exportReportInventory;
-    private javax.swing.JButton exportStockBtn;
     private javax.swing.JTextField findProductNameTextField;
     private javax.swing.JButton goHomeBtn;
     private javax.swing.JTable inventoryTable;

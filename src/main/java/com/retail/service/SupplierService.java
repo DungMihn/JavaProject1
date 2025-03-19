@@ -30,14 +30,20 @@ public class SupplierService {
     }
 
     // Cập nhật thông tin nhà cung cấp
-    public void updateSupplier(Supplier supplier) {
-        supplierDAO.updateSupplier(supplier);
-        System.out.println("✅ Nhà cung cấp đã được cập nhật thành công!");
+    public boolean updateSupplier(Supplier supplier) {
+        return supplierDAO.updateSupplier(supplier);
     }
 
     // Xóa nhà cung cấp theo ID
-    public void deleteSupplier(int supplierId) {
-        supplierDAO.deleteSupplier(supplierId);
-        System.out.println("✅ Nhà cung cấp đã được xóa thành công!");
+    public boolean deleteSupplier(int supplierId) {
+        return supplierDAO.deleteSupplier(supplierId);
+    }
+    //
+     public List<Supplier> searchSuppliersByName(String keyword) {
+        return supplierDAO.searchSuppliersByName(keyword);
+    }
+     //
+     public int getNextSupplierId() {
+        return supplierDAO.getNextSupplierId();
     }
 }

@@ -7,6 +7,7 @@ package com.retail.service;
 import com.retail.dao.InventoryDAOImpl;
 import com.retail.model.Inventory;
 import com.retail.model.Product;
+import java.time.LocalDate;
 import java.util.List;
 /**
  *
@@ -70,5 +71,9 @@ public class InventoryService {
     //
     public List<Inventory> getInventoryReport(String startDate, String endDate){
         return inventoryDAO.getInventoryReport(startDate, endDate);
+    }
+    //
+    public List<Inventory> getFilteredInventories(LocalDate fromDate, LocalDate toDate){
+        return inventoryDAO.getFilteredInventories(fromDate, toDate);
     }
 }

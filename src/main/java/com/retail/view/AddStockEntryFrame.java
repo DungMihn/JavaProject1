@@ -89,7 +89,6 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         // Khởi tạo suggestionList
         suggestionList = new JList<>();
         suggestionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        jPopupMenu1 = new javax.swing.JPopupMenu();
 
         // Khởi tạo danh sách tạm thời
         tempStockEntryDetails = new ArrayList<>();
@@ -461,10 +460,6 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void priceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_priceTextFieldActionPerformed
-
     private void addStockEntryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStockEntryBtnActionPerformed
 
         String productName = productNameTextField.getText().trim();
@@ -575,6 +570,10 @@ public class AddStockEntryFrame extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_saveStockEntryBtnActionPerformed
+
+    private void priceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_priceTextFieldActionPerformed
 
     private void generateAndOpenStockEntryReport(int stockEntryId) {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {

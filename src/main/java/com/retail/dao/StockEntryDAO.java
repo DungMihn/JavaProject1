@@ -5,6 +5,7 @@
 package com.retail.dao;
 
 import com.retail.model.StockEntry;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 /**
@@ -28,5 +29,14 @@ public interface StockEntryDAO {
     void deleteStockEntry(int stockEntryId);
     
     Map<String, Object> getStockEntryDetails(int stockEntryId);
+    
+    //
+    public int getNextStockEntryId();
+    
+    //
+    public boolean isStockEntryExist(int stockEntryId);
+    
+    //
+    public List<StockEntry> getFilteredStockEntries(Integer supplierId, LocalDate fromDate, LocalDate toDate);
     
 }

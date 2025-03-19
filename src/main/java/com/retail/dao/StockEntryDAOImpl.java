@@ -11,15 +11,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 /**
  *
  * @author Admin
  */
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +28,12 @@ import java.util.Map;
 public class StockEntryDAOImpl implements StockEntryDAO {
 
     private static final String INSERT_STOCK_ENTRY = "{CALL sp_AddStockEntry(?, ?, ?)}";
-    private static final String SELECT_ALL_STOCK_ENTRIES = "SELECT * FROM StockEntry";
+    private static final String SELECT_ALL_STOCK_ENTRIES = "EXEC GetAllStockEntryDetails";
     private static final String GET_STOCK_ENTRY_DETAILS = "{CALL sp_GetStockEntryDetails(?)}";
     private static final String DELETE_STOCK_ENTRY = "DELETE FROM StockEntry WHERE stock_entry_id = ?";
     private static final String GET_STOCK_ENTRY_BY_ID = "{CALL GetStockEntryById(?)}";
-    private static final String UPDATE_STOCK_ENTRY = "UPDATE StockEntry SET supplier_id = ?, employee_id = ? WHERE stock_entry_id = ?";
+    private static final String UPDATE_STOCK_ENTRY = "UPDATE StockEntry SET supplier_id = ?, employee_id = ?, entry_date = ? WHERE stock_entry_id = ?";
+    private static final String GET_NEXT_STOCK_ENTRY_ID = "SELECT IDENT_CURRENT('StockEntry') + IDENT_INCR('StockEntry') AS NextStockEntryId;";
 
     @Override
     public int addStockEntry(StockEntry stockEntry) {
@@ -104,8 +105,11 @@ public class StockEntryDAOImpl implements StockEntryDAO {
                 StockEntry stockEntry = new StockEntry(
                         rs.getInt("stock_entry_id"),
                         rs.getInt("supplier_id"),
+                        rs.getString("supplier_name"),
                         rs.getInt("employee_id"),
-                        rs.getObject("entry_date", LocalDateTime.class)
+                        rs.getString("employee_name"),
+                        rs.getObject("entry_date", LocalDateTime.class),
+                        rs.getDouble("total_price")
                 );
                 stockEntries.add(stockEntry);
             }
@@ -121,7 +125,24 @@ public class StockEntryDAOImpl implements StockEntryDAO {
 
             pstmt.setInt(1, stockEntry.getSupplierId()); // Cập nhật supplier_id
             pstmt.setInt(2, stockEntry.getEmployeeId()); // Cập nhật employee_id
-            pstmt.setInt(3, stockEntry.getStockEntryId()); // Điều kiện WHERE
+            // Lấy ngày từ String (dd/MM/yyyy)
+            String entryDateString = stockEntry.getEntryDate(); // Ví dụ: "16/03/2025"
+            LocalDateTime entryDateTime = null;
+
+            if (entryDateString != null && !entryDateString.isEmpty()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate entryDate = LocalDate.parse(entryDateString, formatter);
+
+                // Lấy giờ-phút-giây hiện tại
+                LocalTime currentTime = LocalTime.now();
+
+                // Kết hợp ngày từ `entryDateString` với giờ hiện tại
+                entryDateTime = LocalDateTime.of(entryDate, currentTime);
+            }
+
+            // Chuyển thành Timestamp để lưu vào DB
+            pstmt.setTimestamp(3, entryDateTime != null ? Timestamp.valueOf(entryDateTime) : null);
+            pstmt.setInt(4, stockEntry.getStockEntryId()); // Điều kiện WHERE
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
@@ -176,5 +197,84 @@ public class StockEntryDAOImpl implements StockEntryDAO {
         }
 
         return result;
+    }
+
+    //
+    @Override
+    public int getNextStockEntryId() {
+        try (Connection con = DatabaseConnection.getConnection(); PreparedStatement pstmt = con.prepareStatement(GET_NEXT_STOCK_ENTRY_ID); ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                // Truy cập cột "NextStockEntryId" bằng tên cột
+                return rs.getInt("NextStockEntryId");
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi lấy ID tiếp theo của StockEntry: " + e.getMessage());
+        }
+        return -1; // Trả về -1 nếu có lỗi
+    }
+
+    @Override
+    public boolean isStockEntryExist(int stockEntryId) {
+        String query = "SELECT COUNT(*) FROM StockEntry WHERE stock_entry_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, stockEntryId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi kiểm tra ID: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public List<StockEntry> getFilteredStockEntries(Integer supplierId, LocalDate fromDate, LocalDate toDate) {
+        List<StockEntry> filteredEntries = new ArrayList<>();
+        System.out.println("FROM date: " + fromDate); 
+        System.out.println("TO date: " + toDate); 
+
+        try (Connection connection = DatabaseConnection.getConnection(); CallableStatement cstmt = connection.prepareCall("{call GetFilteredStockEntryDetails(?, ?, ?)}")) {
+
+            // Thiết lập tham số cho nhà cung cấp
+            if (supplierId != null && supplierId != -1) {
+                cstmt.setInt(1, supplierId); // Truyền supplier_id nếu không phải "Tất cả"
+            } else {
+                cstmt.setNull(1, Types.INTEGER); // Truyền NULL nếu chọn "Tất cả"
+            }
+
+            // Thiết lập tham số cho ngày bắt đầu
+            if (fromDate != null) {
+                cstmt.setDate(2, Date.valueOf(fromDate));
+            } else {
+                cstmt.setNull(2, Types.DATE); // Truyền NULL nếu không chọn ngày bắt đầu
+            }
+
+            // Thiết lập tham số cho ngày kết thúc
+            if (toDate != null) {
+                cstmt.setDate(3, Date.valueOf(toDate));
+            } else {
+                cstmt.setNull(3, Types.DATE); // Truyền NULL nếu không chọn ngày kết thúc
+            }
+
+            // Thực thi stored procedure
+            ResultSet rs = cstmt.executeQuery();
+
+            // Đọc kết quả và thêm vào danh sách
+            while (rs.next()) {
+                StockEntry stockEntry = new StockEntry();
+                stockEntry.setStockEntryId(rs.getInt("stock_entry_id"));
+                stockEntry.setSupplierName(rs.getString("supplier_name"));
+                stockEntry.setEmployeeName(rs.getString("employee_name"));
+                stockEntry.setEntryDate(rs.getTimestamp("entry_date").toLocalDateTime());
+                stockEntry.setTotalPrice(rs.getDouble("total_price"));
+                filteredEntries.add(stockEntry);
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi lọc stock entry: " + e.getMessage());
+        }
+
+        return filteredEntries;
     }
 }

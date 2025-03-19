@@ -58,6 +58,18 @@ public class Product {
         this.purchasePrice = purchasePrice;
     }
 
+    public Product(String name, String category, double price, String unit, int supplierId, int stockQuantity, String barcode, double purchasePrice) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.unit = unit;
+        this.supplierId = supplierId;
+        this.stockQuantity = stockQuantity;
+        this.barcode = barcode;
+        this.purchasePrice = purchasePrice;
+    }
+
+    
 
 
     

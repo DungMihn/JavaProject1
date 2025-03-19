@@ -6,7 +6,7 @@ package com.retail.service;
 
 import com.retail.dao.StockEntryDAOImpl;
 import com.retail.model.StockEntry;
-import com.retail.model.StockEntryDetail;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -49,5 +49,15 @@ public class StockEntryService {
         return stockEntryDAO.getStockEntryDetails(stockEntryId);
     }
     
-
+    public int getNextStockEntryId(){
+        return stockEntryDAO.getNextStockEntryId();
+    }
+    //
+    public boolean isStockEntryExist(int stockEntryId){
+        return stockEntryDAO.isStockEntryExist(stockEntryId);
+    }
+    //
+    public List<StockEntry> getFilteredStockEntries(Integer supplierId, LocalDate fromDate, LocalDate toDate) {
+        return stockEntryDAO.getFilteredStockEntries(supplierId, fromDate, toDate);
+    }
 }

@@ -7,6 +7,7 @@ package com.retail.dao;
 import com.retail.model.Inventory;
 import com.retail.model.Product;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +27,12 @@ public class InventoryDAOImpl implements InventoryDAO {
 
     private static final String INSERT_INVENTORY = "INSERT INTO Inventory (product_id, stock_quantity) VALUES (?, ?)";
     private static final String SELECT_ALL_INVENTORIES = "EXEC sp_GetInventoryWithProduct;";
-    private static final String SELECT_INVENTORY_BY_ID = "SELECT * FROM Inventory WHERE inventory_id = ?";
+    private static final String SELECT_INVENTORY_BY_ID = "SELECT \n"
+            + "    I.*, \n"
+            + "    P.name AS product_name \n"
+            + "FROM Inventory I\n"
+            + "JOIN Product P ON I.product_id = P.product_id\n"
+            + "WHERE I.inventory_id = ?;";
     private static final String SELECT_INVENTORY_BY_PRODUCT_ID = "SELECT * FROM Inventory WHERE product_id = ?";
     private static final String UPDATE_INVENTORY = "UPDATE Inventory SET product_id = ?, stock_quantity = ?, last_updated = ? WHERE inventory_id = ?";
     private static final String DELETE_INVENTORY = "DELETE FROM Inventory WHERE inventory_id = ?";
@@ -60,6 +66,7 @@ public class InventoryDAOImpl implements InventoryDAO {
                 return new Inventory(
                         rs.getInt("inventory_id"),
                         rs.getInt("product_id"),
+                        rs.getString("product_name"),
                         rs.getInt("stock_quantity"),
                         rs.getObject("last_updated", LocalDateTime.class)
                 );
@@ -302,6 +309,56 @@ public class InventoryDAOImpl implements InventoryDAO {
             System.out.println("❌ Lỗi khi lấy báo cáo: " + e.getMessage());
         }
         return inventoryReport;
+    }
+
+    @Override
+    public List<Inventory> getFilteredInventories(LocalDate fromDate, LocalDate toDate) {
+        List<Inventory> inventories = new ArrayList<>();
+
+        // Truy vấn SQL cơ bản
+        String sql = "SELECT i.inventory_id, p.name AS product_name, i.stock_quantity, i.last_updated "
+                + "FROM Inventory i "
+                + "JOIN Product p ON i.product_id = p.product_id "
+                + "WHERE 1=1"; // Điều kiện mặc định
+
+        // Thêm điều kiện ngày nếu có
+        if (fromDate != null) {
+            sql += " AND i.last_updated >= ?";
+        }
+        if (toDate != null) {
+            sql += " AND i.last_updated <= ?";
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Thiết lập các tham số cho truy vấn
+            int paramIndex = 1;
+            if (fromDate != null) {
+                stmt.setDate(paramIndex++, Date.valueOf(fromDate));
+            }
+            if (toDate != null) {
+                stmt.setDate(paramIndex++, Date.valueOf(toDate));
+            }
+
+            // Thực thi truy vấn
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    // Tạo đối tượng Inventory từ kết quả truy vấn
+                    Inventory inventory = new Inventory();
+                    inventory.setInventoryId(rs.getInt("inventory_id"));
+                    inventory.setProductName(rs.getString("product_name"));
+                    inventory.setStockQuantity(rs.getInt("stock_quantity"));
+                    inventory.setLastUpdated(rs.getTimestamp("last_updated").toLocalDateTime());
+
+                    // Thêm vào danh sách
+                    inventories.add(inventory);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi lọc inventory: " + e.getMessage());
+        }
+
+        return inventories;
     }
 
 }

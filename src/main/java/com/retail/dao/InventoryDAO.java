@@ -6,6 +6,7 @@ package com.retail.dao;
 
 import com.retail.model.Inventory;
 import com.retail.model.Product;
+import java.time.LocalDate;
 import java.util.List;
 /**
  *
@@ -41,4 +42,6 @@ public interface InventoryDAO {
     public void showLowStockWarning();
     //
     public List<Inventory> getInventoryReport(String startDate, String endDate);
+    //
+    public List<Inventory> getFilteredInventories(LocalDate fromDate, LocalDate toDate);
 }

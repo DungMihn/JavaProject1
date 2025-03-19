@@ -16,9 +16,8 @@ public class StockEntryDetailService {
     private final StockEntryDetailDAOImpl stockEntryDetailDAO = new StockEntryDetailDAOImpl();
 
     // Thêm chi tiết nhập kho mới
-    public void addStockEntryDetail(StockEntryDetail stockEntryDetail) {
-        stockEntryDetailDAO.addStockEntryDetail(stockEntryDetail);
-        System.out.println("✅ Chi tiết nhập kho đã được thêm thành công!");
+    public boolean addStockEntryDetail(StockEntryDetail stockEntryDetail) {
+        return stockEntryDetailDAO.addStockEntryDetail(stockEntryDetail);
     }
 
     // Lấy danh sách tất cả chi tiết nhập kho
@@ -50,5 +49,10 @@ public class StockEntryDetailService {
     //
     public StockEntryDetail getStockEntryDetailByStockEntryIdAndProductId(int stockEntryId, int productId){
         return stockEntryDetailDAO.getStockEntryDetailByStockEntryIdAndProductId(stockEntryId, productId);
+    }
+    
+    //
+    public boolean deleteStockEntryDetailByProductId(int stockEntryId, int productId){
+        return stockEntryDetailDAO.deleteStockEntryDetailByProductId(stockEntryId, productId);
     }
 }
