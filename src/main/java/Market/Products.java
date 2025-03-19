@@ -29,27 +29,23 @@ public class Products extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         boxProducts = new javax.swing.JPanel();
         ManageProducts = new javax.swing.JLabel();
-        FormName = new javax.swing.JTextField();
         FormProdID = new javax.swing.JTextField();
-        ProdID = new javax.swing.JLabel();
         Name = new javax.swing.JLabel();
-        FormQuantity = new javax.swing.JTextField();
         Category = new javax.swing.JLabel();
-        Quantity = new javax.swing.JLabel();
-        Price = new javax.swing.JLabel();
+        Suplier = new javax.swing.JLabel();
         FormCategory = new javax.swing.JComboBox<>();
         SearchButton = new javax.swing.JButton();
         EditButton = new javax.swing.JButton();
-        FormPrice = new javax.swing.JTextField();
         TableProducts = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         ProductList = new javax.swing.JLabel();
-        FormBarcode = new javax.swing.JTextField();
-        Barcode = new javax.swing.JLabel();
+        FormCategory2 = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu6 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
 
@@ -67,51 +63,25 @@ public class Products extends javax.swing.JFrame {
         ManageProducts.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         ManageProducts.setText("QUẢN LÝ SẢN PHẨM");
 
-        FormName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        FormName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FormNameActionPerformed(evt);
-            }
-        });
-
         FormProdID.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        FormProdID.setToolTipText("");
         FormProdID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FormProdIDActionPerformed(evt);
             }
         });
 
-        ProdID.setBackground(new java.awt.Color(255, 102, 0));
-        ProdID.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        ProdID.setForeground(new java.awt.Color(255, 255, 255));
-        ProdID.setText("ID Sản phẩm");
-
-        Name.setBackground(new java.awt.Color(255, 102, 0));
+        Name.setBackground(new java.awt.Color(255, 255, 255));
         Name.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        Name.setForeground(new java.awt.Color(255, 255, 255));
-        Name.setText("Tên sản phẩm");
+        Name.setText("Nhà CC");
 
-        FormQuantity.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        FormQuantity.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FormQuantityActionPerformed(evt);
-            }
-        });
-
-        Category.setBackground(new java.awt.Color(255, 102, 0));
+        Category.setBackground(new java.awt.Color(255, 255, 255));
         Category.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        Category.setForeground(new java.awt.Color(255, 255, 255));
-        Category.setText("Loại");
+        Category.setText("Tìm SP/ Mã vạch");
 
-        Quantity.setBackground(new java.awt.Color(255, 102, 0));
-        Quantity.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        Quantity.setForeground(new java.awt.Color(255, 255, 255));
-        Quantity.setText("Số lượng");
-
-        Price.setBackground(new java.awt.Color(255, 102, 0));
-        Price.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        Price.setForeground(new java.awt.Color(255, 255, 255));
-        Price.setText("Giá");
+        Suplier.setBackground(new java.awt.Color(255, 102, 0));
+        Suplier.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        Suplier.setText("Loại");
 
         FormCategory.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         FormCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Beverage", "Vegetable", "Meat", "Clothes", " " }));
@@ -121,8 +91,9 @@ public class Products extends javax.swing.JFrame {
             }
         });
 
-        SearchButton.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        SearchButton.setText("Search");
+        SearchButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        SearchButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\search-interface-symbol.png")); // NOI18N
+        SearchButton.setText("Tìm kiếm");
         SearchButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 0)));
         SearchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,8 +101,9 @@ public class Products extends javax.swing.JFrame {
             }
         });
 
-        EditButton.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        EditButton.setText("Edit");
+        EditButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        EditButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\edit.png")); // NOI18N
+        EditButton.setText("Chỉnh sửa");
         EditButton.setBorder(null);
         EditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,23 +111,16 @@ public class Products extends javax.swing.JFrame {
             }
         });
 
-        FormPrice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        FormPrice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FormPriceActionPerformed(evt);
-            }
-        });
-
         jTable1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Tên SP", "Loại", "Giá", "Đơn vị", "Nhà cung cấp", "Barcode", "Tồn kho"
+                "ID", "Tên SP", "Loại", "Giá bán", "Đơn vị", "Số lượng ", "Mã vạch", "Nhà CC", "Giá Nhập"
             }
         ));
         jTable1.setRowHeight(25);
@@ -165,17 +130,13 @@ public class Products extends javax.swing.JFrame {
         ProductList.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         ProductList.setText("DANH SÁCH SẢN PHẨM");
 
-        FormBarcode.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        FormBarcode.addActionListener(new java.awt.event.ActionListener() {
+        FormCategory2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        FormCategory2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Beverage", "Vegetable", "Meat", "Clothes", " " }));
+        FormCategory2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FormBarcodeActionPerformed(evt);
+                FormCategory2ActionPerformed(evt);
             }
         });
-
-        Barcode.setBackground(new java.awt.Color(255, 102, 0));
-        Barcode.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        Barcode.setForeground(new java.awt.Color(255, 255, 255));
-        Barcode.setText("BARCODE");
 
         javax.swing.GroupLayout boxProductsLayout = new javax.swing.GroupLayout(boxProducts);
         boxProducts.setLayout(boxProductsLayout);
@@ -186,80 +147,61 @@ public class Products extends javax.swing.JFrame {
                 .addComponent(ProductList)
                 .addGap(397, 397, 397))
             .addGroup(boxProductsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(TableProducts)
-                .addContainerGap())
-            .addGroup(boxProductsLayout.createSequentialGroup()
                 .addGap(80, 80, 80)
                 .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(Category, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ProdID))
+                    .addComponent(Name, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(FormName)
-                    .addComponent(FormProdID)
-                    .addComponent(FormCategory, 0, 280, Short.MAX_VALUE))
-                .addGap(80, 80, 80)
+                    .addComponent(FormCategory2, 0, 240, Short.MAX_VALUE)
+                    .addComponent(FormProdID))
+                .addGap(150, 150, 150)
                 .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Barcode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Price, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Quantity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(FormQuantity, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(FormPrice)
-                    .addComponent(FormBarcode))
+                    .addGroup(boxProductsLayout.createSequentialGroup()
+                        .addComponent(Suplier, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(FormCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(boxProductsLayout.createSequentialGroup()
+                        .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(EditButton, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(boxProductsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TableProducts))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, boxProductsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, boxProductsLayout.createSequentialGroup()
-                        .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)
-                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(403, 403, 403))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, boxProductsLayout.createSequentialGroup()
-                        .addComponent(ManageProducts)
-                        .addGap(402, 402, 402))))
+                .addComponent(ManageProducts)
+                .addGap(415, 415, 415))
         );
         boxProductsLayout.setVerticalGroup(
             boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(boxProductsLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addComponent(ManageProducts)
-                .addGap(32, 32, 32)
-                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(26, 26, 26)
+                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(Name)
+                        .addComponent(FormCategory2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(Suplier)
+                        .addComponent(FormCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(boxProductsLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
                         .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(ProdID)
                             .addComponent(FormProdID, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Quantity))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(Name)
-                                .addComponent(FormName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(FormPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Price, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Category)
-                            .addComponent(FormCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Barcode)
-                            .addComponent(FormBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(Category)))
                     .addGroup(boxProductsLayout.createSequentialGroup()
-                        .addComponent(FormQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(88, 88, 88)))
-                .addGap(36, 36, 36)
-                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                        .addGap(18, 18, 18)
+                        .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(43, 43, 43)
                 .addComponent(ProductList)
                 .addGap(24, 24, 24)
-                .addComponent(TableProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addComponent(TableProducts, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -273,6 +215,9 @@ public class Products extends javax.swing.JFrame {
             .addComponent(boxProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jMenu6.setText("Nhập Hàng");
+        jMenuBar1.add(jMenu6);
+
         jMenu3.setText("Sản Phẩm");
         jMenuBar1.add(jMenu3);
 
@@ -281,6 +226,9 @@ public class Products extends javax.swing.JFrame {
 
         jMenu1.setText("Khách Hàng");
         jMenuBar1.add(jMenu1);
+
+        jMenu7.setText("Nhân Viên");
+        jMenuBar1.add(jMenu7);
 
         jMenu4.setText("Báo Cáo");
         jMenuBar1.add(jMenu4);
@@ -305,18 +253,6 @@ public class Products extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void FormNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FormNameActionPerformed
-
-    private void FormQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormQuantityActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FormQuantityActionPerformed
-
-    private void FormPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormPriceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FormPriceActionPerformed
-
     private void SearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SearchButtonActionPerformed
@@ -325,13 +261,13 @@ public class Products extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_EditButtonActionPerformed
 
-    private void FormBarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormBarcodeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FormBarcodeActionPerformed
-
     private void FormCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormCategoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_FormCategoryActionPerformed
+
+    private void FormCategory2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormCategory2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FormCategory2ActionPerformed
 
     private void FormProdIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormProdIDActionPerformed
         // TODO add your handling code here:
@@ -373,22 +309,16 @@ public class Products extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Barcode;
     private javax.swing.JLabel Category;
     private javax.swing.JButton EditButton;
-    private javax.swing.JTextField FormBarcode;
     private javax.swing.JComboBox<String> FormCategory;
-    private javax.swing.JTextField FormName;
-    private javax.swing.JTextField FormPrice;
+    private javax.swing.JComboBox<String> FormCategory2;
     private javax.swing.JTextField FormProdID;
-    private javax.swing.JTextField FormQuantity;
     private javax.swing.JLabel ManageProducts;
     private javax.swing.JLabel Name;
-    private javax.swing.JLabel Price;
-    private javax.swing.JLabel ProdID;
     private javax.swing.JLabel ProductList;
-    private javax.swing.JLabel Quantity;
     private javax.swing.JButton SearchButton;
+    private javax.swing.JLabel Suplier;
     private javax.swing.JScrollPane TableProducts;
     private javax.swing.JPanel boxProducts;
     private javax.swing.JMenu jMenu1;
@@ -396,6 +326,8 @@ public class Products extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTable jTable1;

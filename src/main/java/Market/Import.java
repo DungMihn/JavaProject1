@@ -26,7 +26,7 @@ public class Import extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        InformationBox = new javax.swing.JPanel();
         Entry = new javax.swing.JLabel();
         EntryForm = new javax.swing.JTextField();
         Ncc = new javax.swing.JLabel();
@@ -35,7 +35,7 @@ public class Import extends javax.swing.JFrame {
         DateComboBox = new javax.swing.JComboBox<>();
         AddNccButton = new javax.swing.JButton();
         FormAddNcc = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
+        Box = new javax.swing.JPanel();
         Commo = new javax.swing.JLabel();
         CommoForm = new javax.swing.JTextField();
         Unit = new javax.swing.JLabel();
@@ -53,21 +53,23 @@ public class Import extends javax.swing.JFrame {
         DeleteButton = new javax.swing.JButton();
         PrintButton = new javax.swing.JButton();
         Quantity = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        TableProduct = new javax.swing.JPanel();
         Title = new javax.swing.JLabel();
         ImportTable = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
+        ImportPage = new javax.swing.JMenu();
+        ProductPage = new javax.swing.JMenu();
+        InvoicePage = new javax.swing.JMenu();
+        CustomerPage = new javax.swing.JMenu();
+        EmployeePage = new javax.swing.JMenu();
+        ReportPage = new javax.swing.JMenu();
+        SystemPage = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1024, 272));
+        InformationBox.setBackground(new java.awt.Color(153, 153, 153));
+        InformationBox.setPreferredSize(new java.awt.Dimension(1024, 272));
 
         Entry.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         Entry.setForeground(new java.awt.Color(255, 255, 255));
@@ -122,8 +124,8 @@ public class Import extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel2.setPreferredSize(new java.awt.Dimension(1024, 167));
+        Box.setBackground(new java.awt.Color(153, 153, 153));
+        Box.setPreferredSize(new java.awt.Dimension(1024, 167));
 
         Commo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         Commo.setForeground(new java.awt.Color(255, 255, 255));
@@ -258,28 +260,28 @@ public class Import extends javax.swing.JFrame {
         Quantity.setForeground(new java.awt.Color(255, 255, 255));
         Quantity.setText("Số lượng");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout BoxLayout = new javax.swing.GroupLayout(Box);
+        Box.setLayout(BoxLayout);
+        BoxLayout.setHorizontalGroup(
+            BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxLayout.createSequentialGroup()
+                .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(BoxLayout.createSequentialGroup()
                         .addGap(32, 32, 32)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Commo)
                             .addComponent(Unit))
                         .addGap(72, 72, 72)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(BoxLayout.createSequentialGroup()
                                 .addComponent(CommoForm, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(58, 58, 58))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(BoxLayout.createSequentialGroup()
                                 .addComponent(UnitCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(Quantity)
                                 .addGap(18, 18, 18))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxLayout.createSequentialGroup()
                         .addGap(71, 71, 71)
                         .addComponent(AddButton)
                         .addGap(49, 49, 49)
@@ -287,39 +289,39 @@ public class Import extends javax.swing.JFrame {
                         .addGap(49, 49, 49)
                         .addComponent(EditButton)
                         .addGap(49, 49, 49)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(BoxLayout.createSequentialGroup()
                         .addComponent(AddCommoForm, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(AddCommoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(BoxLayout.createSequentialGroup()
+                        .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(BoxLayout.createSequentialGroup()
                                 .addComponent(DeleteButton)
                                 .addGap(49, 49, 49)
                                 .addComponent(PrintButton))
                             .addComponent(QuantityForm))
                         .addGap(53, 53, 53)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Price)
                             .addComponent(Total))
                         .addGap(20, 20, 20)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(TotalForm)
                             .addComponent(PriceForm))))
                 .addGap(46, 46, 46))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        BoxLayout.setVerticalGroup(
+            BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BoxLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CommoForm, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Commo)
                     .addComponent(AddCommoForm, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(AddCommoButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(UnitCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Unit)
                     .addComponent(QuantityForm, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -327,7 +329,7 @@ public class Import extends javax.swing.JFrame {
                     .addComponent(Price)
                     .addComponent(Quantity))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(BoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TotalForm, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Total)
                     .addComponent(AddButton)
@@ -338,55 +340,55 @@ public class Import extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout InformationBoxLayout = new javax.swing.GroupLayout(InformationBox);
+        InformationBox.setLayout(InformationBoxLayout);
+        InformationBoxLayout.setHorizontalGroup(
+            InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(InformationBoxLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Entry)
                     .addComponent(Ncc))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(NccComboBox, 0, 220, Short.MAX_VALUE)
                     .addComponent(EntryForm))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(InformationBoxLayout.createSequentialGroup()
                         .addComponent(FormAddNcc, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(AddNccButton))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(InformationBoxLayout.createSequentialGroup()
                         .addComponent(Date)
                         .addGap(18, 18, 18)
                         .addComponent(DateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(22, 22, 22))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1051, Short.MAX_VALUE)
+            .addComponent(Box, javax.swing.GroupLayout.DEFAULT_SIZE, 1051, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        InformationBoxLayout.setVerticalGroup(
+            InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(InformationBoxLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(Entry)
                         .addComponent(EntryForm, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(Date)
                         .addComponent(DateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(InformationBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NccComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(AddNccButton)
                     .addComponent(Ncc)
                     .addComponent(FormAddNcc, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TableProduct.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         Title.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         Title.setText("Sản phẩm");
@@ -404,19 +406,19 @@ public class Import extends javax.swing.JFrame {
         ));
         ImportTable.setViewportView(jTable1);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout TableProductLayout = new javax.swing.GroupLayout(TableProduct);
+        TableProduct.setLayout(TableProductLayout);
+        TableProductLayout.setHorizontalGroup(
+            TableProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(ImportTable)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(TableProductLayout.createSequentialGroup()
                 .addGap(481, 481, 481)
                 .addComponent(Title)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        TableProductLayout.setVerticalGroup(
+            TableProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TableProductLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(Title)
                 .addGap(24, 24, 24)
@@ -424,20 +426,26 @@ public class Import extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jMenu1.setText("Sản phẩm");
-        jMenuBar1.add(jMenu1);
+        ImportPage.setText("Nhập Hàng");
+        jMenuBar1.add(ImportPage);
 
-        jMenu2.setText("Hoá Đơn");
-        jMenuBar1.add(jMenu2);
+        ProductPage.setText("Sản Phẩm");
+        jMenuBar1.add(ProductPage);
 
-        jMenu3.setText("Khách Hàng");
-        jMenuBar1.add(jMenu3);
+        InvoicePage.setText("Hoá Đơn");
+        jMenuBar1.add(InvoicePage);
 
-        jMenu4.setText("Báo Cáo");
-        jMenuBar1.add(jMenu4);
+        CustomerPage.setText("Khách Hàng");
+        jMenuBar1.add(CustomerPage);
 
-        jMenu5.setText("Hệ Thống");
-        jMenuBar1.add(jMenu5);
+        EmployeePage.setText("Nhân Viên");
+        jMenuBar1.add(EmployeePage);
+
+        ReportPage.setText("Báo Cáo");
+        jMenuBar1.add(ReportPage);
+
+        SystemPage.setText("Hệ Thống");
+        jMenuBar1.add(SystemPage);
 
         setJMenuBar(jMenuBar1);
 
@@ -445,15 +453,15 @@ public class Import extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1051, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(InformationBox, javax.swing.GroupLayout.DEFAULT_SIZE, 1051, Short.MAX_VALUE)
+            .addComponent(TableProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(InformationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TableProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -568,38 +576,40 @@ public class Import extends javax.swing.JFrame {
     private javax.swing.JButton AddCommoButton;
     private javax.swing.JTextField AddCommoForm;
     private javax.swing.JButton AddNccButton;
+    private javax.swing.JPanel Box;
     private javax.swing.JLabel Commo;
     private javax.swing.JTextField CommoForm;
+    private javax.swing.JMenu CustomerPage;
     private javax.swing.JLabel Date;
     private javax.swing.JComboBox<String> DateComboBox;
     private javax.swing.JButton DeleteButton;
     private javax.swing.JButton EditButton;
+    private javax.swing.JMenu EmployeePage;
     private javax.swing.JLabel Entry;
     private javax.swing.JTextField EntryForm;
     private javax.swing.JTextField FormAddNcc;
+    private javax.swing.JMenu ImportPage;
     private javax.swing.JScrollPane ImportTable;
+    private javax.swing.JPanel InformationBox;
+    private javax.swing.JMenu InvoicePage;
     private javax.swing.JLabel Ncc;
     private javax.swing.JComboBox<String> NccComboBox;
     private javax.swing.JLabel Price;
     private javax.swing.JTextField PriceForm;
     private javax.swing.JButton PrintButton;
+    private javax.swing.JMenu ProductPage;
     private javax.swing.JLabel Quantity;
     private javax.swing.JTextField QuantityForm;
+    private javax.swing.JMenu ReportPage;
     private javax.swing.JButton SaveButton;
+    private javax.swing.JMenu SystemPage;
+    private javax.swing.JPanel TableProduct;
     private javax.swing.JLabel Title;
     private javax.swing.JLabel Total;
     private javax.swing.JTextField TotalForm;
     private javax.swing.JLabel Unit;
     private javax.swing.JComboBox<String> UnitCombobox;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
