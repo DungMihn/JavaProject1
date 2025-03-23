@@ -5,9 +5,7 @@
 package com.retail.view;
 
 import com.retail.controller.SupplierController;
-import com.retail.model.ComboBoxItem;
 import com.retail.model.Supplier;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.UnsupportedEncodingException;
@@ -206,7 +204,7 @@ public class SupplierFrame extends javax.swing.JFrame {
         boxProducts.setBackground(new java.awt.Color(255, 255, 255));
         boxProducts.setRequestFocusEnabled(false);
 
-        ManageProducts.setFont(new java.awt.Font("Candara", 1, 24)); // NOI18N
+        ManageProducts.setFont(new java.awt.Font("Candara", 1, 18)); // NOI18N
         ManageProducts.setForeground(new java.awt.Color(255, 102, 51));
         ManageProducts.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ManageProducts.setText("QUẢN LÝ NHÀ CUNG CẤP");
@@ -504,8 +502,8 @@ public class SupplierFrame extends javax.swing.JFrame {
         boxProductsLayout.setVerticalGroup(
             boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(boxProductsLayout.createSequentialGroup()
-                .addComponent(ManageProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ManageProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)

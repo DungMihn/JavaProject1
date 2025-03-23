@@ -4,6 +4,7 @@
  */
 package com.retail.dao;
 
+import com.retail.model.Product;
 import com.retail.model.Supplier;
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface SupplierDAO {
     List<Supplier> getAllSuppliers();
     public List<Supplier> searchSuppliersByName(String keyword);
     public int getNextSupplierId();
+    public List<Product> getProductsBySupplierId(int supplierId);
 }

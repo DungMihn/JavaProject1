@@ -28,6 +28,7 @@ public class StockSidebar extends javax.swing.JFrame {
         stockEntryPanel = new StockEntryPanel(); // Khởi tạo StockEntryPanel
         StockEntryListPanel stockEntryListPanel = new StockEntryListPanel();
         inventoryPanel = new InventoryPanel();
+        StockMenuPanel stockMenuPanel = new StockMenuPanel();
 
         // Thiết lập CardLayout
         cardLayout = new CardLayout();
@@ -37,6 +38,7 @@ public class StockSidebar extends javax.swing.JFrame {
         contentPanel.add(stockEntryPanel, "StockEntry");
         contentPanel.add(stockEntryListPanel, "StockEntryList");
         contentPanel.add(inventoryPanel, "Inventory");
+        contentPanel.add(stockMenuPanel, "Menu");
 
         // Hiển thị màn hình mặc định
         cardLayout.show(contentPanel, "StockEntryList");
@@ -60,6 +62,7 @@ public class StockSidebar extends javax.swing.JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cardLayout.show(contentPanel, "StockEntry"); // Hiển thị panel StockEntry
+                stockEntryPanel.initializeData(); // Gọi lại phương thức initializeData()
             }
         });
 
@@ -77,12 +80,11 @@ public class StockSidebar extends javax.swing.JFrame {
             }
         });
 
-
-
         exitLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                System.exit(0); // Thoát ứng dụng
+//                System.exit(0); // Thoát ứng dụng
+                cardLayout.show(contentPanel, "Menu");
             }
         });
     }
@@ -96,7 +98,6 @@ public class StockSidebar extends javax.swing.JFrame {
 
         // Hiệu ứng cho InventoryLabel
         addHoverEffect(InventoryLabel);
-
 
         // Hiệu ứng cho exitLabel
         addHoverEffect(exitLabel);

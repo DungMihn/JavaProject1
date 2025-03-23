@@ -4,6 +4,7 @@
  */
 package com.retail.controller;
 
+import com.retail.model.Product;
 import com.retail.model.Supplier;
 import com.retail.service.SupplierService;
 import java.util.List;
@@ -48,5 +49,9 @@ public class SupplierController {
 
     public int getNextSupplierId() {
         return supplierService.getNextSupplierId();
+    }
+
+    public List<Product> getProductsBySupplierId(int supplierId) {
+        return supplierService.getProductsBySupplierId(supplierId);
     }
 }

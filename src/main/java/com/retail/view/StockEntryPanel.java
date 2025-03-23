@@ -6,10 +6,10 @@ package com.retail.view;
 
 import com.retail.controller.EmployeeController;
 import com.retail.controller.InventoryController;
-import com.retail.controller.ProductController;
 import com.retail.controller.StockEntryController;
 import com.retail.controller.StockEntryDetailController;
 import com.retail.controller.SupplierController;
+import com.retail.dao.DatabaseConnection;
 import com.retail.model.ComboBoxItem;
 import com.retail.model.Employee;
 import com.retail.model.Inventory;
@@ -31,7 +31,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -61,11 +60,7 @@ import net.sf.jasperreports.engine.JRException;
  */
 public class StockEntryPanel extends javax.swing.JPanel {
 
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=GroceryStoreDB;encrypt=true;trustServerCertificate=true";
-    private static final String USER = "bookoff";
-    private static final String PASSWORD = "123456789";
 
-    private ProductController productController;
     private int supplierId; // Thêm biến supplierId
     private StockEntryController stockEntryController;
     private StockEntryDetailController stockEntryDetailController;
@@ -91,7 +86,6 @@ public class StockEntryPanel extends javax.swing.JPanel {
     public StockEntryPanel() {
         initComponents();
 
-        productController = new ProductController();
         supplierController = new SupplierController();
         stockEntryController = new StockEntryController();
         stockEntryDetailController = new StockEntryDetailController();
@@ -255,7 +249,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
     }
 
     private void loadProductsIntoAutoComplete() {
-        List<Product> products = productController.getProductsBySupplierId(supplierId);
+        List<Product> products = supplierController.getProductsBySupplierId(supplierId);
         productItems = new ArrayList<>();
 
         for (Product product : products) {
@@ -377,7 +371,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
     }
 
     private void autoFillProductFields(int productId) {
-        Product product = productController.getProductById(productId);
+        Product product = stockEntryController.getProductById(productId);
         if (product != null) {
             productIdTextField.setText(String.valueOf(product.getProductId()));
             barcodeTextField.setText(product.getBarcode());
@@ -550,8 +544,8 @@ public class StockEntryPanel extends javax.swing.JPanel {
     }
 
     private void generateAndOpenStockEntryReport() throws JRException {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            CallableStatement cstmt = connection.prepareCall("{call sp_GetStockEntryDetails(?)}");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            CallableStatement cstmt = conn.prepareCall("{call sp_GetStockEntryDetails(?)}");
 
             cstmt.setInt(1, stockEntryId);
 
@@ -644,7 +638,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         }
     }
 
-    private void initializeData() {
+    public void initializeData() {
         // Lấy ngày hiện tại và điền vào entryDateTextField
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = dateFormat.format(new Date());
@@ -777,7 +771,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         boxProducts.setBackground(new java.awt.Color(255, 255, 255));
         boxProducts.setRequestFocusEnabled(false);
 
-        ManageProducts.setFont(new java.awt.Font("Candara", 1, 24)); // NOI18N
+        ManageProducts.setFont(new java.awt.Font("Candara", 1, 18)); // NOI18N
         ManageProducts.setForeground(new java.awt.Color(255, 102, 51));
         ManageProducts.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ManageProducts.setText("PHIẾU NHẬP HÀNG");
@@ -833,7 +827,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         jLabel8.setText("Số lượng");
 
         unitComboBox.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        unitComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kg", "Gói", "Chai", "Hộp", "Lon", "Tuýp" }));
+        unitComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gói", "Hộp", "Chai", "Lon", "Lít", "Cái", "Kg", "Túi", "Thanh", "Viên" }));
 
         jLabel9.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 102, 0));
@@ -901,7 +895,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         jLabel12.setText("Loại");
 
         categoryComboBox.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        categoryComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đồ Uống", "Bánh Kẹo", "Chăm Sóc Nhà Cửa", "Chăm Sóc Cá Nhân", "Gia Vị", "Thực Phẩm Đóng Hộp", "Thực Phẩm", "Gạo", "Mì Ăn Liền" }));
+        categoryComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Thực phẩm khô", "Thực phẩm đông lạnh", "Đồ uống", "Gia vị", "Sữa & sản phẩm từ sữa", "Đồ hộp", "Bánh kẹo", "Rau củ quả", "Hóa mỹ phẩm", "Đồ gia dụng" }));
 
         jLabel13.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 102, 0));
@@ -1190,7 +1184,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(Name))
-                            .addComponent(supplierIdTextField))))
+                            .addComponent(supplierIdTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -1199,29 +1193,33 @@ public class StockEntryPanel extends javax.swing.JPanel {
         boxProductsLayout.setHorizontalGroup(
             boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(boxProductsLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(boxProductsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1299, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, boxProductsLayout.createSequentialGroup()
-                .addComponent(ManageProducts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ManageProducts, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(boxProductsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(boxProductsLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1299, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(boxProductsLayout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         boxProductsLayout.setVerticalGroup(
             boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(boxProductsLayout.createSequentialGroup()
-                .addComponent(ManageProducts, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                .addGap(12, 12, 12)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ManageProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1480,7 +1478,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         if (selectedProduct == null) {
             // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới vào cơ sở dữ liệu
             double price = purchasePrice * 1.2; // Tính giá bán với lợi nhuận 20%
-            productId = productController.addProductWithStockEntry(productName, supplierId, unit, category, barcode, purchasePrice, price);
+            productId = stockEntryController.addProductWithStockEntry(productName, supplierId, unit, category, barcode, purchasePrice, price);
 
             if (productId == -1) {
                 JOptionPane.showMessageDialog(null, "Lỗi khi thêm sản phẩm mới!", "Lỗi", JOptionPane.ERROR_MESSAGE);

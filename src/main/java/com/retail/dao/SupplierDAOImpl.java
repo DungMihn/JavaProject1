@@ -4,6 +4,7 @@
  */
 package com.retail.dao;
 
+import com.retail.model.Product;
 import com.retail.model.Supplier;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -162,5 +163,27 @@ public class SupplierDAOImpl implements SupplierDAO {
             System.out.println("❌ Lỗi khi lấy ID tiếp theo của Supplier: " + e.getMessage());
         }
         return -1; // Trả về -1 nếu có lỗi
+    }
+    
+        @Override
+    public List<Product> getProductsBySupplierId(int supplierId) {
+        List<Product> products = new ArrayList<>();
+        // Giả sử bạn có một phương thức trong DAO để lấy sản phẩm theo supplierId
+        String query = "SELECT * FROM Product WHERE supplier_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, supplierId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getInt("product_id"));
+                product.setName(rs.getString("name"));
+                product.setSupplierId(rs.getInt("supplier_id"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi truy vấn sản phẩm theo supplier_id: " + e.getMessage());
+        }
+        return products;
+
     }
 }

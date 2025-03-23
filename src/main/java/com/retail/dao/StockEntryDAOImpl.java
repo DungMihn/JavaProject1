@@ -4,6 +4,7 @@
  */
 package com.retail.dao;
 
+import com.retail.model.Product;
 import com.retail.model.StockEntry;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -232,8 +233,8 @@ public class StockEntryDAOImpl implements StockEntryDAO {
     @Override
     public List<StockEntry> getFilteredStockEntries(Integer supplierId, LocalDate fromDate, LocalDate toDate) {
         List<StockEntry> filteredEntries = new ArrayList<>();
-        System.out.println("FROM date: " + fromDate); 
-        System.out.println("TO date: " + toDate); 
+        System.out.println("FROM date: " + fromDate);
+        System.out.println("TO date: " + toDate);
 
         try (Connection connection = DatabaseConnection.getConnection(); CallableStatement cstmt = connection.prepareCall("{call GetFilteredStockEntryDetails(?, ?, ?)}")) {
 
@@ -276,5 +277,66 @@ public class StockEntryDAOImpl implements StockEntryDAO {
         }
 
         return filteredEntries;
+    }
+
+    //
+    @Override
+    public Product getProductById(int productId) {
+        String query = "SELECT p.product_id, p.name AS product_name, p.category, p.price, p.unit, p.supplier_id, p.stock_quantity, p.barcode, p.purchase_price, s.name AS supplier_name "
+                + "FROM Product p "
+                + "LEFT JOIN Supplier s ON p.supplier_id = s.supplier_id "
+                + "WHERE p.product_id = ?";
+
+        try (Connection con = DatabaseConnection.getConnection(); PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, productId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // Tạo đối tượng Product từ dữ liệu trong ResultSet
+                Product product = new Product();
+                product.setProductId(rs.getInt("product_id"));
+                product.setName(rs.getString("product_name"));
+                product.setCategory(rs.getString("category"));
+                product.setPrice(rs.getDouble("price"));
+                product.setUnit(rs.getString("unit"));
+                product.setSupplierId(rs.getInt("supplier_id"));
+                product.setStockQuantity(rs.getInt("stock_quantity"));
+                product.setBarcode(rs.getString("barcode"));
+                product.setPurchasePrice(rs.getDouble("purchase_price"));
+                product.setSupplierName(rs.getString("supplier_name")); // Nếu có trường supplier_name
+
+                return product; // Trả về đối tượng Product
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi lấy thông tin sản phẩm: " + e.getMessage());
+        }
+        return null; // Trả về null nếu không tìm thấy sản phẩm hoặc có lỗi
+    }
+    
+    //
+    @Override
+    public int addProductWithStockEntry(String productName, int supplierId, String unit, String category, String barcode, double purchasePrice, double price) {
+        String query = "INSERT INTO Product (name, supplier_id, unit, category, barcode, purchase_price, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, productName);
+            stmt.setInt(2, supplierId);
+            stmt.setString(3, unit);
+            stmt.setString(4, category);
+            stmt.setString(5, barcode);
+            stmt.setDouble(6, purchasePrice);
+            stmt.setDouble(7, price);
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1); // Trả về product_id mới tạo
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi thêm sản phẩm: " + e.getMessage());
+        }
+        return -1; // Trả về -1 nếu thêm thất bại
     }
 }

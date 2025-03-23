@@ -5,14 +5,17 @@
 package com.retail.service;
 
 import com.retail.dao.SupplierDAOImpl;
+import com.retail.model.Product;
 import com.retail.model.Supplier;
 import java.util.List;
+
 /**
  *
  * @author Admin
  */
 public class SupplierService {
-     private final SupplierDAOImpl supplierDAO = new SupplierDAOImpl();
+
+    private final SupplierDAOImpl supplierDAO = new SupplierDAOImpl();
 
     // Thêm nhà cung cấp mới
     public boolean addSupplier(Supplier supplier) {
@@ -38,12 +41,19 @@ public class SupplierService {
     public boolean deleteSupplier(int supplierId) {
         return supplierDAO.deleteSupplier(supplierId);
     }
+
     //
-     public List<Supplier> searchSuppliersByName(String keyword) {
+    public List<Supplier> searchSuppliersByName(String keyword) {
         return supplierDAO.searchSuppliersByName(keyword);
     }
-     //
-     public int getNextSupplierId() {
+    //
+
+    public int getNextSupplierId() {
         return supplierDAO.getNextSupplierId();
+    }
+    //
+
+    public List<Product> getProductsBySupplierId(int supplierId) {
+        return supplierDAO.getProductsBySupplierId(supplierId);
     }
 }

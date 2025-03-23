@@ -4,12 +4,9 @@
  */
 package com.retail.view;
 
-import com.retail.controller.EmployeeController;
-import com.retail.controller.InventoryController;
-import com.retail.controller.ProductController;
 import com.retail.controller.StockEntryController;
-import com.retail.controller.StockEntryDetailController;
 import com.retail.controller.SupplierController;
+import com.retail.dao.DatabaseConnection;
 import com.retail.model.ComboBoxItem;
 import com.retail.model.StockEntry;
 import com.retail.model.Supplier;
@@ -21,7 +18,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -45,14 +41,8 @@ import net.sf.jasperreports.engine.JRException;
  */
 public class StockEntryListPanel extends javax.swing.JPanel {
 
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=GroceryStoreDB;encrypt=true;trustServerCertificate=true";
-    private static final String USER = "bookoff";
-    private static final String PASSWORD = "123456789";
-    private ProductController productController;
     private StockEntryController stockEntryController;
-    private StockEntryDetailController stockEntryDetailController;
     private SupplierController supplierController;
-    private EmployeeController employeeController;
     // Lấy Window cha của StockEntryPanel
     Window parentWindow = SwingUtilities.getWindowAncestor(this);
 
@@ -62,11 +52,8 @@ public class StockEntryListPanel extends javax.swing.JPanel {
     public StockEntryListPanel() {
         initComponents();
 
-        productController = new ProductController();
         supplierController = new SupplierController();
         stockEntryController = new StockEntryController();
-        stockEntryDetailController = new StockEntryDetailController();
-        employeeController = new EmployeeController();
 
         DefaultTableModel defaulTableModel = new DefaultTableModel() {
             @Override
@@ -263,7 +250,7 @@ public class StockEntryListPanel extends javax.swing.JPanel {
         boxProducts.setBackground(new java.awt.Color(255, 255, 255));
         boxProducts.setRequestFocusEnabled(false);
 
-        ManageProducts.setFont(new java.awt.Font("Candara", 1, 24)); // NOI18N
+        ManageProducts.setFont(new java.awt.Font("Candara", 1, 18)); // NOI18N
         ManageProducts.setForeground(new java.awt.Color(255, 102, 51));
         ManageProducts.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ManageProducts.setText("DANH SÁCH NHẬP HÀNG");
@@ -510,10 +497,10 @@ public class StockEntryListPanel extends javax.swing.JPanel {
             boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(boxProductsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ManageProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ManageProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -643,9 +630,9 @@ public class StockEntryListPanel extends javax.swing.JPanel {
         } else {
             int stockEntryId = Integer.parseInt(String.valueOf(stockEntryTable.getValueAt(row, 0)));
 
-            try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            try (Connection conn = DatabaseConnection.getConnection()) {
                 // Gọi stored procedure
-                CallableStatement cstmt = connection.prepareCall("{call sp_GetStockEntryDetails(?)}");
+                CallableStatement cstmt = conn.prepareCall("{call sp_GetStockEntryDetails(?)}");
                 cstmt.setInt(1, stockEntryId);
 
                 // Thực thi stored procedure
@@ -735,7 +722,6 @@ public class StockEntryListPanel extends javax.swing.JPanel {
     private javax.swing.JButton showInforStockEntryBtn;
     private javax.swing.JButton showPDFStockEntryBtn;
     private javax.swing.JTable stockEntryTable;
-    private javax.swing.JComboBox<ComboBoxItem> supplierComboBox;
     private javax.swing.JComboBox<ComboBoxItem> supplierComboBox1;
     private javax.swing.JFormattedTextField toEntryDateTextField;
     // End of variables declaration//GEN-END:variables

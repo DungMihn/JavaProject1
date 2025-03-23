@@ -4,6 +4,7 @@
  */
 package com.retail.dao;
 
+import com.retail.model.Product;
 import com.retail.model.StockEntry;
 import java.time.LocalDate;
 import java.util.List;
@@ -38,5 +39,8 @@ public interface StockEntryDAO {
     
     //
     public List<StockEntry> getFilteredStockEntries(Integer supplierId, LocalDate fromDate, LocalDate toDate);
-    
+    //
+    public Product getProductById(int productId);
+    //
+    public int addProductWithStockEntry(String productName, int supplierId, String unit, String category, String barcode, double purchasePrice, double price);
 }

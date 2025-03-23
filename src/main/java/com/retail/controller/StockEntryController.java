@@ -4,6 +4,7 @@
  */
 package com.retail.controller;
 
+import com.retail.model.Product;
 import com.retail.model.StockEntry;
 import com.retail.service.StockEntryService;
 import java.time.LocalDate;
@@ -58,5 +59,14 @@ public class StockEntryController {
     //
     public List<StockEntry> getFilteredStockEntries(Integer supplierId, LocalDate fromDate, LocalDate toDate) {
         return stockEntryService.getFilteredStockEntries(supplierId, fromDate, toDate);
+    }
+
+    //
+    public Product getProductById(int productId) {
+        return stockEntryService.getProductById(productId);
+    }
+    //
+    public int addProductWithStockEntry(String productName, int supplierId, String unit, String category, String barcode, double purchasePrice, double price){
+        return stockEntryService.addProductWithStockEntry(productName, supplierId, unit, category, barcode, purchasePrice, price);
     }
 }
