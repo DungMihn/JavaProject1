@@ -8,38 +8,52 @@ package com.retail.controller;
  *
  * @author ADMIN
  */
-import com.retail.dao.EmployeeDAO;
+import com.retail.service.EmployeeService;
 import com.retail.model.Employee;
 import java.util.List;
 
 public class EmployeeController {
-    private final EmployeeDAO employeeDAO = new EmployeeDAO();
+    private final EmployeeService employeeService;
 
-    public void displayAllEmployees() {
-        List<Employee> employees = employeeDAO.getAllEmployees();
-        employees.forEach(System.out::println);
+    public EmployeeController() {
+        this.employeeService = new EmployeeService();
     }
 
-    public void addEmployee( String name, String phone, String role) {
-        Employee employee = new Employee();
-        employee.setName(name);
-        employee.setPhone(phone);
-        employee.setRole(role);
-        if (employeeDAO.insertEmployee(employee)) {
-            System.out.println("Them nhan vien thanh cong!");
+    // Lấy danh sách tất cả nhân viên
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
+    }
+
+    // Thêm nhân viên mới
+    public boolean addEmployee(String name, String phone, String role) {
+        if (name.isEmpty() || phone.isEmpty() || role.isEmpty()) {
+            System.out.println("Thông tin nhân viên không được để trống!");
+            return false;
         }
+        return employeeService.addEmployee(name,phone,role);
     }
 
-    public void updateEmployee(Employee employee) {
-        if (employeeDAO.updateEmployee(employee)) {
-            System.out.println("Cap nhat thanh cong!");
-        }
+    // Cập nhật thông tin nhân viên
+   public boolean updateEmployee(Employee update) {       
+        return employeeService.updateEmployee(update);
     }
 
-    public void deleteEmployee(String id) {
-        if (employeeDAO.deleteEmployee(id)) {
-            System.out.println("Xoa thanh cong!");
+    // Xóa nhân viên
+    public boolean deleteEmployee(int employeeID) {
+        if (employeeID <= 0) {
+            System.out.println("ID nhân viên không hợp lệ!");
+            return false;
         }
+        return employeeService.deleteEmployee(employeeID);
     }
-  
+    
+    // Lấy ID nhân viên tiếp theo (nếu cần)
+    public int getNextEmployeeId() {
+        return employeeService.getNextEmployeeId();
+    }
+    
+    // Tìm kiếm nhân viên theo tên
+    public List<Employee> searchEmployeesByName(String keyword) {
+        return employeeService.searchEmployeesByName(keyword);
+    }
 }

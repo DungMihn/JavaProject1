@@ -15,22 +15,53 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class EmployeeService {
-    private final EmployeeDAO employeeDAO = new EmployeeDAO();
+    private EmployeeDAO employeeDAO;
 
-    public List<Employee> getEmployees() {
+    public EmployeeService() {
+        this.employeeDAO = new EmployeeDAO();
+    }
+
+    // Lấy danh sách tất cả nhân viên
+    public List<Employee> getAllEmployees() {
         return employeeDAO.getAllEmployees();
     }
 
-    public void addCustomer(String id, String name, String phone, String role) {
-        Employee customer = new Employee(id, name, phone, role, LocalDateTime.now());
-        employeeDAO.insertEmployee(customer);
+    // Thêm nhân viên mới
+    public boolean addEmployee(String name, String phone, String role) {
+        if (name.isEmpty() || phone.isEmpty() || role.isEmpty()) {
+            System.out.println("❌ Lỗi: Thông tin nhân viên không được để trống!");
+            return false;
+        }
+        
+        Employee newEmployee = new Employee(0, name, phone, role, null);
+        return employeeDAO.insertEmployee(newEmployee);
     }
 
-    public boolean updateCustomer(Employee customer) {
-        return employeeDAO.updateEmployee(customer);
+    // Cập nhật thông tin nhân viên
+    public boolean updateEmployee(Employee update) {       
+        return employeeDAO.updateEmployee(update);
     }
 
-    public boolean deleteCustomer(String employeeID) {
-        return employeeDAO.deleteEmployee(employeeID);
+    // Xóa nhân viên theo ID
+     public boolean deleteEmployee(int id) {
+        if (id <= 0) {
+            System.out.println("❌ Loi: ID nhan vien khong hop le!");
+            return false;
+        }
+        return employeeDAO.deleteEmployee(String.valueOf(id));
+    }
+    
+    // Lấy ID nhân viên tiếp theo
+    public int getNextEmployeeId() {
+        return employeeDAO.getNextSupplierId();
+    }
+    
+    // Tìm kiếm nhân viên theo tên
+    public List<Employee> searchEmployeesByName(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            System.out.println("Loi: Tu khoa tim kiem khong hop le!");
+            return List.of(); // Trả về danh sách rỗng nếu từ khóa không hợp lệ
+        }
+        return employeeDAO.searchEmployeeByName(keyword);
     }
 }

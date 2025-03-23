@@ -11,13 +11,13 @@ package com.retail.model;
 import java.time.LocalDateTime;
 
 public class Employee {
-    private String employeeID;
+    private int employeeID;
     private String name;
     private String phone;
     private String role;
     private LocalDateTime createdAt;
 
-    public Employee(String employeeID, String name, String phone, String role, LocalDateTime createdAt) {
+    public Employee(int employeeID, String name, String phone, String role, LocalDateTime createdAt) {
         this.employeeID = employeeID;
         this.name = name;
         this.phone = phone;
@@ -29,11 +29,16 @@ public class Employee {
         
     }
 
-    public String getEmployeeID() { return employeeID; }
+    public int getEmployeeID() { return employeeID; }
     public String getName() { return name; }
     public String getPhone() { return phone; }
     public String getRole() { return role; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+    
+    public void setEmployeeID(int ID){
+        this.employeeID = ID;
+    }
+    
     public void setName(String name){
         this.name = name;
     }
@@ -52,4 +57,5 @@ public class Employee {
     public String toString() {
         return "ID: " + employeeID + ", Name: " + name + ", Phone: " + phone + ", Role: " + role + ", Created At: " + createdAt;
     }
+
 }

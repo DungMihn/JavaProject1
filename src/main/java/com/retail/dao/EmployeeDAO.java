@@ -25,7 +25,7 @@ public class EmployeeDAO {
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 employees.add(new Employee(
-                        rs.getString("Employee_ID"),
+                        rs.getInt("Employee_ID"),
                         rs.getString("Name"),
                         rs.getString("Phone"),
                         rs.getString("Role"),
@@ -59,7 +59,7 @@ public class EmployeeDAO {
             pstmt.setString(1, employee.getName());
             pstmt.setString(2, employee.getPhone());
             pstmt.setString(3, employee.getRole());
-            pstmt.setString(4, employee.getEmployeeID());
+            pstmt.setInt(4, employee.getEmployeeID());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Loi: " + e.getMessage());
@@ -84,5 +84,39 @@ public class EmployeeDAO {
         return false;
     }
 }
- 
+ public int getNextSupplierId() {
+        String GET_NEXT_SUPPLIER_ID = "SELECT MAX(Employee_id) + 1 AS NextEmployeeId FROM Employee";
+
+        try (Connection con = ConnectDB.connect(); PreparedStatement pstmt = con.prepareStatement(GET_NEXT_SUPPLIER_ID); ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("NextEmployeeId"); // Truy cập cột NextSupplierId
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Loi khi lay ID tiep theo cua Employee: " + e.getMessage());
+        }
+        return -1; // Trả về -1 nếu có lỗi
+    }
+ public List<Employee> searchEmployeeByName(String keyword) {
+        List<Employee> employees = new ArrayList<>();
+        try (Connection con = ConnectDB.connect(); PreparedStatement pstmt = con.prepareStatement(SEARCH_EMPLOYEE_BY_NAME)) {
+
+            pstmt.setString(1, "%" + keyword + "%"); // Tìm kiếm với LIKE '%keyword%'
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Employee employee = new Employee();
+                employee.setEmployeeID(rs.getInt("employee_id"));
+                employee.setName(rs.getString("name"));
+                employee.setPhone(rs.getString("phone"));
+                employee.setRole(rs.getString("role"));
+
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi tìm kiếm nhân viên: " + e.getMessage());
+        }
+        return employees;
+    }
+private static final String SEARCH_EMPLOYEE_BY_NAME = "SELECT * FROM Employee WHERE name LIKE ?";
 }
