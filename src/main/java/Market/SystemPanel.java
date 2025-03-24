@@ -53,6 +53,7 @@ public class SystemPanel extends javax.swing.JPanel {
         Decentralization = new javax.swing.JLabel();
 
         SystemBox.setBackground(new java.awt.Color(255, 193, 153));
+        SystemBox.setPreferredSize(new java.awt.Dimension(1227, 900));
 
         BackupPage.setBackground(new java.awt.Color(255, 255, 255));
         BackupPage.setPreferredSize(new java.awt.Dimension(136, 136));
@@ -260,7 +261,7 @@ public class SystemPanel extends javax.swing.JPanel {
         SystemBoxLayout.setHorizontalGroup(
             SystemBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SystemBoxLayout.createSequentialGroup()
-                .addGap(279, 279, 279)
+                .addGap(289, 289, 289)
                 .addGroup(SystemBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(BackupPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(InformaitionPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -278,7 +279,7 @@ public class SystemPanel extends javax.swing.JPanel {
                         .addComponent(RepairPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(TransferPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 289, Short.MAX_VALUE))
+                .addGap(285, 285, 285))
         );
         SystemBoxLayout.setVerticalGroup(
             SystemBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -295,18 +296,18 @@ public class SystemPanel extends javax.swing.JPanel {
                     .addComponent(BackupPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(RepairPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TransferPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(303, 303, 303))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(SystemBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(SystemBox, javax.swing.GroupLayout.DEFAULT_SIZE, 1241, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(SystemBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(SystemBox, javax.swing.GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

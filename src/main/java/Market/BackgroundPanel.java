@@ -30,7 +30,7 @@ public class BackgroundPanel extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(1012, 900));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\bgmarket.jpeg")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\bgimg.jpeg")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

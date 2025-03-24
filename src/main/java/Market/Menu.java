@@ -80,32 +80,32 @@ public class Menu extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         SideBarPanel = new javax.swing.JPanel();
         SupplierPage = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        SupplierButton = new javax.swing.JButton();
         ImportPage = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        ImportButton = new javax.swing.JButton();
         ProductPage = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        ProductButton = new javax.swing.JButton();
         CustomerPage = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        CustomerButton = new javax.swing.JButton();
         EmployeePage = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        EmployeeButton = new javax.swing.JButton();
         InvoicePage = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        InvoiceButton = new javax.swing.JButton();
         SystemPage = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
+        SystemButton = new javax.swing.JButton();
         ReportPage = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
+        ReportButton = new javax.swing.JButton();
         Logout = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        LogoutButton = new javax.swing.JButton();
         ContentPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -121,25 +121,30 @@ public class Menu extends javax.swing.JFrame {
         SupplierPage.setBackground(new java.awt.Color(255, 255, 255));
         SupplierPage.setPreferredSize(new java.awt.Dimension(120, 80));
 
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\supplier.png")); // NOI18N
-
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Nhà CC");
 
+        SupplierButton.setBackground(new java.awt.Color(255, 193, 153));
+        SupplierButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\supplier.png")); // NOI18N
+        SupplierButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SupplierButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout SupplierPageLayout = new javax.swing.GroupLayout(SupplierPage);
         SupplierPage.setLayout(SupplierPageLayout);
         SupplierPageLayout.setHorizontalGroup(
             SupplierPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(SupplierButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         SupplierPageLayout.setVerticalGroup(
             SupplierPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SupplierPageLayout.createSequentialGroup()
-                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(SupplierButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel12))
         );
@@ -147,144 +152,149 @@ public class Menu extends javax.swing.JFrame {
         ImportPage.setBackground(new java.awt.Color(255, 255, 255));
         ImportPage.setPreferredSize(new java.awt.Dimension(120, 80));
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\import.png")); // NOI18N
-
         jLabel13.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("QL Nhập Kho");
+
+        ImportButton.setBackground(new java.awt.Color(255, 193, 153));
+        ImportButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\import.png")); // NOI18N
+        ImportButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ImportButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout ImportPageLayout = new javax.swing.GroupLayout(ImportPage);
         ImportPage.setLayout(ImportPageLayout);
         ImportPageLayout.setHorizontalGroup(
             ImportPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(ImportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         ImportPageLayout.setVerticalGroup(
             ImportPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ImportPageLayout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(ImportButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13))
         );
 
         ProductPage.setBackground(new java.awt.Color(255, 255, 255));
         ProductPage.setPreferredSize(new java.awt.Dimension(120, 80));
-        ProductPage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ProductPageMouseClicked(evt);
-            }
-        });
-
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\products.png")); // NOI18N
 
         jLabel14.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("Sản Phẩm");
 
+        ProductButton.setBackground(new java.awt.Color(255, 193, 153));
+        ProductButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\products.png")); // NOI18N
+        ProductButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ProductButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout ProductPageLayout = new javax.swing.GroupLayout(ProductPage);
         ProductPage.setLayout(ProductPageLayout);
         ProductPageLayout.setHorizontalGroup(
             ProductPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(ProductButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         ProductPageLayout.setVerticalGroup(
             ProductPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ProductPageLayout.createSequentialGroup()
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(ProductButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14))
         );
 
         CustomerPage.setBackground(new java.awt.Color(255, 255, 255));
         CustomerPage.setPreferredSize(new java.awt.Dimension(120, 80));
-        CustomerPage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                CustomerPageMouseClicked(evt);
-            }
-        });
-
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\service.png")); // NOI18N
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Khách Hàng");
 
+        CustomerButton.setBackground(new java.awt.Color(255, 193, 153));
+        CustomerButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\service.png")); // NOI18N
+        CustomerButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CustomerButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout CustomerPageLayout = new javax.swing.GroupLayout(CustomerPage);
         CustomerPage.setLayout(CustomerPageLayout);
         CustomerPageLayout.setHorizontalGroup(
             CustomerPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(CustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         CustomerPageLayout.setVerticalGroup(
             CustomerPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CustomerPageLayout.createSequentialGroup()
-                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(CustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel16))
         );
 
         EmployeePage.setBackground(new java.awt.Color(255, 255, 255));
         EmployeePage.setPreferredSize(new java.awt.Dimension(120, 80));
-        EmployeePage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                EmployeePageMouseClicked(evt);
-            }
-        });
-
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\division.png")); // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Nhân Viên");
 
+        EmployeeButton.setBackground(new java.awt.Color(255, 193, 153));
+        EmployeeButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\division.png")); // NOI18N
+        EmployeeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EmployeeButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout EmployeePageLayout = new javax.swing.GroupLayout(EmployeePage);
         EmployeePage.setLayout(EmployeePageLayout);
         EmployeePageLayout.setHorizontalGroup(
             EmployeePageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(EmployeeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         EmployeePageLayout.setVerticalGroup(
             EmployeePageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EmployeePageLayout.createSequentialGroup()
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(EmployeeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel17))
         );
 
         InvoicePage.setBackground(new java.awt.Color(255, 255, 255));
         InvoicePage.setPreferredSize(new java.awt.Dimension(120, 80));
-        InvoicePage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                InvoicePageMouseClicked(evt);
-            }
-        });
-
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\invoice.png")); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setText("Hoá Đơn");
 
+        InvoiceButton.setBackground(new java.awt.Color(255, 193, 153));
+        InvoiceButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\invoice.png")); // NOI18N
+        InvoiceButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                InvoiceButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout InvoicePageLayout = new javax.swing.GroupLayout(InvoicePage);
         InvoicePage.setLayout(InvoicePageLayout);
         InvoicePageLayout.setHorizontalGroup(
             InvoicePageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(InvoiceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         InvoicePageLayout.setVerticalGroup(
             InvoicePageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InvoicePageLayout.createSequentialGroup()
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(InvoiceButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -292,90 +302,90 @@ public class Menu extends javax.swing.JFrame {
         SystemPage.setBackground(new java.awt.Color(255, 255, 255));
         SystemPage.setForeground(new java.awt.Color(255, 255, 255));
         SystemPage.setPreferredSize(new java.awt.Dimension(120, 80));
-        SystemPage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                SystemPageMouseClicked(evt);
-            }
-        });
-
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\system-integration.png")); // NOI18N
 
         jLabel19.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel19.setText("Hệ Thống");
 
+        SystemButton.setBackground(new java.awt.Color(255, 193, 153));
+        SystemButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\system-integration.png")); // NOI18N
+        SystemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SystemButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout SystemPageLayout = new javax.swing.GroupLayout(SystemPage);
         SystemPage.setLayout(SystemPageLayout);
         SystemPageLayout.setHorizontalGroup(
             SystemPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(SystemButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         SystemPageLayout.setVerticalGroup(
             SystemPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SystemPageLayout.createSequentialGroup()
-                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(SystemButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel19))
         );
 
         ReportPage.setBackground(new java.awt.Color(255, 255, 255));
         ReportPage.setPreferredSize(new java.awt.Dimension(120, 80));
-        ReportPage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ReportPageMouseClicked(evt);
-            }
-        });
-
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\report.png")); // NOI18N
 
         jLabel18.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("Báo Cáo");
 
+        ReportButton.setBackground(new java.awt.Color(255, 193, 153));
+        ReportButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\report.png")); // NOI18N
+        ReportButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ReportButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout ReportPageLayout = new javax.swing.GroupLayout(ReportPage);
         ReportPage.setLayout(ReportPageLayout);
         ReportPageLayout.setHorizontalGroup(
             ReportPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(ReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         ReportPageLayout.setVerticalGroup(
             ReportPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReportPageLayout.createSequentialGroup()
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(ReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel18))
         );
 
         Logout.setBackground(new java.awt.Color(255, 255, 255));
         Logout.setPreferredSize(new java.awt.Dimension(120, 80));
-        Logout.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                LogoutMouseClicked(evt);
-            }
-        });
-
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\logout.png")); // NOI18N
 
         jLabel20.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText("Thoát");
 
+        LogoutButton.setBackground(new java.awt.Color(255, 193, 153));
+        LogoutButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\logout.png")); // NOI18N
+        LogoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LogoutButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout LogoutLayout = new javax.swing.GroupLayout(Logout);
         Logout.setLayout(LogoutLayout);
         LogoutLayout.setHorizontalGroup(
             LogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addComponent(LogoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         LogoutLayout.setVerticalGroup(
             LogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogoutLayout.createSequentialGroup()
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(LogoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel20))
         );
@@ -465,32 +475,40 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void EmployeePageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EmployeePageMouseClicked
-        cardLayout.show(ContentPanel, "Employee"); 
-    }//GEN-LAST:event_EmployeePageMouseClicked
+    private void SupplierButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupplierButtonMouseClicked
+       
+    }//GEN-LAST:event_SupplierButtonMouseClicked
 
-    private void CustomerPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomerPageMouseClicked
-      cardLayout.show(ContentPanel, "Customer");
-    }//GEN-LAST:event_CustomerPageMouseClicked
+    private void ImportButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ImportButtonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ImportButtonMouseClicked
 
-    private void InvoicePageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_InvoicePageMouseClicked
-        cardLayout.show(ContentPanel, "Invoice");
-    }//GEN-LAST:event_InvoicePageMouseClicked
-
-    private void ProductPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProductPageMouseClicked
+    private void ProductButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProductButtonMouseClicked
         cardLayout.show(ContentPanel, "Products");
-    }//GEN-LAST:event_ProductPageMouseClicked
+    }//GEN-LAST:event_ProductButtonMouseClicked
 
-    private void ReportPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportPageMouseClicked
-        cardLayout.show(ContentPanel, "Report");
-    }//GEN-LAST:event_ReportPageMouseClicked
+    private void CustomerButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomerButtonMouseClicked
+        cardLayout.show(ContentPanel, "Customer");
+    }//GEN-LAST:event_CustomerButtonMouseClicked
 
-    private void SystemPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SystemPageMouseClicked
+    private void EmployeeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EmployeeButtonMouseClicked
+        cardLayout.show(ContentPanel, "Employee");
+    }//GEN-LAST:event_EmployeeButtonMouseClicked
+
+    private void InvoiceButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_InvoiceButtonMouseClicked
+        cardLayout.show(ContentPanel, "Invoice");
+    }//GEN-LAST:event_InvoiceButtonMouseClicked
+
+    private void SystemButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SystemButtonMouseClicked
         cardLayout.show(ContentPanel, "System");
-    }//GEN-LAST:event_SystemPageMouseClicked
+    }//GEN-LAST:event_SystemButtonMouseClicked
 
-    private void LogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMouseClicked
-        int confirm = JOptionPane.showConfirmDialog(this, 
+    private void ReportButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportButtonMouseClicked
+        cardLayout.show(ContentPanel, "Report");
+    }//GEN-LAST:event_ReportButtonMouseClicked
+
+    private void LogoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutButtonMouseClicked
+         int confirm = JOptionPane.showConfirmDialog(this, 
         "Bạn có chắc chắn muốn thoát không?", 
         "Xác nhận đăng xuất", 
         JOptionPane.YES_NO_OPTION);
@@ -498,7 +516,7 @@ public class Menu extends javax.swing.JFrame {
     if (confirm == JOptionPane.YES_OPTION) {
         System.exit(0); // Thoát hoàn toàn chương trình
     }
-    }//GEN-LAST:event_LogoutMouseClicked
+    }//GEN-LAST:event_LogoutButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -537,18 +555,25 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ContentPanel;
+    private javax.swing.JButton CustomerButton;
     private javax.swing.JPanel CustomerPage;
+    private javax.swing.JButton EmployeeButton;
     private javax.swing.JPanel EmployeePage;
+    private javax.swing.JButton ImportButton;
     private javax.swing.JPanel ImportPage;
+    private javax.swing.JButton InvoiceButton;
     private javax.swing.JPanel InvoicePage;
     private javax.swing.JPanel Logout;
+    private javax.swing.JButton LogoutButton;
+    private javax.swing.JButton ProductButton;
     private javax.swing.JPanel ProductPage;
+    private javax.swing.JButton ReportButton;
     private javax.swing.JPanel ReportPage;
     private javax.swing.JPanel SideBarPanel;
+    private javax.swing.JButton SupplierButton;
     private javax.swing.JPanel SupplierPage;
+    private javax.swing.JButton SystemButton;
     private javax.swing.JPanel SystemPage;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -558,13 +583,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }

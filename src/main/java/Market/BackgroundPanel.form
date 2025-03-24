@@ -34,7 +34,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\ADMIN\Downloads\bgmarket.jpeg"/>
+          <Image iconType="2" name="D:\LongNg(Aptec)\JAVA_B189_196\JavaProject1\src\main\java\Icon\bgimg.jpeg"/>
         </Property>
       </Properties>
     </Component>

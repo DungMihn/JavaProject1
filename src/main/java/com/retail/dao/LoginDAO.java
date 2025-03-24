@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 
 public class LoginDAO {
     public static String login(String username, String password) {
-        String sql = "SELECT role FROM Users WHERE username = ? AND password = ?";
+        String sql = "SELECT role FROM Employee WHERE username = ? AND password = ?";
         try (Connection conn = ConnectDB.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
