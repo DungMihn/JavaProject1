@@ -23,7 +23,7 @@ public class Menu extends javax.swing.JFrame {
     private EmployeePanel employeepanel;
     private CustomerPanel customerpanel;
     private InvoicePanel invoicepanel;
-    private ProductsPanel productpanel;
+    private ProductPanel productpanel;
     private ReportPanel reportpanel;
     private SystemPanel systempanel;
 
@@ -40,7 +40,7 @@ public class Menu extends javax.swing.JFrame {
         employeepanel = new EmployeePanel();
         customerpanel = new CustomerPanel();
         invoicepanel = new InvoicePanel();
-        productpanel = new ProductsPanel();
+        productpanel = new ProductPanel();
         reportpanel = new ReportPanel();
         systempanel = new SystemPanel();
  
@@ -55,7 +55,7 @@ public class Menu extends javax.swing.JFrame {
         ContentPanel.add(customerpanel,"Customer");
         ContentPanel.add(employeepanel, "Employee");
         ContentPanel.add(invoicepanel, "Invoice");
-        ContentPanel.add(productpanel, "Products");
+        ContentPanel.add(productpanel, "Product");
         ContentPanel.add(reportpanel, "Report");
         ContentPanel.add(systempanel, "System");
 
@@ -484,7 +484,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_ImportButtonMouseClicked
 
     private void ProductButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProductButtonMouseClicked
-        cardLayout.show(ContentPanel, "Products");
+        cardLayout.show(ContentPanel, "Product");
     }//GEN-LAST:event_ProductButtonMouseClicked
 
     private void CustomerButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomerButtonMouseClicked

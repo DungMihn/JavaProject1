@@ -9,10 +9,10 @@ package Market;
  *
  * @author ADMIN
  */
-public class ProductsPanel extends javax.swing.JPanel {
+public class ProductPanel extends javax.swing.JPanel {
 
     /** Creates new form ProductsPanel */
-    public ProductsPanel() {
+    public ProductPanel() {
         initComponents();
     }
 
