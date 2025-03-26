@@ -500,7 +500,7 @@ public class StockEntryListPanel extends javax.swing.JPanel {
                 .addComponent(ManageProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(boxProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -595,16 +595,22 @@ public class StockEntryListPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_editStockEntryBtnActionPerformed
 
     private void openStockEntryPanelForEditing(int stockEntryId) {
-        // Lấy instance của StockEntryPanel từ StockSidebar
-        StockSidebar stockSidebar = (StockSidebar) SwingUtilities.getWindowAncestor(this);
-        StockEntryPanel stockEntryPanel = stockSidebar.getStockEntryPanel();
+        // Tìm StockMenuPanel là tổ tiên của component hiện tại
+        StockMenuPanel stockMenuPanel = (StockMenuPanel) SwingUtilities.getAncestorOfClass(StockMenuPanel.class, this);
 
-        // Thiết lập stockEntryId và tải dữ liệu
-        stockEntryPanel.setStockEntryId(stockEntryId);
-        stockEntryPanel.fetchStockEntryData();
+        if (stockMenuPanel != null) {
+            // Lấy StockEntryPanel từ StockMenuPanel
+            StockEntryPanel stockEntryPanel = stockMenuPanel.getStockEntryPanel();
 
-        // Chuyển sang StockEntryPanel
-        stockSidebar.showPanel("StockEntry");
+            // Thiết lập stockEntryId và tải dữ liệu
+            stockEntryPanel.setStockEntryId(stockEntryId);
+            stockEntryPanel.fetchStockEntryData();
+
+            // Chuyển sang StockEntryPanel
+            stockMenuPanel.showPanel("StockEntry");
+        } else {
+            System.err.println("StockMenuPanel không tìm thấy trong cây thành phần.");
+        }
     }
     private void showInforStockEntryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showInforStockEntryBtnActionPerformed
         // Lấy chỉ số hàng được chọn

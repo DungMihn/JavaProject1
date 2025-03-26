@@ -14,28 +14,43 @@ import java.util.List;
  */
 public class EmployeeController {
     private final EmployeeService employeeService = new EmployeeService();
+    
 
-    // Thêm nhân viên mới
-    public void addEmployee(String name, String phone, String role) {
-        Employee employee = new Employee();
-        employee.setName(name);
-        employee.setPhone(phone);
-        employee.setRole(role);
-        employeeService.addEmployee(employee);
-    }
-
-    // Lấy danh sách nhân viên
+    // Lấy danh sách tất cả nhân viên
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
-    // Lấy thông tin nhân viên theo ID
-    public Employee getEmployeeById(int employeeId) {
-        return employeeService.getEmployeeById(employeeId);
+    // Thêm nhân viên mới
+    public boolean addEmployee(String name, String phone, String role) {
+        if (name.isEmpty() || phone.isEmpty() || role.isEmpty()) {
+            System.out.println("Thông tin nhân viên không được để trống!");
+            return false;
+        }
+        return employeeService.addEmployee(name, phone, role);
+    }
+
+    // Cập nhật thông tin nhân viên
+    public boolean updateEmployee(Employee update) {
+        return employeeService.updateEmployee(update);
     }
 
     // Xóa nhân viên
-    public void deleteEmployee(int employeeId) {
-        employeeService.deleteEmployee(employeeId);
+    public boolean deleteEmployee(int employeeID) {
+        if (employeeID <= 0) {
+            System.out.println("ID nhân viên không hợp lệ!");
+            return false;
+        }
+        return employeeService.deleteEmployee(employeeID);
+    }
+
+    // Lấy ID nhân viên tiếp theo (nếu cần)
+    public int getNextEmployeeId() {
+        return employeeService.getNextEmployeeId();
+    }
+
+    // Tìm kiếm nhân viên theo tên
+    public List<Employee> searchEmployeesByName(String keyword) {
+        return employeeService.searchEmployeesByName(keyword);
     }
 }

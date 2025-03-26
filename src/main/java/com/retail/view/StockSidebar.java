@@ -19,6 +19,7 @@ public class StockSidebar extends javax.swing.JFrame {
     private CardLayout cardLayout;
     private StockEntryPanel stockEntryPanel; // Khai báo biến
     private InventoryPanel inventoryPanel;
+    private TestPanel testPanel;
 
     public StockSidebar() {
         initComponents();
@@ -29,6 +30,7 @@ public class StockSidebar extends javax.swing.JFrame {
         StockEntryListPanel stockEntryListPanel = new StockEntryListPanel();
         inventoryPanel = new InventoryPanel();
         StockMenuPanel stockMenuPanel = new StockMenuPanel();
+        testPanel = new TestPanel();
 
         // Thiết lập CardLayout
         cardLayout = new CardLayout();
@@ -39,9 +41,10 @@ public class StockSidebar extends javax.swing.JFrame {
         contentPanel.add(stockEntryListPanel, "StockEntryList");
         contentPanel.add(inventoryPanel, "Inventory");
         contentPanel.add(stockMenuPanel, "Menu");
+        contentPanel.add(testPanel, "Test");
 
         // Hiển thị màn hình mặc định
-        cardLayout.show(contentPanel, "StockEntryList");
+        cardLayout.show(contentPanel, "Test");
 
         // Thêm sự kiện và hiệu ứng
         addLabelListeners();
@@ -182,7 +185,7 @@ public class StockSidebar extends javax.swing.JFrame {
                 .addComponent(InventoryLabel)
                 .addGap(63, 63, 63)
                 .addComponent(exitLabel)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(452, Short.MAX_VALUE))
         );
 
         contentPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -195,7 +198,7 @@ public class StockSidebar extends javax.swing.JFrame {
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 894, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

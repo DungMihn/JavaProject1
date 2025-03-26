@@ -12,9 +12,12 @@ D:\JavaProject1\JavaProject\src\main\java\com\retail\model\StockEntry.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\Product.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\StockEntryDAO.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\InvoiceService.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\view\SupplierPanel.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\util\ConfigUtil.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\view\TestPanel.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\DatabaseConnection.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\InventoryDAOImpl.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\view\Menu.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\EmployeeDAO.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\SupplierService.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\Employee.java
@@ -24,14 +27,15 @@ D:\JavaProject1\JavaProject\src\main\java\com\retail\model\StockEntryDetailChang
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\StockEntryDetail.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\view\Login.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\Invoice.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\view\EmployeePanel.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\InvoiceDAOImpl.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\CustomerService.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\InvoiceController.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\StockEntryDetailService.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\SupplierController.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\view\ChangepassPanel.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\StockEntryDetailController.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\SupplierDAO.java
-D:\JavaProject1\JavaProject\src\main\java\com\retail\view\LoginFrame.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\InventoryService.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\InvoiceDAO.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\view\StockEntryListPanel.java
@@ -52,8 +56,10 @@ D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\StockEntryContro
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\ProductInventory.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\view\SupplierFrame.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\CustomerController.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\view\SystemPanel.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\StockEntryDetailDAO.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\StockEntryService.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\view\BackgroundPanel.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\view\Splash.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\view\StockEntryReportGenerator.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\Supplier.java
@@ -61,4 +67,3 @@ D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\ProductDAOImpl.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\SupplierDAOImpl.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\StockEntryDetailDAOImpl.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\CustomerDAO.java
-D:\JavaProject1\JavaProject\src\main\java\com\retail\view\Stock.java
