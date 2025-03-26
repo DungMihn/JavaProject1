@@ -5,6 +5,7 @@
 package Market;
 
 import com.retail.ConnectDB;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +21,8 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
     }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -199,6 +202,12 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        FormPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                FormPasswordKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout BoxFormLayout = new javax.swing.GroupLayout(BoxForm);
         BoxForm.setLayout(BoxFormLayout);
         BoxFormLayout.setHorizontalGroup(
@@ -312,41 +321,44 @@ public class Login extends javax.swing.JFrame {
 
     private void LoginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoginButtonMouseClicked
          String role = FormRole.getSelectedItem().toString();
-    String uid = FormUID.getText();
-    String password = FormPassword.getText();
+        String uid = FormUID.getText();
+        String password = new String(FormPassword.getPassword());
 
-    if (uid.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try (Connection conn = ConnectDB.connect()) {
-        if (conn != null) {
-            String sql = "SELECT * FROM Employee WHERE username = ? AND password = ? AND role = ?";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, uid);
-            pst.setString(2, password);
-            pst.setString(3, role);
-
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose(); // Đóng form đăng nhập
-                
-                // Mở giao diện khác nếu cần
-                Menu menuForm = new Menu();
-                menuForm.setVisible(true);
-                
-            } else {
-                JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Không thể kết nối CSDL!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        if (uid.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+
+        try (Connection conn = ConnectDB.connect()) {
+            if (conn != null) {
+                String sql = "SELECT * FROM Employee WHERE username = ? AND password = ? AND role = ?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, uid);
+                pst.setString(2, password);
+                pst.setString(3, role);
+
+                ResultSet rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose(); 
+
+                    String username = rs.getString("username"); // Lấy username từ DB
+                    Menu menuForm = new Menu(role, username); // Truyền role và username
+                    menuForm.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Không thể kết nối CSDL!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    
+
+                                        
     }//GEN-LAST:event_LoginButtonMouseClicked
 
     private void OffIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OffIconMouseClicked
@@ -356,6 +368,12 @@ public class Login extends javax.swing.JFrame {
         java.lang.System.exit(0); // Thoát chương trình
     }
     }//GEN-LAST:event_OffIconMouseClicked
+
+    private void FormPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FormPasswordKeyPressed
+            if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            LoginButtonMouseClicked(null); // Gọi sự kiện đăng nhập khi nhấn Enter
+        }
+    }//GEN-LAST:event_FormPasswordKeyPressed
 
     /**
      * @param args the command line arguments

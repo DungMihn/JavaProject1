@@ -289,6 +289,9 @@
               <Dimension value="[136, 136]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ChangePassPageMouseClicked"/>
+          </Events>
 
           <Layout>
             <DimensionLayout dim="0">
