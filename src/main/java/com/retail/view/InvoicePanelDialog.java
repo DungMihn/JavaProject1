@@ -569,12 +569,30 @@ public class InvoicePanelDialog {
         }
     }
 
+    public void fetchCustomerInfoByPhone() {
+        String phone = invoicePanel.getTxtCustomerPhone().getText().trim();
+        if (!phone.isEmpty()) {
+            CustomerDAO customerDAO = new CustomerDAOImpl();
+            Customer cust = customerDAO.getCustomerByPhone(phone);
+            if (cust != null) {
+                selectedCustomer = cust;
+                invoicePanel.getLblCustomerName().setText(cust.getName());
+                invoicePanel.getLblCustomerEmail().setText(cust.getEmail());
+                invoicePanel.getLblCustomerAddress().setText(cust.getAddress());
+            } else {
+                JOptionPane.showMessageDialog(invoicePanel, "Không tìm thấy khách hàng với SĐT này!");
+                selectedCustomer = null;
+            }
+        }
+    }
+
     private void editSelectedInvoice() {
         int selectedRow = invoicePanel.getInvoiceListTable().getSelectedRow();
         if (selectedRow == -1) {
             showMessage("Vui lòng chọn hóa đơn cần sửa!");
             return;
         }
+
         int invoiceId = Integer.parseInt(invoicePanel.getInvoiceListTableModel().getValueAt(selectedRow, 0).toString());
         InvoiceDAO invoiceDAO = new InvoiceDAOImpl();
         Invoice invoice = invoiceDAO.getInvoiceById(invoiceId);
@@ -592,17 +610,18 @@ public class InvoicePanelDialog {
             }
         }
 
-        CustomerDAO customerDAO = new CustomerDAOImpl();
-        Customer cust = customerDAO.getCustomerById(invoice.getCustomerId());
-        if (cust != null) {
-            selectedCustomer = cust;
-            invoicePanel.getTxtCustomerPhone().setText(cust.getPhone());
-            invoicePanel.getLblCustomerName().setText(cust.getName());
-            invoicePanel.getLblCustomerEmail().setText(cust.getEmail());
-            invoicePanel.getLblCustomerAddress().setText(cust.getAddress());
+        if (invoice != null) {
+            CustomerDAO customerDAO = new CustomerDAOImpl();
+            Customer cust = customerDAO.getCustomerById(invoice.getCustomerId());
+            if (cust != null) {
+                invoicePanel.getTxtCustomerPhone().setText(cust.getPhone());
+
+                // 👉 Gọi lại như bấm "Lấy thông tin"
+                fetchCustomerInfoByPhone();
+            }
         }
 
-        EmployeeDAOImpl empDAO = new EmployeeDAOImpl();
+        EmployeeDAO empDAO = new EmployeeDAOImpl();
         Employee emp = empDAO.getEmployeeById(invoice.getEmployeeId());
         if (emp != null) {
             invoicePanel.getCmbEmployee().setSelectedItem(emp);
@@ -632,6 +651,7 @@ public class InvoicePanelDialog {
             };
             invoicePanel.getDetailTableModel().addRow(rowData);
         }
+
         updateSummary();
         currentInvoiceId = invoice.getInvoiceId();
         invoicePanel.getBtnCreateInvoice().setText("Cập nhật hóa đơn");

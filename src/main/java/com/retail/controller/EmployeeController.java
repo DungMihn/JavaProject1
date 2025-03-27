@@ -22,12 +22,16 @@ public class EmployeeController {
     }
 
     // Thêm nhân viên mới
-    public boolean addEmployee(String name, String phone, String role) {
-        if (name.isEmpty() || phone.isEmpty() || role.isEmpty()) {
-            System.out.println("Thông tin nhân viên không được để trống!");
+   public boolean addEmployee(String name, String phone, String role, String username, String password) {
+        if (name == null || name.trim().isEmpty() ||
+            phone == null || phone.trim().isEmpty() ||
+            role == null || role.trim().isEmpty() ||
+            username == null || username.trim().isEmpty() ||
+            password == null || password.trim().isEmpty()) {
+            System.out.println("❌ Lỗi: Thông tin nhân viên không được để trống!");
             return false;
         }
-        return employeeService.addEmployee(name, phone, role);
+        return employeeService.addEmployee(name, phone, role, username, password);
     }
 
     // Cập nhật thông tin nhân viên

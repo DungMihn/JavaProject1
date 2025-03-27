@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.retail.view;
+
 /**
  *
  * @author ADMIN
@@ -17,12 +18,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-
 public class EmployeePanel extends javax.swing.JPanel {
 
     private final EmployeeController employeeController = new EmployeeController();
-    
-    
+
     public EmployeePanel() {
         initComponents();
         loadEmployeeTable();
@@ -46,35 +45,34 @@ public class EmployeePanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void filterEmployeeByName() {
-    String keyword = SearchEmployeeForm.getText().trim();
-    
-    // Lấy mô hình bảng từ JTable
-    DefaultTableModel model = (DefaultTableModel) EmployeeTable.getModel();
-    model.setRowCount(0); // Xóa dữ liệu cũ
+        String keyword = SearchEmployeeForm.getText().trim();
 
-    List<Employee> employees;
+        // Lấy mô hình bảng từ JTable
+        DefaultTableModel model = (DefaultTableModel) EmployeeTable.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
 
-    // Nếu ô tìm kiếm trống, lấy toàn bộ nhân viên
-    if (keyword.isEmpty()) {
-        employees = employeeController.getAllEmployees();
-    } else {
-        employees = employeeController.searchEmployeesByName(keyword);
+        List<Employee> employees;
+
+        // Nếu ô tìm kiếm trống, lấy toàn bộ nhân viên
+        if (keyword.isEmpty()) {
+            employees = employeeController.getAllEmployees();
+        } else {
+            employees = employeeController.searchEmployeesByName(keyword);
+        }
+
+        // Thêm dữ liệu vào bảng
+        for (Employee employee : employees) {
+            model.addRow(new Object[]{
+                employee.getEmployeeId(),
+                employee.getName(),
+                employee.getPhone(),
+                employee.getRole()
+            });
+        }
     }
 
-    // Thêm dữ liệu vào bảng
-    for (Employee employee : employees) {
-        model.addRow(new Object[]{
-            employee.getEmployeeId(),
-            employee.getName(),
-            employee.getPhone(),
-            employee.getRole()
-        });
-    }
-}
-
-    
     private void loadEmployeeTable() {
         List<com.retail.model.Employee> employees = employeeController.getAllEmployees();
         DefaultTableModel model = (DefaultTableModel) EmployeeTable.getModel();
@@ -82,15 +80,17 @@ public class EmployeePanel extends javax.swing.JPanel {
 
         for (com.retail.model.Employee emp : employees) {
             Object[] row = {
-                emp.getEmployeeId(), 
-                emp.getName(), 
-                emp.getPhone(), 
-                emp.getRole(), 
-                emp.getCreateAt()
+                emp.getEmployeeId(),
+                emp.getName(),
+                emp.getPhone(),
+                emp.getRole(),
+                emp.getUserName(),
+                emp.getPassword(),
             };
             model.addRow(row);
         }
     }
+
     private void initializeData() {
         // Lấy ID tiếp theo của Supplier
         int nextEmployeeId = employeeController.getNextEmployeeId();
@@ -105,9 +105,7 @@ public class EmployeePanel extends javax.swing.JPanel {
         // Đặt lại các trường nhập liệu về giá trị mặc định
         clearFields();
     }
-    
-    
- 
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -123,12 +121,16 @@ public class EmployeePanel extends javax.swing.JPanel {
         AddButton = new javax.swing.JButton();
         EditButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
-        NameEmployeeForm = new javax.swing.JTextField();
+        UserEmployeeForm = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        PhoneEmployeeForm = new javax.swing.JTextField();
+        NameEmployeeForm = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         RoleEmployeeCombobox = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        PhoneEmployeeForm = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        PasswordEmployeeForm = new javax.swing.JPasswordField();
         TableBox = new javax.swing.JPanel();
         Title = new javax.swing.JLabel();
         BoxTable = new javax.swing.JScrollPane();
@@ -155,7 +157,6 @@ public class EmployeePanel extends javax.swing.JPanel {
         SearchButton.setBackground(new java.awt.Color(255, 132, 51));
         SearchButton.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         SearchButton.setForeground(new java.awt.Color(255, 255, 255));
-        SearchButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\search.png")); // NOI18N
         SearchButton.setText("Tìm kiếm");
         SearchButton.setMargin(new java.awt.Insets(8, 14, 8, 14));
         SearchButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -205,7 +206,6 @@ public class EmployeePanel extends javax.swing.JPanel {
         AddButton.setBackground(new java.awt.Color(255, 132, 51));
         AddButton.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         AddButton.setForeground(new java.awt.Color(255, 255, 255));
-        AddButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\add-user.png")); // NOI18N
         AddButton.setText("Thêm mới");
         AddButton.setMargin(new java.awt.Insets(8, 14, 8, 14));
         AddButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -213,11 +213,15 @@ public class EmployeePanel extends javax.swing.JPanel {
                 AddButtonMouseClicked(evt);
             }
         });
+        AddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButtonActionPerformed(evt);
+            }
+        });
 
         EditButton.setBackground(new java.awt.Color(255, 132, 51));
         EditButton.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         EditButton.setForeground(new java.awt.Color(255, 255, 255));
-        EditButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\edit.png")); // NOI18N
         EditButton.setText("Sửa");
         EditButton.setMargin(new java.awt.Insets(8, 14, 8, 14));
         EditButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -234,7 +238,6 @@ public class EmployeePanel extends javax.swing.JPanel {
         DeleteButton.setBackground(new java.awt.Color(255, 132, 51));
         DeleteButton.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         DeleteButton.setForeground(new java.awt.Color(255, 255, 255));
-        DeleteButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\ADMIN\\Downloads\\delete.png")); // NOI18N
         DeleteButton.setText("Xoá");
         DeleteButton.setMargin(new java.awt.Insets(8, 14, 8, 14));
         DeleteButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -248,17 +251,17 @@ public class EmployeePanel extends javax.swing.JPanel {
             }
         });
 
-        NameEmployeeForm.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        UserEmployeeForm.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Tên");
+        jLabel2.setText("Tên người dùng");
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Số điện thoại");
+        jLabel3.setText("Tên");
 
-        PhoneEmployeeForm.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        NameEmployeeForm.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
@@ -266,32 +269,30 @@ public class EmployeePanel extends javax.swing.JPanel {
         jLabel4.setText("Vai trò");
 
         RoleEmployeeCombobox.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-        RoleEmployeeCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Manager", "Cashier", "Stock_keeper", " " }));
+        RoleEmployeeCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "manager", "cashier", "stock_keeper", " " }));
+        RoleEmployeeCombobox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RoleEmployeeComboboxActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Số điện thoại");
+
+        PhoneEmployeeForm.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Mật khẩu");
+
+        PasswordEmployeeForm.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        PasswordEmployeeForm.setText("jPasswordField1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(227, 227, 227)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(PhoneEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(EmployeeIDForm, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(80, 80, 80)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(RoleEmployeeCombobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(NameEmployeeForm, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -299,32 +300,68 @@ public class EmployeePanel extends javax.swing.JPanel {
                 .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(330, 330, 330))
+                .addGap(329, 329, 329))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(227, 227, 227)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(PhoneEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(24, 24, 24)
+                            .addComponent(NameEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(24, 24, 24)
+                            .addComponent(EmployeeIDForm, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(80, 80, 80)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(RoleEmployeeCombobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(UserEmployeeForm, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(PasswordEmployeeForm))
+                .addContainerGap(217, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(PhoneEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(NameEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel6))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(EmployeeIDForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addGap(43, 43, 43)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(NameEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EmployeeIDForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
+                            .addComponent(PhoneEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(UserEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addComponent(PasswordEmployeeForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(RoleEmployeeCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(38, 38, 38)
+                        .addComponent(RoleEmployeeCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddButton)
                     .addComponent(EditButton)
                     .addComponent(DeleteButton))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGap(15, 15, 15))
         );
 
         TableBox.setBackground(new java.awt.Color(255, 255, 255));
@@ -336,13 +373,13 @@ public class EmployeePanel extends javax.swing.JPanel {
 
         EmployeeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Tên", "SĐT", "Vai trò", "Ngày tạo"
+                "ID", "Tên", "SĐT", "Vai trò", "Tên người dùng", "Mật khẩu"
             }
         ));
         BoxTable.setViewportView(EmployeeTable);
@@ -421,7 +458,7 @@ public class EmployeePanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_DeleteButtonActionPerformed
 
-private void setupTableClickListener() {
+    private void setupTableClickListener() {
         EmployeeTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -432,12 +469,17 @@ private void setupTableClickListener() {
                     String Name = (String) EmployeeTable.getValueAt(selectedRow, 1);
                     String Phone = (String) EmployeeTable.getValueAt(selectedRow, 2);
                     String Role = (String) EmployeeTable.getValueAt(selectedRow, 3);
+                    String UserName = (String) EmployeeTable.getValueAt(selectedRow, 4);
+                    String Password = (String) EmployeeTable.getValueAt(selectedRow, 5);
 
                     // Điền thông tin vào các trường nhập liệu
                     EmployeeIDForm.setText(String.valueOf(EmployeeID));
                     NameEmployeeForm.setText(Name);
-                    PhoneEmployeeForm.setText(String.valueOf(Phone));
+                    PhoneEmployeeForm.setText(Phone);
                     RoleEmployeeCombobox.setSelectedItem(Role);
+                    UserEmployeeForm.setText(UserName);
+                    PasswordEmployeeForm.setText(Password);
+
                 }
             }
         });
@@ -454,6 +496,8 @@ private void setupTableClickListener() {
         String name = NameEmployeeForm.getText().trim();
         String phone = PhoneEmployeeForm.getText().trim();
         String role = RoleEmployeeCombobox.getSelectedItem().toString();
+        String userName = UserEmployeeForm.getText().trim();
+        String password = PasswordEmployeeForm.getText().trim();
 
         if (name.isEmpty() || phone.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -465,8 +509,9 @@ private void setupTableClickListener() {
         updatedEmployee.setName(name);
         updatedEmployee.setPhone(phone);
         updatedEmployee.setRole(role);
+        updatedEmployee.setUserName(userName);
+        updatedEmployee.setPassword(password);
 
-        
         boolean isUpdated = employeeController.updateEmployee(updatedEmployee);
         if (isUpdated) {
             JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công!");
@@ -502,11 +547,13 @@ private void setupTableClickListener() {
                 JOptionPane.showMessageDialog(this, "Không thể xóa nhân viên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
     }//GEN-LAST:event_DeleteButtonMouseClicked
- }
+    }
     private void AddButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddButtonMouseClicked
         String name = NameEmployeeForm.getText().trim();
         String phone = PhoneEmployeeForm.getText().trim();
         String role = RoleEmployeeCombobox.getSelectedItem().toString();
+        String userName = UserEmployeeForm.getText().trim();
+        String password = PasswordEmployeeForm.getText().trim();
 
         if (name.isEmpty() || phone.isEmpty() || role.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui long nhap day du thong tin!", "Loi", JOptionPane.ERROR_MESSAGE);
@@ -514,7 +561,7 @@ private void setupTableClickListener() {
         }
 
         EmployeeController controller = new EmployeeController();
-        boolean success = controller.addEmployee(name, phone, role);
+        boolean success = controller.addEmployee(name, phone, role, userName, password);
 
         if (success) {
             JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong!", "Thong bao", JOptionPane.INFORMATION_MESSAGE);
@@ -523,48 +570,60 @@ private void setupTableClickListener() {
         } else {
             JOptionPane.showMessageDialog(this, "Them nhan vien that bai!", "Loi", JOptionPane.ERROR_MESSAGE);
         }
-        }
+    }
 
-        // Ham de xoa du lieu tren TextField sau khi them thanh cong
-        private void clearFields() {
-            NameEmployeeForm.setText("");
-            PhoneEmployeeForm.setText("");
-            RoleEmployeeCombobox.setSelectedItem("");
+    // Ham de xoa du lieu tren TextField sau khi them thanh cong
+    private void clearFields() {
+        UserEmployeeForm.setText("");
+        NameEmployeeForm.setText("");
+        RoleEmployeeCombobox.setSelectedItem("");
+        UserEmployeeForm.setText("");
+        PasswordEmployeeForm.setText("");
     }//GEN-LAST:event_AddButtonMouseClicked
 
     private void SearchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchButtonMouseClicked
-       // Lấy từ khóa tìm kiếm từ trường nhập liệu
-    String keyword = SearchEmployeeForm.getText().trim();
+        // Lấy từ khóa tìm kiếm từ trường nhập liệu
+        String keyword = SearchEmployeeForm.getText().trim();
 
-    // Kiểm tra nếu từ khóa rỗng
-    if (keyword.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhân viên cần tìm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        return ;
-    }
+        // Kiểm tra nếu từ khóa rỗng
+        if (keyword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhân viên cần tìm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    // Gọi Controller để tìm kiếm nhân viên
-    EmployeeController controller = new EmployeeController();
-    List<Employee> employees = controller.searchEmployeesByName(keyword);
+        // Gọi Controller để tìm kiếm nhân viên
+        EmployeeController controller = new EmployeeController();
+        List<Employee> employees = controller.searchEmployeesByName(keyword);
 
-    // Kiểm tra nếu không có kết quả
-    if (employees.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên!", "Kết quả", JOptionPane.INFORMATION_MESSAGE);
-        return;
-    }
+        // Kiểm tra nếu không có kết quả
+        if (employees.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên!", "Kết quả", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
 
-    // Cập nhật bảng hiển thị kết quả
-    DefaultTableModel model = (DefaultTableModel) EmployeeTable.getModel();
-    model.setRowCount(0); // Xóa dữ liệu cũ
+        // Cập nhật bảng hiển thị kết quả
+        DefaultTableModel model = (DefaultTableModel) EmployeeTable.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
 
-    for (Employee emp : employees) {
-        model.addRow(new Object[]{
-            emp.getEmployeeId(),
-            emp.getName(),
-            emp.getPhone(),
-            emp.getRole()
-        });
-    }
+        for (Employee emp : employees) {
+            model.addRow(new Object[]{
+                emp.getEmployeeId(),
+                emp.getName(),
+                emp.getPhone(),
+                emp.getRole(),
+                emp.getUserName(),
+                emp.getPassword()
+            });
+        }
     }//GEN-LAST:event_SearchButtonMouseClicked
+
+    private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddButtonActionPerformed
+
+    private void RoleEmployeeComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RoleEmployeeComboboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RoleEmployeeComboboxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -576,6 +635,7 @@ private void setupTableClickListener() {
     private javax.swing.JTable EmployeeTable;
     private javax.swing.JPanel InformationBox;
     private javax.swing.JTextField NameEmployeeForm;
+    private javax.swing.JPasswordField PasswordEmployeeForm;
     private javax.swing.JTextField PhoneEmployeeForm;
     private javax.swing.JComboBox<String> RoleEmployeeCombobox;
     private javax.swing.JLabel Search;
@@ -583,10 +643,13 @@ private void setupTableClickListener() {
     private javax.swing.JTextField SearchEmployeeForm;
     private javax.swing.JPanel TableBox;
     private javax.swing.JLabel Title;
+    private javax.swing.JTextField UserEmployeeForm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

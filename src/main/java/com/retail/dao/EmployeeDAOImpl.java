@@ -34,7 +34,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                         rs.getString("name"),
                         rs.getString("phone"),
                         rs.getString("role"),
+                        rs.getString("userName"),
+                        rs.getString("password"),
                         rs.getObject("created_at", LocalDateTime.class)
+                      
                 ));
             }
         } catch (SQLException e) {
@@ -45,11 +48,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public boolean insertEmployee(Employee employee) {
-        String query = "INSERT INTO Employee (Name, Phone, Role) VALUES (?, ?, ?)";
+        String query = "INSERT INTO Employee (Name, Phone, Role, UserName, Password) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, employee.getName());
             pstmt.setString(2, employee.getPhone());
             pstmt.setString(3, employee.getRole());
+            pstmt.setString(4, employee.getUserName());
+            pstmt.setString(5, employee.getPassword());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Loi: " + e.getMessage());
@@ -59,12 +64,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public boolean updateEmployee(Employee employee) {
-        String query = "UPDATE Employee SET Name = ?, Phone = ?, Role = ? WHERE Employee_ID = ?";
+        String query = "UPDATE Employee SET name = ?, phone = ?, role = ?, username = ?, password = ? WHERE employee_id = ?";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, employee.getName());
             pstmt.setString(2, employee.getPhone());
             pstmt.setString(3, employee.getRole());
-            pstmt.setInt(4, employee.getEmployeeId());
+            pstmt.setString(4, employee.getUserName());
+            pstmt.setString(5, employee.getPassword());
+            pstmt.setInt(6, employee.getEmployeeId());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Loi: " + e.getMessage());
@@ -106,27 +113,30 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public List<Employee> searchEmployeeByName(String keyword) {
+  public List<Employee> searchEmployeeByName(String keyword) {
         List<Employee> employees = new ArrayList<>();
-        try (Connection con = DatabaseConnection.getConnection(); PreparedStatement pstmt = con.prepareStatement(SEARCH_EMPLOYEE_BY_NAME)) {
-
-            pstmt.setString(1, "%" + keyword + "%"); // Tìm kiếm với LIKE '%keyword%'
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Employee employee = new Employee();
-                employee.setEmployeeId(rs.getInt("employee_id"));
-                employee.setName(rs.getString("name"));
-                employee.setPhone(rs.getString("phone"));
-                employee.setRole(rs.getString("role"));
-
-                employees.add(employee);
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(SEARCH_EMPLOYEE_BY_NAME)) {
+            pstmt.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    employees.add(new Employee(
+                            rs.getInt("employee_id"),
+                            rs.getString("name"),
+                            rs.getString("phone"),
+                            rs.getString("role"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getObject("created_at", LocalDateTime.class)
+                    ));
+                }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi tìm kiếm nhân viên: " + e.getMessage());
+            System.out.println("Lỗi tìm kiếm nhân viên: " + e.getMessage());
         }
         return employees;
     }
+
     
     @Override
     public Employee getEmployeeById(int employeeId) {
@@ -136,12 +146,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             stmt.setInt(1, employeeId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    employee = new Employee();
-                    employee.setEmployeeId(rs.getInt("employee_id"));
-                    employee.setName(rs.getString("name"));
-                    employee.setPhone(rs.getString("phone"));
-                    employee.setRole(rs.getString("role"));
-                    rs.getObject("created_at", LocalDateTime.class);
+                    employee = new Employee(
+                            rs.getInt("employee_id"),
+                            rs.getString("name"),
+                            rs.getString("phone"),
+                            rs.getString("role"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getObject("created_at", LocalDateTime.class)
+                    );
                 }
             }
         } catch (SQLException e) {

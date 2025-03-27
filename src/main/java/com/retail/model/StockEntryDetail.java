@@ -13,6 +13,9 @@ public class StockEntryDetail {
     private int stockEntryId;
     private int productId;
     private String productName;
+    private String category;
+    private String unit;
+    private String barcode;
     private int quantity;
     private double purchasePrice;
 
@@ -77,5 +80,31 @@ public class StockEntryDetail {
     public void setPurchasePrice(double purchasePrice) {
         this.purchasePrice = purchasePrice;
     }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+    
+    
 }
 

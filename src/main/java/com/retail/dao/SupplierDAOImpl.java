@@ -29,18 +29,38 @@ public class SupplierDAOImpl implements SupplierDAO {
 
     @Override
     public boolean addSupplier(Supplier supplier) {
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(ADD_SUPPLIER, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, supplier.getName());
-            stmt.setString(2, supplier.getContactName());
-            stmt.setString(3, supplier.getPhone());
-            stmt.setString(4, supplier.getEmail());
-            stmt.setString(5, supplier.getAddress());
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        supplier.setSupplierId(rs.getInt(1)); // Lấy ID tự sinh
-                        return true;
+        String CHECK_SUPPLIER = "SELECT COUNT(*) FROM Supplier WHERE name = ? AND phone = ? AND email = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement checkStmt = conn.prepareStatement(CHECK_SUPPLIER)) {
+
+            // Kiểm tra xem nhà cung cấp đã tồn tại chưa
+            checkStmt.setString(1, supplier.getName());
+            checkStmt.setString(2, supplier.getPhone());
+            checkStmt.setString(3, supplier.getEmail());
+
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("❌ Nhà cung cấp đã tồn tại!");
+                    return false; // Nhà cung cấp đã tồn tại, không thêm nữa
+                }
+            }
+
+            // Nếu không tồn tại, thực hiện thêm mới
+            String ADD_SUPPLIER = "INSERT INTO Supplier (name, contact_name, phone, email, address) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(ADD_SUPPLIER, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setString(1, supplier.getName());
+                stmt.setString(2, supplier.getContactName());
+                stmt.setString(3, supplier.getPhone());
+                stmt.setString(4, supplier.getEmail());
+                stmt.setString(5, supplier.getAddress());
+
+                int affectedRows = stmt.executeUpdate();
+                if (affectedRows > 0) {
+                    try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            supplier.setSupplierId(generatedKeys.getInt(1)); // Lấy ID tự động
+                            return true;
+                        }
                     }
                 }
             }
@@ -164,8 +184,8 @@ public class SupplierDAOImpl implements SupplierDAO {
         }
         return -1; // Trả về -1 nếu có lỗi
     }
-    
-        @Override
+
+    @Override
     public List<Product> getProductsBySupplierId(int supplierId) {
         List<Product> products = new ArrayList<>();
         // Giả sử bạn có một phương thức trong DAO để lấy sản phẩm theo supplierId

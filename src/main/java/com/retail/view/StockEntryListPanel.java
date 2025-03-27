@@ -253,7 +253,7 @@ public class StockEntryListPanel extends javax.swing.JPanel {
         ManageProducts.setFont(new java.awt.Font("Candara", 1, 18)); // NOI18N
         ManageProducts.setForeground(new java.awt.Color(255, 102, 51));
         ManageProducts.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        ManageProducts.setText("DANH SÁCH NHẬP HÀNG");
+        ManageProducts.setText("LỊCH SỬ NHẬP HÀNG");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Chức năng", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(255, 102, 0))); // NOI18N
@@ -605,6 +605,9 @@ public class StockEntryListPanel extends javax.swing.JPanel {
             // Thiết lập stockEntryId và tải dữ liệu
             stockEntryPanel.setStockEntryId(stockEntryId);
             stockEntryPanel.fetchStockEntryData();
+            stockEntryPanel.loadStockEntryDetailsIntoTable(stockEntryId);
+            stockEntryPanel.calculateTotalPrice();
+            stockEntryPanel.updateTotalPrice();
 
             // Chuyển sang StockEntryPanel
             stockMenuPanel.showPanel("StockEntry");

@@ -140,7 +140,7 @@
                   <Color blue="33" green="66" red="ff" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="DANH S&#xc1;CH NH&#x1eac;P H&#xc0;NG"/>
+                <Property name="text" type="java.lang.String" value="L&#x1eca;CH S&#x1eec; NH&#x1eac;P H&#xc0;NG"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JSeparator" name="jSeparator1">

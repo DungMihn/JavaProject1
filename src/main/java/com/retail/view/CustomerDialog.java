@@ -62,6 +62,7 @@ public class CustomerDialog extends JDialog {
 
         txtName = new JTextField(20);
         txtName.setFont(fieldFont);
+        txtName.setPreferredSize(new Dimension(200, 25));
         gbc.gridx = 1;
         mainPanel.add(txtName, gbc);
 
@@ -74,6 +75,7 @@ public class CustomerDialog extends JDialog {
 
         txtPhone = new JTextField(20);
         txtPhone.setFont(fieldFont);
+        txtPhone.setPreferredSize(new Dimension(200, 25));
         gbc.gridx = 1;
         mainPanel.add(txtPhone, gbc);
 
@@ -92,6 +94,7 @@ public class CustomerDialog extends JDialog {
 
         txtEmail = new JTextField(20);
         txtEmail.setFont(fieldFont);
+        txtEmail.setPreferredSize(new Dimension(200, 25));
         gbc.gridx = 1;
         mainPanel.add(txtEmail, gbc);
 
@@ -110,6 +113,7 @@ public class CustomerDialog extends JDialog {
 
         txtAddress = new JTextField(20);
         txtAddress.setFont(fieldFont);
+        txtAddress.setPreferredSize(new Dimension(200, 25));
         gbc.gridx = 1;
         mainPanel.add(txtAddress, gbc);
 

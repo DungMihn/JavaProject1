@@ -3,6 +3,7 @@ package com.retail.controller;
 import com.retail.service.ReportPanelService;
 import com.retail.service.ReportPanelService.ReportData;
 import com.retail.view.ReportPanel;
+import java.util.Arrays;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class ReportPanelController {
     }
     
     private void updateBestSellingTable(List<Object[]> rows) {
+        
         DefaultTableModel model = view.getBestSellingTableModel();
         model.setRowCount(0);
         for (Object[] row : rows) {

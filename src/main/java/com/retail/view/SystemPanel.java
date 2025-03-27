@@ -10,9 +10,9 @@ package com.retail.view;
  */
 public class SystemPanel extends javax.swing.JPanel {
 
-    private final Menu mainMenu; // Tham chiếu đến Menu
+    private final Main mainMenu; // Tham chiếu đến Menu
 
-    public SystemPanel(Menu mainMenu) {
+    public SystemPanel(Main mainMenu) {
         this.mainMenu = mainMenu; // Lưu tham chiếu Menu
         initComponents();
     }

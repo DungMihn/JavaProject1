@@ -25,6 +25,7 @@ public class SupplierPanel extends javax.swing.JPanel {
     private final SupplierController supplierController;
     private final DefaultTableModel supplierTableModel;
     private int nextSupplierId;
+
     /**
      * Creates new form SupplierPanel
      */
@@ -45,10 +46,9 @@ public class SupplierPanel extends javax.swing.JPanel {
         supplierTableModel.addColumn("Địa chỉ");
         // Tải dữ liệu nhà cung cấp vào bảng
         loadSuppliersIntoTable();
-        
+
         // Khởi tạo dữ liệu ban đầu
         initializeData();
-
 
         // Thêm DocumentListener để lắng nghe sự kiện nhập liệu
         searchSupplierNameTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -76,8 +76,8 @@ public class SupplierPanel extends javax.swing.JPanel {
             }
         });
     }
-    
-     private void initializeData() {
+
+    private void initializeData() {
         // Lấy ID tiếp theo của Supplier
         nextSupplierId = supplierController.getNextSupplierId();
         if (nextSupplierId == -1) {
@@ -454,16 +454,12 @@ public class SupplierPanel extends javax.swing.JPanel {
                     .addComponent(phoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ProdID8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(ProdID7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ProdID9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(86, 86, 86))))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ProdID9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ProdID7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(86, 86, 86))
         );
 
         javax.swing.GroupLayout boxProductsLayout = new javax.swing.GroupLayout(boxProducts);
@@ -533,10 +529,10 @@ public class SupplierPanel extends javax.swing.JPanel {
 
         int supplierId = (int) supplierTable.getValueAt(selectedRow, 0);
         int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Bạn có chắc chắn muốn xóa nhà cung cấp này không?",
-            "Xác nhận xóa",
-            JOptionPane.YES_NO_OPTION
+                this,
+                "Bạn có chắc chắn muốn xóa nhà cung cấp này không?",
+                "Xác nhận xóa",
+                JOptionPane.YES_NO_OPTION
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
@@ -563,12 +559,12 @@ public class SupplierPanel extends javax.swing.JPanel {
 
         if (supplier != null) {
             String message = "Thông tin chi tiết:\n"
-            + "Mã NCC: " + supplier.getSupplierId() + "\n"
-            + "Tên NCC: " + supplier.getName() + "\n"
-            + "Tên người liên hệ: " + supplier.getContactName() + "\n"
-            + "SĐT: " + supplier.getPhone() + "\n"
-            + "Email: " + supplier.getEmail() + "\n"
-            + "Địa chỉ: " + supplier.getAddress();
+                    + "Mã NCC: " + supplier.getSupplierId() + "\n"
+                    + "Tên NCC: " + supplier.getName() + "\n"
+                    + "Tên người liên hệ: " + supplier.getContactName() + "\n"
+                    + "SĐT: " + supplier.getPhone() + "\n"
+                    + "Email: " + supplier.getEmail() + "\n"
+                    + "Địa chỉ: " + supplier.getAddress();
             JOptionPane.showMessageDialog(this, message, "Thông tin nhà cung cấp", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin nhà cung cấp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -635,10 +631,10 @@ public class SupplierPanel extends javax.swing.JPanel {
         boolean success = supplierController.addSupplier(newSupplier);
         if (success) {
             JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
-            loadSuppliersIntoTable(); // Tải lại dữ liệu
-            clearFields(); // Xóa các trường nhập liệu
+            loadSuppliersIntoTable(); // Cập nhật danh sách
+            clearFields(); // Xóa dữ liệu nhập
         } else {
-            JOptionPane.showMessageDialog(this, "Lỗi khi thêm nhà cung cấp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nhà cung cấp đã tồn tại hoặc có lỗi xảy ra!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_addSupplierBtnActionPerformed
 

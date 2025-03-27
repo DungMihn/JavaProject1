@@ -98,7 +98,7 @@ public class ReportPanel extends JPanel {
         };
         revenueTable = new JTable(revenueTableModel);
         revenueTable.setRowHeight(25);
-        revenueTable.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        revenueTable.setFont(new Font("Arial", Font.PLAIN, 14));
         JScrollPane revenueScrollPane = new JScrollPane(revenueTable);
         revenueScrollPane.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Báo cáo doanh thu"));
 
@@ -119,7 +119,7 @@ public class ReportPanel extends JPanel {
         };
         bestSellingTable = new JTable(bestSellingTableModel);
         bestSellingTable.setRowHeight(25);
-        bestSellingTable.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        bestSellingTable.setFont(new Font("Arial", Font.PLAIN, 14));
         JScrollPane bestSellingScrollPane = new JScrollPane(bestSellingTable);
         bestSellingScrollPane.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Top Sản Phẩm Bán Chạy"));
         sellProductBox.add(bestSellingScrollPane, BorderLayout.CENTER);

@@ -135,6 +135,9 @@ public class StockEntryDetailDAOImpl implements StockEntryDetailDAO {
                     detail.setStockEntryId(rs.getInt("stock_entry_id"));
                     detail.setProductId(rs.getInt("product_id"));
                     detail.setProductName(rs.getString("product_name"));
+                    detail.setCategory(rs.getString("category"));
+                    detail.setUnit(rs.getString("unit"));
+                    detail.setBarcode(rs.getString("barcode"));
                     detail.setQuantity(rs.getInt("quantity"));
                     detail.setPurchasePrice(rs.getDouble("purchase_price"));
                     details.add(detail);

@@ -58,6 +58,7 @@ public class EditProductDialog extends JDialog {
         formPanel.add(label, gbc);
         txtName = new JTextField(product.getName(), 20);
         txtName.setFont(fieldFont);
+        txtName.setPreferredSize(new Dimension(200, 25));
         txtName.setEditable(false); txtName.setFocusable(false);
         gbc.gridx = 1;
         formPanel.add(txtName, gbc);
@@ -69,6 +70,7 @@ public class EditProductDialog extends JDialog {
         formPanel.add(label, gbc);
         txtCategory = new JTextField(product.getCategory(), 20);
         txtCategory.setFont(fieldFont);
+        txtCategory.setPreferredSize(new Dimension(200, 25));
         txtCategory.setEditable(false); txtCategory.setFocusable(false);
         gbc.gridx = 1;
         formPanel.add(txtCategory, gbc);
@@ -79,6 +81,7 @@ public class EditProductDialog extends JDialog {
         label.setFont(labelFont);
         formPanel.add(label, gbc);
         txtPrice = new JTextField(String.valueOf(product.getPrice()), 20);
+        txtPrice.setPreferredSize(new Dimension(200, 25));
         txtPrice.setFont(fieldFont);
         gbc.gridx = 1;
         formPanel.add(txtPrice, gbc);
@@ -90,6 +93,7 @@ public class EditProductDialog extends JDialog {
         formPanel.add(label, gbc);
         txtUnit = new JTextField(product.getUnit(), 20);
         txtUnit.setFont(fieldFont);
+        txtUnit.setPreferredSize(new Dimension(200, 25));
         txtUnit.setEditable(false); txtUnit.setFocusable(false);
         gbc.gridx = 1;
         formPanel.add(txtUnit, gbc);
@@ -101,6 +105,7 @@ public class EditProductDialog extends JDialog {
         formPanel.add(label, gbc);
         txtStockQuantity = new JTextField(String.valueOf(stockQuantity), 20);
         txtStockQuantity.setFont(fieldFont);
+        txtStockQuantity.setPreferredSize(new Dimension(200, 25));
         txtStockQuantity.setEditable(false); txtStockQuantity.setFocusable(false);
         gbc.gridx = 1;
         formPanel.add(txtStockQuantity, gbc);
@@ -112,6 +117,7 @@ public class EditProductDialog extends JDialog {
         formPanel.add(label, gbc);
         txtBarcode = new JTextField(product.getBarcode(), 20);
         txtBarcode.setFont(fieldFont);
+        txtBarcode.setPreferredSize(new Dimension(200, 25));
         txtBarcode.setEditable(false); txtBarcode.setFocusable(false);
         gbc.gridx = 1;
         formPanel.add(txtBarcode, gbc);
@@ -125,6 +131,7 @@ public class EditProductDialog extends JDialog {
         Supplier supplier = supplierDAO.getSupplierById(product.getSupplierId());
         txtSupplierName = new JTextField(supplier != null ? supplier.getName() : "N/A", 20);
         txtSupplierName.setFont(fieldFont);
+        txtSupplierName.setPreferredSize(new Dimension(200, 25));
         txtSupplierName.setEditable(false); txtSupplierName.setFocusable(false);
         gbc.gridx = 1;
         formPanel.add(txtSupplierName, gbc);
@@ -136,6 +143,7 @@ public class EditProductDialog extends JDialog {
         formPanel.add(label, gbc);
         txtPurchasePrice = new JTextField(String.valueOf(product.getPurchasePrice()), 20);
         txtPurchasePrice.setFont(fieldFont);
+        txtPurchasePrice.setPreferredSize(new Dimension(200, 25));
         txtPurchasePrice.setEditable(false); txtPurchasePrice.setFocusable(false);
         gbc.gridx = 1;
         formPanel.add(txtPurchasePrice, gbc);

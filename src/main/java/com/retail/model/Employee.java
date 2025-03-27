@@ -16,6 +16,8 @@ public class Employee {
     private String phone;
     private String role;
     private LocalDateTime createAt;
+    private String userName;
+    private String password;
 
     public Employee(int employeeId, String name, String phone, String role, LocalDateTime createAt) {
         this.employeeId = employeeId;
@@ -25,6 +27,28 @@ public class Employee {
         this.createAt = createAt;
     }
 
+    public Employee(int employeeId, String name, String phone, String role, String userName, String password,  LocalDateTime createAt) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.phone = phone;
+        this.role = role;
+        this.userName = userName;
+        this.password = password;
+        this.createAt = createAt;
+    }
+
+    public Employee(String name, String phone, String role, String userName, String password) {
+        this.name = name;
+        this.phone = phone;
+        this.role = role;
+        this.userName = userName;
+        this.password = password;
+    }
+
+    
+    
+    
+    
     public Employee(){
         
     }
@@ -72,6 +96,26 @@ public class Employee {
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    
+
+   
     
     
 }

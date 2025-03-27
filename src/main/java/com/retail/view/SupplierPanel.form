@@ -504,20 +504,13 @@
                           <Component id="ProdID8" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="ProdID7" min="-2" pref="27" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="emailTextField" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                                  <Component id="ProdID9" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                                  <Component id="addressTextField" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="emailTextField" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                          <Component id="ProdID9" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                          <Component id="addressTextField" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                          <Component id="ProdID7" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

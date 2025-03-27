@@ -74,6 +74,10 @@ public class InvoicePanel extends JPanel {
         splitPane.setDividerSize(8);
         splitPane.setOneTouchExpandable(true);
         add(splitPane, BorderLayout.CENTER);
+        
+        SwingUtilities.invokeLater(() -> {
+            splitPane.setDividerLocation(0.6); 
+        });
 
         initLogic();
         new InvoiceController(new InvoiceService(), this);
@@ -230,7 +234,7 @@ public class InvoicePanel extends JPanel {
         ImageIcon addIcon = new ImageIcon(getClass().getResource("/images/plus.png"));
         Image scaledAddImage = addIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         btnAddProduct.setIcon(new ImageIcon(scaledAddImage));
-        barcodePanel.add(new JLabel("<html><b><span style='font-size:12px; color:white;'>Mã vạch Sản:</span></b></html>"));
+        barcodePanel.add(new JLabel("<html><b><span style='font-size:12px; color:white;'>Mã vạch SP:</span></b></html>"));
         barcodePanel.add(txtBarcode);
         barcodePanel.add(btnAddProduct);
         JPanel barcodeWrapper = new JPanel(new BorderLayout());

@@ -60,7 +60,6 @@ import net.sf.jasperreports.engine.JRException;
  */
 public class StockEntryPanel extends javax.swing.JPanel {
 
-
     private int supplierId; // Thêm biến supplierId
     private StockEntryController stockEntryController;
     private StockEntryDetailController stockEntryDetailController;
@@ -114,6 +113,9 @@ public class StockEntryPanel extends javax.swing.JPanel {
         // Thêm các cột vào bảng
         stockEntryDetailTableModel.addColumn("Mã SP");
         stockEntryDetailTableModel.addColumn("Tên SP");
+        stockEntryDetailTableModel.addColumn("Loại");
+        stockEntryDetailTableModel.addColumn("Đơn vị");
+        stockEntryDetailTableModel.addColumn("Mã vạch");
         stockEntryDetailTableModel.addColumn("Số lượng");
         stockEntryDetailTableModel.addColumn("Giá nhập");
 
@@ -132,7 +134,6 @@ public class StockEntryPanel extends javax.swing.JPanel {
         // Thêm sự kiện lắng nghe cho stockEntryIdTextField
         setupStockEntryIdTextFieldListener();
     }
-
 
     private void setupStockEntryIdTextFieldListener() {
         stockEntryIdTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -206,13 +207,13 @@ public class StockEntryPanel extends javax.swing.JPanel {
         entryDateTextField.setText("");
         stockEntryDetailTableModel.setRowCount(0); // Xóa dữ liệu cũ trong bảng
     }
-    
-    public void setStockEntryId(int stockEntryId) {
-    this.stockEntryId = stockEntryId;
-    stockEntryIdTextField.setText(String.valueOf(stockEntryId)); // Hiển thị stockEntryId lên giao diện
-}
 
-    private void loadStockEntryDetailsIntoTable(int stockEntryId) {
+    public void setStockEntryId(int stockEntryId) {
+        this.stockEntryId = stockEntryId;
+        stockEntryIdTextField.setText(String.valueOf(stockEntryId)); // Hiển thị stockEntryId lên giao diện
+    }
+
+    public void loadStockEntryDetailsIntoTable(int stockEntryId) {
         // Xóa dữ liệu cũ trong bảng và danh sách tạm thời
         stockEntryDetailTableModel.setRowCount(0);
         tempStockEntryDetails.clear();
@@ -228,6 +229,9 @@ public class StockEntryPanel extends javax.swing.JPanel {
             stockEntryDetailTableModel.addRow(new Object[]{
                 detail.getProductId(),
                 detail.getProductName(),
+                detail.getCategory(),
+                detail.getUnit(),
+                detail.getBarcode(),
                 detail.getQuantity(),
                 detail.getPurchasePrice()
             });
@@ -237,7 +241,6 @@ public class StockEntryPanel extends javax.swing.JPanel {
         stockEntryDetailTable.revalidate();
         stockEntryDetailTable.repaint();
     }
-
 
     private void loadEmployeesIntoComboBox() {
         List<Employee> employees = employeeController.getAllEmployees();
@@ -255,8 +258,6 @@ public class StockEntryPanel extends javax.swing.JPanel {
         for (Product product : products) {
             productItems.add(new ComboBoxItem(product.getProductId(), product.getName()));
         }
-
-        System.out.println("✅ Danh sách sản phẩm: " + productItems);
     }
 
     private void showDatePickerDialog() {
@@ -580,7 +581,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         }
     }
 
-    private void setupTotalPriceCalculation() {
+    public void setupTotalPriceCalculation() {
         // Lắng nghe sự thay đổi trong quantityTextField
         quantityTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -618,7 +619,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         });
     }
 
-    private void calculateTotalPrice() {
+    public void calculateTotalPrice() {
         try {
             // Lấy giá trị từ quantityTextField và priceTextField
             int quantity = Integer.parseInt(quantityTextField.getText());
@@ -687,12 +688,18 @@ public class StockEntryPanel extends javax.swing.JPanel {
                     // Lấy thông tin từ hàng được chọn
                     int productId = (int) stockEntryDetailTable.getValueAt(selectedRow, 0);
                     String productName = (String) stockEntryDetailTable.getValueAt(selectedRow, 1);
-                    int quantity = (int) stockEntryDetailTable.getValueAt(selectedRow, 2);
-                    double purchasePrice = (double) stockEntryDetailTable.getValueAt(selectedRow, 3);
+                    String category = (String) stockEntryDetailTable.getValueAt(selectedRow, 2);
+                    String unit = (String) stockEntryDetailTable.getValueAt(selectedRow, 3);
+                    String barcode = (String) stockEntryDetailTable.getValueAt(selectedRow, 4);
+                    int quantity = (int) stockEntryDetailTable.getValueAt(selectedRow, 5);
+                    double purchasePrice = (double) stockEntryDetailTable.getValueAt(selectedRow, 6);
 
                     // Điền thông tin vào các trường nhập liệu
                     productIdTextField.setText(String.valueOf(productId));
                     productNameTextField.setText(productName);
+                    categoryComboBox.setSelectedItem(category);
+                    unitComboBox.setSelectedItem(unit);
+                    barcodeTextField.setText(barcode);
                     quantityTextField.setText(String.valueOf(quantity));
                     priceTextField.setText(String.valueOf(purchasePrice));
                 }
@@ -700,15 +707,15 @@ public class StockEntryPanel extends javax.swing.JPanel {
         });
     }
 
-    private void updateTotalPrice() {
+    public void updateTotalPrice() {
         double totalDouble = 0;
         for (int i = 0; i < stockEntryDetailTableModel.getRowCount(); i++) {
-            int quantity = (int) stockEntryDetailTableModel.getValueAt(i, 2);
-            double price = (double) stockEntryDetailTableModel.getValueAt(i, 3);
+            int quantity = (int) stockEntryDetailTableModel.getValueAt(i, 5);
+            double price = (double) stockEntryDetailTableModel.getValueAt(i, 6);
             totalDouble += quantity * price;
         }
-        int total = (int) totalDouble; 
-        
+        int total = (int) totalDouble;
+
         allTotalPriceTextField.setText(String.valueOf(total));
     }
 

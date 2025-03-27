@@ -23,13 +23,17 @@ public class EmployeeService {
     }
 
     // Thêm nhân viên mới
-    public boolean addEmployee(String name, String phone, String role) {
-        if (name.isEmpty() || phone.isEmpty() || role.isEmpty()) {
+    public boolean addEmployee(String name, String phone, String role, String username, String password) {
+        if (name == null || name.trim().isEmpty() ||
+            phone == null || phone.trim().isEmpty() ||
+            role == null || role.trim().isEmpty() ||
+            username == null || username.trim().isEmpty() ||
+            password == null || password.trim().isEmpty()) {
             System.out.println("❌ Lỗi: Thông tin nhân viên không được để trống!");
             return false;
         }
         
-        Employee newEmployee = new Employee(0, name, phone, role, null);
+        Employee newEmployee = new Employee(name, phone, role, username, password);
         return employeeDAO.insertEmployee(newEmployee);
     }
 
