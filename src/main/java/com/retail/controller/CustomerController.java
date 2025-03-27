@@ -4,7 +4,7 @@
  */
 package com.retail.controller;
 
-import com.retail.service.CustomerService;
+import com.retail.dao.CustomerDAOImpl;
 import com.retail.model.Customer;
 import java.util.List;
 
@@ -13,31 +13,30 @@ import java.util.List;
  * @author Admin
  */
 public class CustomerController {
-    private final CustomerService customerService = new CustomerService();
 
+    private CustomerDAOImpl customerDAO;
 
-    // Thêm khách hàng mới
-    public void addCustomer(String name, String phone, String email, String address) {
-        Customer customer = new Customer();
-        customer.setName(name);
-        customer.setPhone(phone);
-        customer.setEmail(email);
-        customer.setAddress(address);
-        customerService.addCustomer(customer);
+    public CustomerController() {
+        customerDAO = new CustomerDAOImpl();
     }
 
-    // Lấy danh sách khách hàng
     public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+        return customerDAO.getAllCustomers();
     }
 
-    // Lấy thông tin khách hàng theo ID
-    public Customer getCustomerById(int customerId) {
-        return customerService.getCustomerById(customerId);
+    public List<Customer> searchCustomers(String keyword) {
+        return customerDAO.searchCustomers(keyword);
     }
 
-    // Xóa khách hàng
-    public void deleteCustomer(int customerId) {
-        customerService.deleteCustomer(customerId);
+    public boolean addCustomer(Customer customer) {
+        return customerDAO.addCustomer(customer);
+    }
+
+    public boolean updateCustomer(Customer customer) {
+        return customerDAO.updateCustomer(customer);
+    }
+
+    public boolean deleteCustomer(int customerId) {
+        return customerDAO.deleteCustomer(customerId);
     }
 }

@@ -120,17 +120,19 @@ public class InventoryDAOImpl implements InventoryDAO {
     }
 
     @Override
-    public void updateInventory(Inventory inventory) {
+    public boolean updateInventory(Inventory inventory) {
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(UPDATE_INVENTORY)) {
             pstmt.setInt(1, inventory.getProductId());
             pstmt.setInt(2, inventory.getStockQuantity());
             pstmt.setObject(3, inventory.getLastUpdated());
             pstmt.setInt(4, inventory.getInventoryId());
             pstmt.executeUpdate();
-            System.out.println("✅ Cập nhật tồn kho thành công!");
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             System.out.println("❌ Lỗi cập nhật tồn kho: " + e.getMessage());
         }
+        return false;
     }
 
     @Override

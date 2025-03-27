@@ -12,11 +12,18 @@ import java.util.List;
  * @author Admin
  */
 public interface EmployeeDAO {
+
     public boolean insertEmployee(Employee employee);
+
     boolean updateEmployee(Employee employee);
+
     public boolean deleteEmployee(String employeeId);
-//    Employee getEmployeeById(int employeeId);
-    List<Employee> getAllEmployees();
+
+    public Employee getEmployeeById(int employeeId);
+
+    List<Employee> getAllEmployees ();
+
     public List<Employee> searchEmployeeByName(String keyword);
+
     public int getNextSupplierId();
 }

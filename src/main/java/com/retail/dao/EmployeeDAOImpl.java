@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class EmployeeDAOImpl implements EmployeeDAO {
      private static final String SEARCH_EMPLOYEE_BY_NAME = "SELECT * FROM Employee WHERE name LIKE ?";
+     private static final String SELECT_EMPLOYEE_BY_ID = "SELECT * FROM Employee WHERE employee_id = ?";
 
     @Override
     public List<Employee> getAllEmployees() {
@@ -125,6 +126,28 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             System.out.println("❌ Lỗi tìm kiếm nhân viên: " + e.getMessage());
         }
         return employees;
+    }
+    
+    @Override
+    public Employee getEmployeeById(int employeeId) {
+        Employee employee = null;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_EMPLOYEE_BY_ID)) {
+            stmt.setInt(1, employeeId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    employee = new Employee();
+                    employee.setEmployeeId(rs.getInt("employee_id"));
+                    employee.setName(rs.getString("name"));
+                    employee.setPhone(rs.getString("phone"));
+                    employee.setRole(rs.getString("role"));
+                    rs.getObject("created_at", LocalDateTime.class);
+                }
+            }
+        } catch (SQLException e) {
+           System.out.println("❌ Lỗi tìm kiếm nhân  theo id: " + e.getMessage());
+        }
+        return employee;
     }
 
 }

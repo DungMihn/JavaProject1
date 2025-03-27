@@ -12,9 +12,13 @@ import java.util.List;
  * @author Admin
  */
 public interface CustomerDAO {
-    void addCustomer(Customer customer);
-    void updateCustomer(Customer customer);
-    void deleteCustomer(int customerId);
+    boolean addCustomer(Customer customer);
+    Customer getCustomerByPhone(String phone);
+    Customer getCustomerByEmail(String email);
     Customer getCustomerById(int customerId);
     List<Customer> getAllCustomers();
+    boolean updateCustomer(Customer customer);
+    boolean deleteCustomer(int customerId);
+    List<Customer> searchCustomers(String keyword);
+    List<String> getAllCustomerPhones();
 }

@@ -8,7 +8,7 @@ package com.retail.view;
  *
  * @author Admin
  */
-import java.awt.Color;
+
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.*;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;

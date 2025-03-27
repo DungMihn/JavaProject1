@@ -3,8 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.retail.controller;
+
 import com.retail.model.Invoice;
+import com.retail.model.InvoiceDetail;
 import com.retail.service.InvoiceService;
+import com.retail.view.InvoicePanel;
 import java.util.List;
 
 /**
@@ -12,45 +15,47 @@ import java.util.List;
  * @author Admin
  */
 public class InvoiceController {
-    private final InvoiceService invoiceService;
+    private InvoiceService invoiceService;
+    private InvoicePanel invoicePanel;
 
-    // Constructor: Inject InvoiceService vào Controller
-    public InvoiceController(InvoiceService invoiceService) {
+    public InvoiceController(InvoiceService invoiceService, InvoicePanel invoicePanel) {
         this.invoiceService = invoiceService;
+        this.invoicePanel = invoicePanel;
+        initController();
     }
 
-    // Phương thức tạo hóa đơn mới
-    public void createInvoice(int customerId, int employeeId, double totalAmount, double discount, String paymentMethod) {
-        // Tính toán finalAmount
-        double finalAmount = totalAmount - discount;
-
-        // Tạo đối tượng Invoice
-        Invoice invoice = new Invoice();
-        invoice.setCustomerId(customerId);
-        invoice.setEmployeeId(employeeId);
-        invoice.setTotalAmount(totalAmount);
-        invoice.setDiscount(discount);
-        invoice.setFinalAmount(finalAmount);
-        invoice.setPaymentMethod(paymentMethod);
-
-        // Gọi Service để lưu hóa đơn
-        invoiceService.addInvoice(invoice);
-        System.out.println("✅ Hóa đơn đã được tạo thành công!");
+    private void initController() {
+        invoicePanel.getSubmitButton().addActionListener(e -> processInvoice());
     }
 
-    // Phương thức lấy danh sách hóa đơn
-    public List<Invoice> getAllInvoices() {
-        return invoiceService.getAllInvoices();
+    private void processInvoice() {
+    Invoice invoice = invoicePanel.getInvoiceData();
+    List<InvoiceDetail> details = invoicePanel.getInvoiceDetails();
+    boolean result;
+    boolean isNew = invoice.getInvoiceId() == 0;
+    
+    if (isNew) {
+        // Tạo hóa đơn mới
+        result = invoiceService.createInvoice(invoice, details);
+    } else {
+        // Cập nhật hóa đơn cũ
+        result = invoiceService.updateInvoice(invoice, details);
     }
-
-    // Phương thức lấy hóa đơn theo ID
-    public Invoice getInvoiceById(int invoiceId) {
-        return invoiceService.getInvoiceById(invoiceId);
+    
+    if (result) {
+        if (isNew) {
+            invoicePanel.showMessage("Hóa đơn được tạo thành công!");
+        } else {
+            invoicePanel.showMessage("Hóa đơn được cập nhật thành công!");
+        }
+        invoicePanel.resetForm();
+        invoicePanel.refreshInvoiceList();
+    } else {
+        if (isNew) {
+            invoicePanel.showMessage("Tạo hóa đơn thất bại!");
+        } else {
+            invoicePanel.showMessage("Cập nhật hóa đơn thất bại!");
+        }
     }
-
-    // Phương thức xóa hóa đơn
-    public void deleteInvoice(int invoiceId) {
-        invoiceService.deleteInvoice(invoiceId);
-        System.out.println("✅ Hóa đơn đã được xóa thành công!");
-    }
+}
 }

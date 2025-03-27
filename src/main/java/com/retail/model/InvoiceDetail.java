@@ -4,20 +4,26 @@
  */
 package com.retail.model;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Admin
  */
 public class InvoiceDetail {
+
     private int invoiceDetailId;
     private int invoiceId;
     private int productId;
     private int quantity;
-    private double price;
-    private double subtotal;
+    private BigDecimal price;
+    private BigDecimal subtotal;
+    private String productName;
 
-    public InvoiceDetail(int invoiceDetailId, int invoiceId, int productId, int quantity, double price, double subtotal) {
-        this.invoiceDetailId = invoiceDetailId;
+    public InvoiceDetail() {
+    }
+
+    public InvoiceDetail(int invoiceId, int productId, int quantity, BigDecimal price, BigDecimal subtotal) {
         this.invoiceId = invoiceId;
         this.productId = productId;
         this.quantity = quantity;
@@ -25,10 +31,18 @@ public class InvoiceDetail {
         this.subtotal = subtotal;
     }
 
-    public InvoiceDetail(){
-        
+    public InvoiceDetail(String productName, int quantity, BigDecimal price, BigDecimal subtotal ) {
+        this.productName = productName;
+        this.quantity = quantity;
+        this.price = price;
+        this.subtotal = subtotal;
+
     }
     
+    
+
+    
+    // Getters và Setters
     public int getInvoiceDetailId() {
         return invoiceDetailId;
     }
@@ -61,21 +75,29 @@ public class InvoiceDetail {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public java.math.BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+
+    public void setPrice(java.math.BigDecimal price) {
         this.price = price;
     }
 
-    public double getSubtotal() {
+    public BigDecimal getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(double subtotal) {
+    public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
-    
-    
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
 }

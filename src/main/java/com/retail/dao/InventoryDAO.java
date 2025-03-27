@@ -25,7 +25,7 @@ public interface InventoryDAO {
     List<Inventory> getAllInventories();
 
     // Cập nhật thông tin tồn kho
-    void updateInventory(Inventory inventory);
+    boolean updateInventory(Inventory inventory);
 
     // Xóa một bản ghi tồn kho theo ID
     void deleteInventory(int inventoryId);

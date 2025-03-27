@@ -4,33 +4,34 @@
  */
 package com.retail.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  *
  * @author Admin
  */
 public class Customer {
+
     private int customerId;
     private String name;
     private String phone;
     private String email;
     private String address;
-    private LocalDateTime createAt;
+    private Date createdAt;
 
-    public Customer(){
-        
+    public Customer() {
     }
 
-    public Customer(int customerId, String name, String phone, String email, String address, LocalDateTime createAt) {
+    public Customer(int customerId, String name, String phone, String email, String address, Date createdAt) {
         this.customerId = customerId;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
     }
 
+    // Getters và Setters
     public int getCustomerId() {
         return customerId;
     }
@@ -71,13 +72,12 @@ public class Customer {
         this.address = address;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreate_at(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
-    
-    
+
 }

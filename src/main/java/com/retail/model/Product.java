@@ -9,6 +9,7 @@ package com.retail.model;
  * @author Admin
  */
 public class Product {
+
     private int productId;
     private String name;
     private String category;
@@ -19,7 +20,7 @@ public class Product {
     private int stockQuantity;
     private String barcode;
     private double purchasePrice;
-    
+
     public Product() {
     }
 
@@ -33,6 +34,18 @@ public class Product {
         this.supplierName = supplierName;
         this.stockQuantity = stockQuantity;
         this.barcode = barcode;
+    }
+    
+    public Product(int productId, String name, String category, double price, String unit, int stockQuantity, String barcode, int supplierId, double purchasePrice) {
+        this.productId = productId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.unit = unit;
+        this.stockQuantity = stockQuantity;
+        this.barcode = barcode;
+        this.supplierId = supplierId;
+        this.purchasePrice = purchasePrice;
     }
 
     public Product(int productId, String name, String category, double price, String unit, int supplierId, int stockQuantity, String barcode) {
@@ -69,12 +82,6 @@ public class Product {
         this.purchasePrice = purchasePrice;
     }
 
-    
-
-
-    
-
-     
     public int getProductId() {
         return productId;
     }
@@ -154,6 +161,4 @@ public class Product {
     public void setPurchasePrice(double purchasePrice) {
         this.purchasePrice = purchasePrice;
     }
-
-    
 }

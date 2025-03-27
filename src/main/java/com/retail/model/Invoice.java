@@ -4,37 +4,38 @@
  */
 package com.retail.model;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
  * @author Admin
  */
 public class Invoice {
-    private int invoiceId;        
-    private int customerId;       
-    private int employeeId;         
-    private double totalAmount;      
-    private double discount;         
-    private double finalAmount;      
-    private String paymentMethod;  
-    private LocalDateTime createdAt;
 
-    public Invoice(int invoiceId, int customerId, int employeeId, double totalAmount, double discount, double finalAmount, String paymentMethod, LocalDateTime createdAt) {
-        this.invoiceId = invoiceId;
+    private int invoiceId;
+    private int customerId;
+    private int employeeId;
+    private BigDecimal totalAmount;
+    private BigDecimal discount;
+    private BigDecimal finalAmount;
+    private String paymentMethod;
+    private Date createdAt;
+
+    public Invoice() {
+    }
+
+    public Invoice(int customerId, int employeeId, BigDecimal totalAmount, BigDecimal discount, BigDecimal finalAmount, String paymentMethod) {
         this.customerId = customerId;
         this.employeeId = employeeId;
         this.totalAmount = totalAmount;
         this.discount = discount;
         this.finalAmount = finalAmount;
         this.paymentMethod = paymentMethod;
-        this.createdAt = createdAt;
+        this.createdAt = new Date(); // Ngày tạo hóa đơn
     }
-    
-    public Invoice() {
-    // Constructor trống
-}
 
+    // Getters và Setters
     public int getInvoiceId() {
         return invoiceId;
     }
@@ -59,27 +60,27 @@ public class Invoice {
         this.employeeId = employeeId;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public double getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 
-    public double getFinalAmount() {
+    public BigDecimal getFinalAmount() {
         return finalAmount;
     }
 
-    public void setFinalAmount(double finalAmount) {
+    public void setFinalAmount(BigDecimal finalAmount) {
         this.finalAmount = finalAmount;
     }
 
@@ -91,14 +92,12 @@ public class Invoice {
         this.paymentMethod = paymentMethod;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    
-    
-    
+
 }

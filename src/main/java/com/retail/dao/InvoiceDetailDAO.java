@@ -12,9 +12,9 @@ import java.util.List;
  * @author Admin
  */
 public interface InvoiceDetailDAO {
-    void addInvoiceDetail(InvoiceDetail invoiceDetail);
-    void updateInvoiceDetail(InvoiceDetail invoiceDetail);
-    void deleteInvoiceDetail(int invoiceDetailId);
-    InvoiceDetail getInvoiceDetailById(int invoiceDetailId);
-    List<InvoiceDetail> getAllInvoiceDetails();
+    boolean addInvoiceDetail(InvoiceDetail detail);
+    List<InvoiceDetail> getInvoiceDetailsByInvoiceId(int invoiceId);
+    boolean deleteInvoiceDetailsByInvoiceId(int invoiceId);
+    List<InvoiceDetail> getBestSellingProductsByDate();
+    List<InvoiceDetail> getBestSellingProductsByMonth();
 }

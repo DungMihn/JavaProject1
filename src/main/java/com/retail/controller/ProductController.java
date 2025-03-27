@@ -3,8 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.retail.controller;
+
+import com.retail.dao.InventoryDAOImpl;
+import com.retail.dao.ProductDAOImpl;
+import com.retail.dao.SupplierDAOImpl;
 import com.retail.model.Product;
-import com.retail.service.ProductService;
+import com.retail.model.Supplier;
+import com.retail.model.Inventory;
 import java.util.List;
 
 /**
@@ -12,51 +17,42 @@ import java.util.List;
  * @author Admin
  */
 public class ProductController {
-    private final ProductService productService = new ProductService();
 
-    // Thêm sản phẩm mới
-    public boolean addProduct(Product product) {
-        try {
-             productService.addProduct(product);
-             return true;
-        } catch (Exception e) {
-            return false;
-        }
-   
-}
+    private ProductDAOImpl productDAO;
+    private SupplierDAOImpl supplierDAO;
+    private InventoryDAOImpl inventoryDAO;
 
-    // Lấy danh sách sản phẩm
+    public ProductController() {
+        productDAO = new ProductDAOImpl();
+        supplierDAO = new SupplierDAOImpl();
+        inventoryDAO = new InventoryDAOImpl();
+    }
+
     public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+        return productDAO.getAllProducts();
     }
 
-    // Lấy thông tin sản phẩm theo ID
-    public Product getProductById(int productId) {
-        return productService.getProductById(productId);
+    public List<String> getDistinctCategories() {
+        return productDAO.getDistinctCategories();
     }
 
-    // Xóa sản phẩm
-    public void deleteProduct(int productId) {
-        productService.deleteProduct(productId);
+    public List<Product> searchProducts(String keyword) {
+        return productDAO.searchProducts(keyword);
     }
-    //
-     public List<Product> getProductsBySupplierId(int supplierId){
-        return productService.getProductsBySupplierId(supplierId); 
+
+    public Supplier getSupplierById(int supplierId) {
+        return supplierDAO.getSupplierById(supplierId);
     }
-     //
-    public int addProductWithStockEntry(String productName, int supplierId, String unit, String category, String barcode, double purchasePrice, double price) {
-        return productService.addProductWithStockEntry(productName, supplierId, unit, category, barcode, purchasePrice, price);
+
+    public Inventory getInventoryByProductId(int productId) {
+        return inventoryDAO.getInventoryByProductId(productId);
     }
-    //
-    public Product getProductByName(String productName) {
-        return productService.getProductByName(productName);
+
+    public List<com.retail.model.Supplier> getAllSuppliers() {
+        return supplierDAO.getAllSuppliers();
     }
-    //
-        public List<Product> searchProductInInventory(String keyword){
-        return productService.searchProductInInventory(keyword);
-    }
-    //
-         public boolean updateStockQuantity(int productId, int quantityChange) {
-        return productService.updateStockQuantity(productId, quantityChange);
+
+    public void updateProduct(Product product) {
+        productDAO.updateProduct(product);
     }
 }

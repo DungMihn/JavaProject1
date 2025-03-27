@@ -11,14 +11,12 @@ import java.util.List;
  * @author Admin
  */
 public interface ProductDAO {
-    void addProduct(Product product);
+    List<Product> getAllProducts();
+    List<Product> searchProducts(String keyword);
+    Product getProductById(int productId);
+    Product getProductByBarcode(String barcode);
+    List<String> getAllProductBarcodes();
+    List<String> getDistinctCategories();
     void updateProduct(Product product);
     void deleteProduct(int productId);
-    Product getProductById(int productId);
-    List<Product> getAllProducts();
-    List<Product> searchProductInInventory(String keyword);
-    List<Product> getProductsBySupplierId(int supplierId);
-    public int addProductWithStockEntry(String productName, int supplierId, String unit, String category, String barcode, double purchasePrice, double price);
-    public Product getProductByName(String productName);
-    public boolean updateStockQuantity(int productId, int quantityChange);
 }

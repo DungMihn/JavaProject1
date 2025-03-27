@@ -10,9 +10,11 @@ import java.util.List;
  * @author Admin
  */
 public interface InvoiceDAO {
-    void addInvoice(Invoice invoice);
-    void updateInvoice(Invoice invoice);
-    void deleteInvoice(int invoiceId);
+    boolean createInvoice(Invoice invoice);
     Invoice getInvoiceById(int invoiceId);
     List<Invoice> getAllInvoices();
+    boolean updateInvoice(Invoice invoice);
+    List<Invoice> getInvoicesByCustomerId(int customerId);
+    List<Invoice> getInvoicesByDate();
+    List<Invoice> getInvoicesByMonth();
 }

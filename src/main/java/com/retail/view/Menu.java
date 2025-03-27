@@ -26,6 +26,10 @@ public class Menu extends javax.swing.JFrame {
     private final ChangepassPanel changepassPanel;
     private final String loggedInUser;
     private final String userRole;
+    private final ProductPanel productPanel;
+    private final ReportPanel reportPanel;
+    private final CustomerPanel customerPanel;
+    private final InvoicePanel invoicePanel;
 
     /**
      * Creates new form Menu
@@ -70,6 +74,26 @@ public class Menu extends javax.swing.JFrame {
         entryListPanel.setMinimumSize(panelSize);
         entryListPanel.setMaximumSize(panelSize);
 
+        productPanel = new ProductPanel();
+        productPanel.setPreferredSize(panelSize);
+        productPanel.setMinimumSize(panelSize);
+        productPanel.setMaximumSize(panelSize);
+
+        reportPanel = new ReportPanel();
+        reportPanel.setPreferredSize(panelSize);
+        reportPanel.setMinimumSize(panelSize);
+        reportPanel.setMaximumSize(panelSize);
+
+        customerPanel = new CustomerPanel();
+        customerPanel.setPreferredSize(panelSize);
+        customerPanel.setMinimumSize(panelSize);
+        customerPanel.setMaximumSize(panelSize);
+
+        invoicePanel = new InvoicePanel();
+        invoicePanel.setPreferredSize(panelSize);
+        invoicePanel.setMinimumSize(panelSize);
+        invoicePanel.setMaximumSize(panelSize);
+
         systempanel = new SystemPanel(this);
 
         changepassPanel = new ChangepassPanel(loggedInUser);
@@ -82,6 +106,11 @@ public class Menu extends javax.swing.JFrame {
         ContentPanel.add(entryListPanel, "Entry");
         ContentPanel.add(systempanel, "System");
         ContentPanel.add(changepassPanel, "Changepass");
+        ContentPanel.add(productPanel, "Product");
+        ContentPanel.add(reportPanel, "Report");
+        ContentPanel.add(customerPanel, "Customer");
+        ContentPanel.add(invoicePanel, "Invoice");
+        
 
         // Hiển thị màn hình mặc định
         cardLayout.show(ContentPanel, "Background");
@@ -305,6 +334,11 @@ public class Menu extends javax.swing.JFrame {
         InvoiceButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 InvoiceButtonMouseClicked(evt);
+            }
+        });
+        InvoiceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InvoiceButtonActionPerformed(evt);
             }
         });
 
@@ -544,6 +578,10 @@ public class Menu extends javax.swing.JFrame {
         cardLayout.show(ContentPanel, "Supplier");
     }//GEN-LAST:event_SupplierButton10SupplierButtonMouseClicked
 
+    private void InvoiceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InvoiceButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_InvoiceButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -600,51 +638,11 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel ProductPage;
     private javax.swing.JButton ReportButton;
     private javax.swing.JPanel ReportPage;
-    private javax.swing.JPanel SideBarPanel;
-    private javax.swing.JPanel SideBarPanel1;
     private javax.swing.JPanel SideBarPanel10;
-    private javax.swing.JPanel SideBarPanel2;
-    private javax.swing.JPanel SideBarPanel3;
-    private javax.swing.JPanel SideBarPanel4;
-    private javax.swing.JPanel SideBarPanel5;
-    private javax.swing.JPanel SideBarPanel6;
-    private javax.swing.JPanel SideBarPanel7;
-    private javax.swing.JPanel SideBarPanel8;
-    private javax.swing.JPanel SideBarPanel9;
-    private javax.swing.JButton SupplierButton;
-    private javax.swing.JButton SupplierButton1;
     private javax.swing.JButton SupplierButton10;
-    private javax.swing.JButton SupplierButton2;
-    private javax.swing.JButton SupplierButton3;
-    private javax.swing.JButton SupplierButton4;
-    private javax.swing.JButton SupplierButton5;
-    private javax.swing.JButton SupplierButton6;
-    private javax.swing.JButton SupplierButton7;
-    private javax.swing.JButton SupplierButton8;
-    private javax.swing.JButton SupplierButton9;
-    private javax.swing.JPanel SupplierPage;
-    private javax.swing.JPanel SupplierPage1;
     private javax.swing.JPanel SupplierPage10;
-    private javax.swing.JPanel SupplierPage2;
-    private javax.swing.JPanel SupplierPage3;
-    private javax.swing.JPanel SupplierPage4;
-    private javax.swing.JPanel SupplierPage5;
-    private javax.swing.JPanel SupplierPage6;
-    private javax.swing.JPanel SupplierPage7;
-    private javax.swing.JPanel SupplierPage8;
-    private javax.swing.JPanel SupplierPage9;
     private javax.swing.JButton SystemButton;
     private javax.swing.JPanel SystemPage;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
