@@ -4,20 +4,19 @@
  */
 package com.retail.model;
 
-/**
- *
- * @author macbookprom1
- */
+import java.math.BigDecimal;
+
 public class InvoiceDetail {
     private int invoiceDetailId;
     private int invoiceId;
     private int productId;
     private int quantity;
-    private double price;
-    private double subtotal;
+    private BigDecimal price;
+    private BigDecimal subtotal;
 
-    public InvoiceDetail(int invoiceDetailId, int invoiceId, int productId, int quantity, double price, double subtotal) {
-        this.invoiceDetailId = invoiceDetailId;
+    public InvoiceDetail() { }
+
+    public InvoiceDetail(int invoiceId, int productId, int quantity, BigDecimal price, BigDecimal subtotal) {
         this.invoiceId = invoiceId;
         this.productId = productId;
         this.quantity = quantity;
@@ -25,25 +24,57 @@ public class InvoiceDetail {
         this.subtotal = subtotal;
     }
 
-    // Getters & Setters
-    public int getInvoiceDetailId() { return invoiceDetailId; }
-    public void setInvoiceDetailId(int invoiceDetailId) { this.invoiceDetailId = invoiceDetailId; }
+    // Getters và Setters
 
-    public int getInvoiceId() { return invoiceId; }
-    public void setInvoiceId(int invoiceId) { this.invoiceId = invoiceId; }
+    public int getInvoiceDetailId() {
+        return invoiceDetailId;
+    }
 
-    public int getProductId() { return productId; } // ✅ Bổ sung getter cho productId
-    public void setProductId(int productId) { this.productId = productId; }
+    public void setInvoiceDetailId(int invoiceDetailId) {
+        this.invoiceDetailId = invoiceDetailId;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public int getInvoiceId() {
+        return invoiceId;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public void setInvoiceId(int invoiceId) {
+        this.invoiceId = invoiceId;
+    }
 
-    public double getSubtotal() { return subtotal; }
-    public void setSubtotal(double subtotal) { this.subtotal = subtotal; }
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public java.math.BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(java.math.BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
 }
+
 
 
 

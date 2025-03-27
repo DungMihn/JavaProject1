@@ -1,174 +1,241 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.retail.view;
 
-/**
- *
- * @author macbookprom1
- */
-import com.retail.dao.ProductDAO;
-import com.retail.model.Product;
-
+import com.retail.service.ProductPanelService;
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.List;
 
 public class ProductPanel extends JPanel {
+    private static ProductPanel instance;
+
     private JTable productTable;
     private DefaultTableModel tableModel;
     private JTextField txtSearch;
-    private JButton btnAdd, btnEdit, btnDelete, btnSearch;
+    private JButton btnSearch, btnEdit;
+    private JComboBox<String> cmbCategory;
+    private JComboBox<String> cmbSupplier;
+    private ProductPanelService service;
 
-    private ProductDAO productDAO;
+    private JPanel container;
+    private JPanel topPanel;
+    private JPanel filterPanel;
+    private JPanel bottomPanel;
+    private JLabel lblManageProducts;
+    private JLabel lblProductList;
 
     public ProductPanel() {
-        setLayout(new BorderLayout());
-        productDAO = new ProductDAO();
+    instance = this;
+    setLayout(new BorderLayout());
 
-        // Tiêu đề
-        JLabel lblTitle = new JLabel("📦 Quản lý Sản phẩm", JLabel.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
-        add(lblTitle, BorderLayout.NORTH);
+    container = new JPanel(new BorderLayout());
+    container.setBackground(new Color(255, 102, 0));
+    container.setBorder(new LineBorder(Color.BLACK, 2));
 
-        // Bảng hiển thị sản phẩm
-        String[] columnNames = {"ID", "Tên sản phẩm", "Loại", "Giá", "Đơn vị", "Số lượng", "Mã vạch"};
-        tableModel = new DefaultTableModel(columnNames, 0);
-        productTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(productTable);
-        add(scrollPane, BorderLayout.CENTER);
+    topPanel = new JPanel();
+    topPanel.setBackground(new Color(255, 102, 0));
+    topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
-        // Panel chức năng
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+    filterPanel = new JPanel(new GridBagLayout());
+    filterPanel.setBackground(new Color(255, 163, 102));
+    filterPanel.setBorder(new LineBorder(Color.BLACK));
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(5, 5, 5, 5);
 
-        txtSearch = new JTextField(20);
-        btnSearch = new JButton("🔍 Tìm kiếm");
-        btnAdd = new JButton("➕ Thêm");
-        btnEdit = new JButton("✏️ Sửa");
-        btnDelete = new JButton("🗑️ Xóa");
+    // Hàng 0: tiêu đề "QUẢN LÝ SẢN PHẨM"
+    lblManageProducts = new JLabel("QUẢN LÝ SẢN PHẨM");
+    lblManageProducts.setFont(new Font("Arial", Font.BOLD, 24));
+    lblManageProducts.setForeground(Color.WHITE);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.gridwidth = 5;
+    gbc.anchor = GridBagConstraints.CENTER;
+    filterPanel.add(lblManageProducts, gbc);
 
-        controlPanel.add(new JLabel("Tìm sản phẩm:"));
-        controlPanel.add(txtSearch);
-        controlPanel.add(btnSearch);
-        controlPanel.add(btnAdd);
-        controlPanel.add(btnEdit);
-        controlPanel.add(btnDelete);
+    // Hàng 1: "Nhà CC" và "Loại"
+    gbc.gridwidth = 1;
+    gbc.gridy = 1;
+    gbc.gridx = 0;
+    gbc.anchor = GridBagConstraints.EAST;
+    JLabel lblSupplier = new JLabel("Nhà CC");
+    lblSupplier.setFont(new Font("Arial", Font.BOLD, 20));
+    lblSupplier.setForeground(Color.WHITE);
+    filterPanel.add(lblSupplier, gbc);
 
-        add(controlPanel, BorderLayout.SOUTH);
+    gbc.gridx = 1;
+    cmbSupplier = new JComboBox<>();
+    cmbSupplier.addItem("Beverage");
+    cmbSupplier.addItem("Vegetable");
+    cmbSupplier.addItem("Meat");
+    cmbSupplier.addItem("Clothes");
+    cmbSupplier.addItem("Tất cả");
+    cmbSupplier.setFont(new Font("Arial", Font.BOLD, 14));
+    cmbSupplier.setPreferredSize(new Dimension(150, 40));
+    filterPanel.add(cmbSupplier, gbc);
 
-        // Load dữ liệu sản phẩm vào bảng
-        loadProductData();
+    gbc.gridx = 2;
+    gbc.anchor = GridBagConstraints.EAST;
+    JLabel lblCategory = new JLabel("Loại");
+    lblCategory.setFont(new Font("Arial", Font.BOLD, 20));
+    lblCategory.setForeground(Color.WHITE);
+    filterPanel.add(lblCategory, gbc);
 
-        // Xử lý sự kiện
-        btnSearch.addActionListener(e -> searchProduct());
-        btnAdd.addActionListener(e -> new AddProductDialog((JFrame) SwingUtilities.getWindowAncestor(this), this));
-        btnEdit.addActionListener(e -> editProduct());
-        btnDelete.addActionListener(e -> deleteProduct());
+    gbc.gridx = 3;
+    cmbCategory = new JComboBox<>();
+    cmbCategory.addItem("Beverage");
+    cmbCategory.addItem("Vegetable");
+    cmbCategory.addItem("Meat");
+    cmbCategory.addItem("Clothes");
+    cmbCategory.addItem("Tất cả");
+    cmbCategory.setFont(new Font("Arial", Font.BOLD, 14));
+    cmbCategory.setPreferredSize(new Dimension(150, 40));
+    filterPanel.add(cmbCategory, gbc);
 
-        // Cho phép chỉnh sửa trực tiếp trên bảng và tự động lưu vào database
-        tableModel.addTableModelListener(e -> {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                int row = e.getFirstRow();
-                updateProductFromTable(row);
-            }
-        });
+    gbc.gridx = 4;
+    JButton btnSync = new JButton("Refresh");
+    btnSync.setFont(new Font("Arial", Font.BOLD, 14));
+    btnSync.setBackground(new Color(255, 132, 51));
+    btnSync.setForeground(Color.BLACK);
+    btnSync.setMargin(new Insets(10, 20, 10, 20));
+    ImageIcon syncIcon = new ImageIcon(getClass().getResource("/images/transfer.png"));
+    Image scaledSyncImage = syncIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+    btnSync.setIcon(new ImageIcon(scaledSyncImage));
+    btnSync.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnSync.setIconTextGap(10);
+    filterPanel.add(btnSync, gbc);
+    // -----------------------------------------------------
+
+    // Hàng 2: "Tìm SP/ Mã vạch", ô tìm kiếm, nút Tìm kiếm và nút Chỉnh sửa
+    gbc.gridy = 2;
+    gbc.gridx = 0;
+    gbc.anchor = GridBagConstraints.EAST;
+    JLabel lblSearch = new JLabel("Tìm SP/ Mã vạch");
+    lblSearch.setFont(new Font("Arial", Font.BOLD, 20));
+    lblSearch.setForeground(Color.WHITE);
+    filterPanel.add(lblSearch, gbc);
+
+    gbc.gridx = 1;
+    gbc.gridwidth = 2;
+    gbc.anchor = GridBagConstraints.WEST;
+    txtSearch = new JTextField(20);
+    txtSearch.setPreferredSize(new Dimension(350, 35));
+    txtSearch.setFont(new Font("Arial", Font.PLAIN, 16));
+    filterPanel.add(txtSearch, gbc);
+
+    gbc.gridx = 3;
+    gbc.gridwidth = 1;
+    gbc.anchor = GridBagConstraints.CENTER;
+    btnSearch = new JButton("Tìm kiếm");
+    btnSearch.setFont(new Font("Arial", Font.BOLD, 14));
+    btnSearch.setBackground(new Color(255, 132, 51));
+    btnSearch.setMargin(new Insets(10, 20, 10, 20));
+    btnSearch.setForeground(Color.BLACK);
+    ImageIcon searchIcon = new ImageIcon(getClass().getResource("/images/search.png"));
+    Image scaledSearchImage = searchIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+    btnSearch.setIcon(new ImageIcon(scaledSearchImage));
+    btnSearch.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnSearch.setIconTextGap(10);
+    filterPanel.add(btnSearch, gbc);
+
+    gbc.gridx = 4;
+    btnEdit = new JButton("Chỉnh sửa");
+    btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
+    btnEdit.setBackground(new Color(255, 132, 51));
+    btnEdit.setForeground(Color.BLACK);
+    btnEdit.setMargin(new Insets(10, 20, 10, 20));
+    ImageIcon editIcon = new ImageIcon(getClass().getResource("/images/edit.png"));
+    Image scaledEditImage = editIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+    btnEdit.setIcon(new ImageIcon(scaledEditImage));
+    btnEdit.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnEdit.setIconTextGap(10);
+    filterPanel.add(btnEdit, gbc);
+
+    topPanel.add(Box.createVerticalStrut(10));
+    topPanel.add(filterPanel);
+    topPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+    // Thêm label "DANH SÁCH SẢN PHẨM" vào topPanel
+    lblProductList = new JLabel("DANH SÁCH SẢN PHẨM");
+    lblProductList.setFont(new Font("Arial", Font.BOLD, 24));
+    lblProductList.setForeground(Color.WHITE);
+    lblProductList.setAlignmentX(Component.CENTER_ALIGNMENT);
+    topPanel.add(lblProductList);
+    topPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+    // bottomPanel chứa bảng sản phẩm
+    bottomPanel = new JPanel(new BorderLayout());
+    bottomPanel.setBackground(new Color(255, 102, 0));
+
+    // Tạo bảng sản phẩm với DefaultTableModel
+    String[] columnNames = {
+        "ID", "Tên sản phẩm", "Loại", "Giá bán",
+        "Đơn vị", "Tồn kho", "Mã vạch", "Nhà cung cấp", "Giá nhập"
+    };
+    tableModel = new DefaultTableModel(columnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    productTable = new JTable(tableModel);
+    productTable.setRowHeight(25);
+    productTable.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+    JScrollPane tableScrollPane = new JScrollPane(productTable);
+    bottomPanel.add(tableScrollPane, BorderLayout.CENTER);
+
+    // Sử dụng JSplitPane để chia topPanel (30%) và bottomPanel (70%)
+    JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topPanel, bottomPanel);
+    splitPane.setResizeWeight(0.2);
+    splitPane.setOneTouchExpandable(true);
+    splitPane.setDividerSize(8);
+
+    // Thêm splitPane vào container và container vào ProductPanel
+    container.add(splitPane, BorderLayout.CENTER);
+    add(container, BorderLayout.CENTER);
+
+    // Khởi tạo ProductPanelService và gán instance
+    service = new ProductPanelService(this);
+
+    // Gán sự kiện cho nút Sync: khi click sẽ gọi syncProject() để load lại toàn bộ dữ liệu
+    btnSync.addActionListener(e -> service.syncProject());
+
     }
 
-    public void loadProductData() {
-        tableModel.setRowCount(0);
-        List<Product> productList = productDAO.getAllProducts();
-        for (Product product : productList) {
-            Object[] rowData = {
-                product.getProductId(),
-                product.getName(),
-                product.getCategory(),
-                product.getPrice(),
-                product.getUnit(),
-                product.getStockQuantity(),
-                product.getBarcode()
-            };
-            tableModel.addRow(rowData);
-        }
+    // Các phương thức getter cho các thành phần UI
+    public JTable getProductTable() {
+        return productTable;
     }
 
-    private void searchProduct() {
-        String keyword = txtSearch.getText().trim();
-        if (keyword.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập từ khóa tìm kiếm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        tableModel.setRowCount(0);
-        List<Product> productList = productDAO.searchProducts(keyword);
-        for (Product product : productList) {
-            Object[] rowData = {
-                product.getProductId(),
-                product.getName(),
-                product.getCategory(),
-                product.getPrice(),
-                product.getUnit(),
-                product.getStockQuantity(),
-                product.getBarcode()
-            };
-            tableModel.addRow(rowData);
-        }
+    public DefaultTableModel getTableModel() {
+        return tableModel;
     }
 
-    private void editProduct() {
-        int selectedRow = productTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int productId = (int) tableModel.getValueAt(selectedRow, 0);
-        String name = (String) tableModel.getValueAt(selectedRow, 1);
-        String category = (String) tableModel.getValueAt(selectedRow, 2);
-        double price = (double) tableModel.getValueAt(selectedRow, 3);
-        String unit = (String) tableModel.getValueAt(selectedRow, 4);
-        int stockQuantity = (int) tableModel.getValueAt(selectedRow, 5);
-        String barcode = (String) tableModel.getValueAt(selectedRow, 6);
-
-        Product product = new Product(productId, name, category, price, unit, stockQuantity, barcode);
-        new EditProductDialog((JFrame) SwingUtilities.getWindowAncestor(this), product, this);
+    public JTextField getTxtSearch() {
+        return txtSearch;
     }
 
-    private void deleteProduct() {
-        int selectedRow = productTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xóa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            int productId = (int) tableModel.getValueAt(selectedRow, 0);
-            productDAO.deleteProduct(productId);
-            loadProductData(); // Cập nhật lại bảng sau khi xóa
-        }
+    public JButton getBtnSearch() {
+        return btnSearch;
     }
 
-    // ✅ Cập nhật sản phẩm trong database khi người dùng chỉnh sửa trên bảng JTable
-    private void updateProductFromTable(int row) {
-        try {
-            int productId = (int) tableModel.getValueAt(row, 0);
-            String name = (String) tableModel.getValueAt(row, 1);
-            String category = (String) tableModel.getValueAt(row, 2);
-            double price = Double.parseDouble(tableModel.getValueAt(row, 3).toString());
-            String unit = (String) tableModel.getValueAt(row, 4);
-            int stockQuantity = Integer.parseInt(tableModel.getValueAt(row, 5).toString());
-            String barcode = (String) tableModel.getValueAt(row, 6);
+    public JButton getBtnEdit() {
+        return btnEdit;
+    }
 
-            Product updatedProduct = new Product(productId, name, category, price, unit, stockQuantity, barcode);
-            productDAO.updateProduct(updatedProduct);
-            JOptionPane.showMessageDialog(this, "✅ Cập nhật sản phẩm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "❌ Lỗi cập nhật sản phẩm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+    public JComboBox<String> getCmbCategory() {
+        return cmbCategory;
+    }
+
+    public JComboBox<String> getCmbSupplier() {
+        return cmbSupplier;
+    }
+
+    public ProductPanelService getService() {
+        return service;
+    }
+
+    // Trả về instance của ProductPanel
+    public static ProductPanel getInstance() {
+        return instance;
     }
 }

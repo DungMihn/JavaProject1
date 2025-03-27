@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.retail.view;
 
-/**
- *
- * @author macbookprom1
- */
+import com.retail.service.CustomerPanelService;
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,6 +9,8 @@ public class MainFrame extends JFrame {
     private CardLayout cardLayout;
     private ProductPanel productPanel;
     private InvoicePanel invoicePanel;
+    private CustomerPanel customerPanel;
+    private ReportPanel reportPanel;
 
     public MainFrame() {
         setTitle("Phần mềm quản lý bán hàng - Cửa hàng tạp hóa");
@@ -65,10 +60,12 @@ public class MainFrame extends JFrame {
         JPanel homePanel = new JPanel();
         homePanel.add(new JLabel("🏠 Chào mừng bạn đến với phần mềm quản lý cửa hàng tạp hóa!"));
 
-        productPanel = new ProductPanel();
+        productPanel = new ProductPanel();  // Chỉ cần khởi tạo ProductPanel
         invoicePanel = new InvoicePanel();
-        JPanel customerPanel = new JPanel();
-        JPanel reportPanel = new JPanel();
+
+                customerPanel = new CustomerPanel();  // Khởi tạo CustomerPanel
+
+        reportPanel = new ReportPanel();
 
         // Thêm các panel vào CardLayout
         mainPanel.add(homePanel, "Home");
@@ -81,10 +78,7 @@ public class MainFrame extends JFrame {
 
         // Xử lý sự kiện menu
         menuItemManageProduct.addActionListener(e -> cardLayout.show(mainPanel, "Product"));
-        menuItemManageInvoice.addActionListener(e -> {
-            invoicePanel.loadInvoiceData(); // Cập nhật dữ liệu mỗi khi mở tab
-            cardLayout.show(mainPanel, "Invoice");
-        });
+        menuItemManageInvoice.addActionListener(e -> cardLayout.show(mainPanel, "Invoice"));
         menuItemManageCustomer.addActionListener(e -> cardLayout.show(mainPanel, "Customer"));
         menuItemViewReport.addActionListener(e -> cardLayout.show(mainPanel, "Report"));
 
