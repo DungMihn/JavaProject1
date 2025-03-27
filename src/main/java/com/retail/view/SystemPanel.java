@@ -54,6 +54,7 @@ public class SystemPanel extends javax.swing.JPanel {
         BackupPage.setPreferredSize(new java.awt.Dimension(136, 136));
 
         BackupIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        BackupIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/database.png"))); // NOI18N
 
         Backup.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         Backup.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -78,6 +79,7 @@ public class SystemPanel extends javax.swing.JPanel {
         RecoverPage.setPreferredSize(new java.awt.Dimension(136, 136));
 
         RecoverIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        RecoverIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backup.png"))); // NOI18N
 
         Recover.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         Recover.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -102,6 +104,7 @@ public class SystemPanel extends javax.swing.JPanel {
         RepairPage.setPreferredSize(new java.awt.Dimension(136, 136));
 
         RepairIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        RepairIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/repair-tools.png"))); // NOI18N
 
         Repair.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         Repair.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -126,6 +129,7 @@ public class SystemPanel extends javax.swing.JPanel {
         TransferPage.setPreferredSize(new java.awt.Dimension(136, 136));
 
         TransferIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TransferIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/transfer.png"))); // NOI18N
 
         Transfer.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         Transfer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -180,7 +184,7 @@ public class SystemPanel extends javax.swing.JPanel {
         DiaryPage.setBackground(new java.awt.Color(255, 255, 255));
 
         DiaryIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        DiaryIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/noteIcon.png"))); // NOI18N
+        DiaryIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diary.png"))); // NOI18N
 
         Diary.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         Diary.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

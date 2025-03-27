@@ -29,6 +29,10 @@ public class Employee {
         
     }
 
+    @Override
+    public String toString() {
+        return name; // Trả về tên nhân viên thay vì hash code
+    }
     public int getEmployeeId() {
         return employeeId;
     }

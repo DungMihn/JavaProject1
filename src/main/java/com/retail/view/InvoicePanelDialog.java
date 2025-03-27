@@ -321,12 +321,21 @@ public class InvoicePanelDialog {
     }
 
     private void loadEmployees() {
-        EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+        EmployeeDAOImpl employeeDAO = new EmployeeDAOImpl();
         List<Employee> employees = employeeDAO.getAllEmployees();
-        JComboBox cmbEmployee = invoicePanel.getCmbEmployee();
+        JComboBox<Employee> cmbEmployee = invoicePanel.getCmbEmployee(); // Đảm bảo là JComboBox<Employee>
+
         cmbEmployee.removeAllItems();
+
+        // Kiểm tra danh sách có rỗng không
+        if (employees == null || employees.isEmpty()) {
+            System.out.println("Không có nhân viên nào để hiển thị!");
+            return;
+        }
+
         for (Employee emp : employees) {
             cmbEmployee.addItem(emp);
+            System.out.println(emp); // Debug xem Employee hiển thị đúng không
         }
     }
 

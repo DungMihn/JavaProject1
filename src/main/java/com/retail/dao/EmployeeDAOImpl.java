@@ -30,10 +30,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         try (Connection conn = DatabaseConnection.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 employees.add(new Employee(
-                        rs.getInt("Employee_ID"),
-                        rs.getString("Name"),
-                        rs.getString("Phone"),
-                        rs.getString("Role"),
+                        rs.getInt("employee_id"),
+                        rs.getString("name"),
+                        rs.getString("phone"),
+                        rs.getString("role"),
                         rs.getObject("created_at", LocalDateTime.class)
                 ));
             }

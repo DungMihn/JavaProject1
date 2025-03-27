@@ -58,6 +58,7 @@ public class Login extends javax.swing.JFrame {
 
         Logo.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         Logo.setForeground(new java.awt.Color(255, 255, 255));
+        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/market.png"))); // NOI18N
 
         FamilyPoint.setBackground(new java.awt.Color(255, 255, 255));
         FamilyPoint.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -77,8 +78,6 @@ public class Login extends javax.swing.JFrame {
         NiceService.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NiceService.setText("Nice Service");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\market.png")); // NOI18N
-
         javax.swing.GroupLayout BoxLogoLayout = new javax.swing.GroupLayout(BoxLogo);
         BoxLogo.setLayout(BoxLogoLayout);
         BoxLogoLayout.setHorizontalGroup(
@@ -87,27 +86,27 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(BoxLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxLogoLayout.createSequentialGroup()
-                        .addGroup(BoxLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(BoxLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(EveryProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(FamilyPoint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(NiceService, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(BoxLogoLayout.createSequentialGroup()
-                                .addGap(64, 64, 64)
-                                .addComponent(Logo)))
-                        .addGap(16, 16, 16))
+                        .addGroup(BoxLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(EveryProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(FamilyPoint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(NiceService, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxLogoLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(42, 42, 42))))
+            .addGroup(BoxLogoLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(Logo)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         BoxLogoLayout.setVerticalGroup(
             BoxLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BoxLogoLayout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(43, 43, 43)
                 .addComponent(Logo)
-                .addGap(37, 37, 37)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(FamilyPoint)
                 .addGap(16, 16, 16)
                 .addComponent(EveryProduct)
@@ -145,7 +144,6 @@ public class Login extends javax.swing.JFrame {
         LoginButton.setBackground(new java.awt.Color(255, 132, 51));
         LoginButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         LoginButton.setForeground(new java.awt.Color(255, 255, 255));
-        LoginButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\login.png")); // NOI18N
         LoginButton.setText("Đăng nhập");
         LoginButton.setBorder(null);
         LoginButton.setMargin(new java.awt.Insets(8, 14, 3, 14));
@@ -163,7 +161,6 @@ public class Login extends javax.swing.JFrame {
         ClearButton.setBackground(new java.awt.Color(255, 132, 51));
         ClearButton.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         ClearButton.setForeground(new java.awt.Color(255, 255, 255));
-        ClearButton.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\cleaning.png")); // NOI18N
         ClearButton.setText("Clear");
         ClearButton.setBorder(null);
         ClearButton.addActionListener(new java.awt.event.ActionListener() {
@@ -180,7 +177,7 @@ public class Login extends javax.swing.JFrame {
         LogoLogin.setBackground(new java.awt.Color(255, 255, 255));
         LogoLogin.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         LogoLogin.setForeground(new java.awt.Color(255, 255, 255));
-        LogoLogin.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\Admin.png")); // NOI18N
+        LogoLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Admin.png"))); // NOI18N
 
         LoginText.setBackground(new java.awt.Color(255, 102, 0));
         LoginText.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
@@ -195,7 +192,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        OffIcon.setIcon(new javax.swing.ImageIcon("D:\\LongNg(Aptec)\\JAVA_B189_196\\JavaProject1\\src\\main\\java\\Icon\\close.png")); // NOI18N
+        OffIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         OffIcon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 OffIconMouseClicked(evt);
@@ -227,39 +224,36 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(FormUID, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(FormRole, javax.swing.GroupLayout.Alignment.LEADING, 0, 272, Short.MAX_VALUE)
                     .addComponent(FormPassword, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxFormLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(BoxFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxFormLayout.createSequentialGroup()
-                        .addGroup(BoxFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(BoxFormLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(LogoLogin))
-                            .addGroup(BoxFormLayout.createSequentialGroup()
-                                .addComponent(LoginText)
-                                .addGap(158, 158, 158)
-                                .addComponent(OffIcon)))
+                        .addComponent(OffIcon)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxFormLayout.createSequentialGroup()
                         .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
                         .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(119, 119, 119))))
+                        .addGap(119, 119, 119))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxFormLayout.createSequentialGroup()
+                        .addGroup(BoxFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LoginText, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxFormLayout.createSequentialGroup()
+                                .addComponent(LogoLogin)
+                                .addGap(19, 19, 19)))
+                        .addGap(202, 202, 202))))
         );
         BoxFormLayout.setVerticalGroup(
             BoxFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BoxFormLayout.createSequentialGroup()
-                .addGroup(BoxFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(BoxFormLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(LoginText))
-                    .addGroup(BoxFormLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(OffIcon)))
+                .addContainerGap()
+                .addComponent(OffIcon)
+                .addGap(5, 5, 5)
+                .addComponent(LoginText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoLogin)
-                .addGap(13, 13, 13)
+                .addGap(18, 18, 18)
                 .addGroup(BoxFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BoxFormLayout.createSequentialGroup()
                         .addComponent(SelectRole)
