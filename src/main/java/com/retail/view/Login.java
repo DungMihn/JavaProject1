@@ -4,14 +4,12 @@
  */
 package com.retail.view;
 
-
 import com.retail.dao.DatabaseConnection;
+import com.retail.model.CurrentUser;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-
-
 
 public class Login extends javax.swing.JFrame {
 
@@ -21,8 +19,6 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
     }
-    
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -296,7 +292,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void FormRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormRoleActionPerformed
-       // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_FormRoleActionPerformed
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
@@ -304,9 +300,9 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void ClearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearButtonActionPerformed
-         FormUID.setText("");  // Xóa nội dung ô nhập User ID
-    FormPassword.setText("");  // Xóa nội dung ô nhập Password
-    FormRole.setSelectedIndex(0); // Đưa combo box về giá trị đầu tiên (Admin)
+        FormUID.setText("");  // Xóa nội dung ô nhập User ID
+        FormPassword.setText("");  // Xóa nội dung ô nhập Password
+        FormRole.setSelectedIndex(0); // Đưa combo box về giá trị đầu tiên (Admin)
     }//GEN-LAST:event_ClearButtonActionPerformed
 
     private void FormUIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FormUIDActionPerformed
@@ -314,7 +310,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_FormUIDActionPerformed
 
     private void LoginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoginButtonMouseClicked
-         String role = FormRole.getSelectedItem().toString();
+        String role = FormRole.getSelectedItem().toString();
         String uid = FormUID.getText();
         String password = new String(FormPassword.getPassword());
 
@@ -334,9 +330,15 @@ public class Login extends javax.swing.JFrame {
                 ResultSet rs = pst.executeQuery();
 
                 if (rs.next()) {
-                    this.dispose(); 
-
+                    this.dispose();
+                    int employeeId = rs.getInt("employee_id"); // Lấy employee_id từ DB
                     String username = rs.getString("username"); // Lấy username từ DB
+
+                    // Lưu employee_id vào một biến static hoặc truyền qua constructor
+                    CurrentUser.setEmployeeId(employeeId);
+                    CurrentUser.setUsername(username);
+                    CurrentUser.setRole(role);
+
                     Main menuForm = new Main(role, username); // Truyền role và username
                     menuForm.setVisible(true);
                 } else {
@@ -348,21 +350,20 @@ public class Login extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    
 
-                                        
+
     }//GEN-LAST:event_LoginButtonMouseClicked
 
     private void OffIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OffIconMouseClicked
-     int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thoát?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-    
-    if (confirm == JOptionPane.YES_OPTION) {
-        java.lang.System.exit(0); // Thoát chương trình
-    }
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thoát?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            java.lang.System.exit(0); // Thoát chương trình
+        }
     }//GEN-LAST:event_OffIconMouseClicked
 
     private void FormPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FormPasswordKeyPressed
-            if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             LoginButtonMouseClicked(null); // Gọi sự kiện đăng nhập khi nhấn Enter
         }
     }//GEN-LAST:event_FormPasswordKeyPressed

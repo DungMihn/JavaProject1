@@ -16,6 +16,7 @@ public class StockMenuPanel extends javax.swing.JPanel {
      private CardLayout cardLayout;
     private StockEntryPanel stockEntryPanel; // Khai báo biến
     private InventoryPanel inventoryPanel;
+    private StockEntryListPanel stockEntryListPanel;
 
     /**
      * Creates new form StockMenuPanel
@@ -26,7 +27,7 @@ public class StockMenuPanel extends javax.swing.JPanel {
 
         // Khởi tạo các panel
         stockEntryPanel = new StockEntryPanel(); // Khởi tạo StockEntryPanel
-        StockEntryListPanel stockEntryListPanel = new StockEntryListPanel();
+        stockEntryListPanel = new StockEntryListPanel();
         inventoryPanel = new InventoryPanel();
 
         // Thiết lập CardLayout
@@ -39,7 +40,7 @@ public class StockMenuPanel extends javax.swing.JPanel {
         contentPanel.add(inventoryPanel, "Inventory");
 
         // Hiển thị màn hình mặc định
-        cardLayout.show(contentPanel, "StockEntryList");
+        cardLayout.show(contentPanel, "StockEntry");
 
         // Thêm sự kiện và hiệu ứng
         addLabelListeners();
@@ -48,6 +49,9 @@ public class StockMenuPanel extends javax.swing.JPanel {
     
     public StockEntryPanel getStockEntryPanel() {
         return stockEntryPanel; // Trả về instance của StockEntryPanel
+    }
+    public StockEntryListPanel getStockEntryListPanel() {
+        return stockEntryListPanel; // Trả về instance của StockEntryPanel
     }
 
     public void showPanel(String panelName) {
@@ -68,6 +72,7 @@ public class StockMenuPanel extends javax.swing.JPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cardLayout.show(contentPanel, "StockEntryList"); // Hiển thị panel Function1
+                stockEntryListPanel.loadStockEntryData();
             }
         });
 
@@ -202,22 +207,22 @@ public class StockMenuPanel extends javax.swing.JPanel {
         sideBarPanelLayout.setHorizontalGroup(
             sideBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sideBarPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addGap(39, 39, 39)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(592, Short.MAX_VALUE))
+                .addContainerGap(590, Short.MAX_VALUE))
         );
         sideBarPanelLayout.setVerticalGroup(
             sideBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sideBarPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(sideBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(sideBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

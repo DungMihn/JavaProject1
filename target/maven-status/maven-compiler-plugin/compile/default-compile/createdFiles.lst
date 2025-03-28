@@ -103,7 +103,6 @@ com\retail\view\InventoryReportDesignGenerator.class
 com\retail\view\StockEntryListPanel$6.class
 com\retail\controller\StockEntryController.class
 com\retail\view\EmployeePanel$5.class
-com\retail\model\SessionManager.class
 com\retail\dao\InventoryDAO.class
 com\retail\dao\SupplierDAO.class
 com\retail\view\InventoryPanel$7.class
@@ -135,6 +134,7 @@ com\retail\service\CustomerPanelService$1.class
 com\retail\view\StockEntryListPanel.class
 com\retail\controller\EmployeeController.class
 com\retail\view\StockEntryListPanel$1.class
+com\retail\model\CurrentUser.class
 com\retail\view\ChangepassPanel$1.class
 com\retail\controller\ReportPanelController.class
 com\retail\dao\StockEntryDetailDAO.class
@@ -190,6 +190,7 @@ com\retail\view\Login.class
 com\retail\view\InvoicePanelDialog.class
 com\retail\service\ProductPanelService$1.class
 com\retail\model\ProductInventory.class
+com\retail\view\StockEntryPanel$26.class
 com\retail\view\StockEntryPanel$7.class
 com\retail\view\InventoryPanel$8.class
 com\retail\view\EmployeePanel$4.class

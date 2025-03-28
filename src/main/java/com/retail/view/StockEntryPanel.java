@@ -11,6 +11,7 @@ import com.retail.controller.StockEntryDetailController;
 import com.retail.controller.SupplierController;
 import com.retail.dao.DatabaseConnection;
 import com.retail.model.ComboBoxItem;
+import com.retail.model.CurrentUser;
 import com.retail.model.Employee;
 import com.retail.model.Inventory;
 import com.retail.model.Product;
@@ -37,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +53,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 
@@ -133,6 +136,96 @@ public class StockEntryPanel extends javax.swing.JPanel {
 
         // Thêm sự kiện lắng nghe cho stockEntryIdTextField
         setupStockEntryIdTextFieldListener();
+
+        setupSupplierIdTextFieldListener();
+
+        stockEntryDetailTableModel.addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int productId = (int) stockEntryDetailTableModel.getValueAt(row, 0);
+                int quantity = (int) stockEntryDetailTableModel.getValueAt(row, 5);
+                double price = (double) stockEntryDetailTableModel.getValueAt(row, 6);
+
+                // Cập nhật temp list
+                tempStockEntryDetails.stream()
+                        .filter(d -> d.getProductId() == productId)
+                        .findFirst()
+                        .ifPresent(d -> {
+                            d.setQuantity(quantity);
+                            d.setPurchasePrice(price);
+                        });
+            }
+        });
+
+    }
+
+    private void setupSupplierIdTextFieldListener() {
+        supplierIdTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateSupplierNameFromId();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSupplierNameFromId();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateSupplierNameFromId();
+            }
+        });
+    }
+
+    private void updateSupplierNameFromId() {
+        String supplierIdText = supplierIdTextField.getText().trim();
+
+        if (supplierIdText.isEmpty()) {
+            supplierNameTextField.setText("");
+            return;
+        }
+
+        try {
+            supplierId = Integer.parseInt(supplierIdText);
+
+            // Tìm nhà cung cấp trong danh sách đã load
+            ComboBoxItem foundSupplier = supplierItems.stream()
+                    .filter(item -> item.getId() == supplierId)
+                    .findFirst()
+                    .orElse(null);
+
+            if (foundSupplier != null) {
+                // Nếu tìm thấy, cập nhật tên nhà cung cấp
+                supplierNameTextField.setText(foundSupplier.getName());
+                this.supplierId = supplierId; // Cập nhật supplierId
+
+                // Load danh sách sản phẩm của nhà cung cấp này
+                loadProductsIntoAutoComplete();
+                setupAutoCompleteListener();
+            } else {
+                // Nếu không tìm thấy, kiểm tra trong database
+                Supplier supplier = supplierController.getSupplierById(supplierId);
+                if (supplier != null) {
+                    supplierNameTextField.setText(supplier.getName());
+                    this.supplierId = supplierId;
+
+                    // Thêm vào danh sách supplierItems nếu chưa có
+                    if (supplierItems.stream().noneMatch(item -> item.getId() == supplierId)) {
+                        supplierItems.add(new ComboBoxItem(supplierId, supplier.getName()));
+                    }
+
+                    // Load danh sách sản phẩm
+                    loadProductsIntoAutoComplete();
+                    setupAutoCompleteListener();
+                } else {
+                    supplierNameTextField.setText("");
+                }
+            }
+        } catch (NumberFormatException e) {
+            // Nếu nhập không phải số
+            supplierNameTextField.setText("");
+        }
     }
 
     private void setupStockEntryIdTextFieldListener() {
@@ -184,7 +277,14 @@ public class StockEntryPanel extends javax.swing.JPanel {
             loadProductsIntoAutoComplete();
             setupAutoCompleteListener();
 
-            employeeComboBox.setSelectedItem(new ComboBoxItem(stockEntry.getEmployeeId(), ""));
+            // Chọn đúng nhân viên trong combobox
+            for (int i = 0; i < employeeComboBox.getItemCount(); i++) {
+                ComboBoxItem item = (ComboBoxItem) employeeComboBox.getItemAt(i);
+                if (item.getId() == stockEntry.getEmployeeId()) {
+                    employeeComboBox.setSelectedIndex(i);
+                    break;
+                }
+            }
             // Hiển thị ngày nhập từ stockEntry vào entryDateTextField
             String entryDateString = stockEntry.getEntryDate(); // Lấy ngày dưới dạng String
             if (entryDateString != null && !entryDateString.isEmpty()) {
@@ -203,8 +303,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
 
     private void resetFields() {
         supplierNameTextField.setText("");
-        employeeComboBox.setSelectedIndex(0);
-        entryDateTextField.setText("");
+        supplierIdTextField.setText("");
         stockEntryDetailTableModel.setRowCount(0); // Xóa dữ liệu cũ trong bảng
     }
 
@@ -242,12 +341,29 @@ public class StockEntryPanel extends javax.swing.JPanel {
         stockEntryDetailTable.repaint();
     }
 
-    private void loadEmployeesIntoComboBox() {
-        List<Employee> employees = employeeController.getAllEmployees();
-        employeeComboBox.removeAllItems();
+    public void loadEmployeesIntoComboBox() {
+        try {
+            List<Employee> employees = employeeController.getAllEmployees();
+            employeeComboBox.removeAllItems();
 
-        for (Employee employee : employees) {
-            employeeComboBox.addItem(new ComboBoxItem(employee.getEmployeeId(), employee.getName()));
+            // Thêm tất cả nhân viên vào combobox
+            for (Employee employee : employees) {
+                employeeComboBox.addItem(new ComboBoxItem(employee.getEmployeeId(), employee.getName()));
+            }
+
+            // Chọn nhân viên đang login
+            int currentEmployeeId = CurrentUser.getEmployeeId();
+            for (int i = 0; i < employeeComboBox.getItemCount(); i++) {
+                ComboBoxItem item = (ComboBoxItem) employeeComboBox.getItemAt(i);
+                if (item.getId() == currentEmployeeId) {
+                    employeeComboBox.setSelectedIndex(i); // Sửa thành setSelectedIndex thay vì setSelectedItem
+                    break;
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải danh sách nhân viên: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -526,16 +642,19 @@ public class StockEntryPanel extends javax.swing.JPanel {
 
     private void autoFillSupplierFields(int supplierId) {
         this.supplierId = supplierId; // Thiết lập supplier_id
-        Supplier supplier = supplierController.getSupplierById(supplierId);
-        if (supplier != null) {
-            supplierIdTextField.setText(String.valueOf(supplier.getSupplierId()));
 
-            // Sau khi có supplier_id, tải danh sách sản phẩm
-            loadProductsIntoAutoComplete();
-            setupAutoCompleteListener();
-        } else {
-            supplierIdTextField.setText("");
-        }
+        // Cập nhật cả 2 trường ID và Name
+        supplierIdTextField.setText(String.valueOf(supplierId));
+
+        // Tìm tên nhà cung cấp tương ứng
+        supplierItems.stream()
+                .filter(item -> item.getId() == supplierId)
+                .findFirst()
+                .ifPresent(item -> supplierNameTextField.setText(item.getName()));
+
+        // Sau khi có supplier_id, tải danh sách sản phẩm
+        loadProductsIntoAutoComplete();
+        setupAutoCompleteListener();
     }
 
     private boolean isStockQuantitySufficient(int productId, int quantityChange) {
@@ -1147,7 +1266,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(supplierIdTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
                     .addComponent(stockEntryIdTextField))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                 .addComponent(ProdID3)
                 .addGap(21, 21, 21)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -1156,8 +1275,8 @@ public class StockEntryPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
+                        .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(ProdID1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(entryDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1258,11 +1377,14 @@ public class StockEntryPanel extends javax.swing.JPanel {
     private void addStockEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStockEntryButtonActionPerformed
         String productIdText = productIdTextField.getText().trim();
         String productName = productNameTextField.getText().trim();
+        String category = (String) categoryComboBox.getSelectedItem();
+        String unit = (String) unitComboBox.getSelectedItem();
+        String barcode = barcodeTextField.getText().trim();
         String quantityText = quantityTextField.getText().trim();
         String priceText = priceTextField.getText().trim();
 
         // Kiểm tra các trường nhập liệu
-        if (productIdText.isEmpty() || productName.isEmpty() || quantityText.isEmpty() || priceText.isEmpty()) {
+        if (productIdText.isEmpty() || productName.isEmpty() || quantityText.isEmpty() || priceText.isEmpty() || barcode.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -1285,6 +1407,9 @@ public class StockEntryPanel extends javax.swing.JPanel {
             StockEntryDetail detail = new StockEntryDetail();
             detail.setProductId(productId);
             detail.setProductName(productName);
+            detail.setCategory(category);
+            detail.setUnit(unit);
+            detail.setBarcode(barcode);
             detail.setQuantity(quantity);
             detail.setPurchasePrice(purchasePrice);
 
@@ -1295,6 +1420,9 @@ public class StockEntryPanel extends javax.swing.JPanel {
             stockEntryDetailTableModel.addRow(new Object[]{
                 productId,
                 productName,
+                category,
+                unit,
+                barcode,
                 quantity,
                 purchasePrice
             });
@@ -1317,7 +1445,7 @@ public class StockEntryPanel extends javax.swing.JPanel {
         }
 
         // Lấy thông tin nhân viên (giả sử nhân viên có ID = 1)
-        int employeeId = 1;
+        int employeeId = CurrentUser.getEmployeeId();
 
         // Lấy tên nhà cung cấp từ giao diện
         String supplierName = supplierNameTextField.getText().trim();
@@ -1337,19 +1465,38 @@ public class StockEntryPanel extends javax.swing.JPanel {
         // Lấy ID nhà cung cấp
         supplierId = selectedSupplier.getId();
 
-        // Lấy ngày nhập hàng từ giao diện
-        String entryDateString = entryDateTextField.getText();
+        // Kiểm tra ngày nhập hàng
+        String entryDateString = entryDateTextField.getText().trim();
+        if (entryDateString.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày nhập hàng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            entryDateTextField.requestFocus(); // Đặt focus vào trường ngày nhập
+            return;
+        }
 
-        // Chuyển đổi ngày nhập hàng từ String sang LocalDateTime
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate localDate = LocalDate.parse(entryDateString, formatter);
-        LocalDateTime entryDate = localDate.atStartOfDay();
+        try {
+            // Chuyển đổi ngày nhập hàng từ String sang LocalDateTime
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(entryDateString, formatter);
+            LocalDateTime entryDate = localDate.atStartOfDay();
 
-        // Tạo đối tượng StockEntry
-        stockEntry = new StockEntry();
-        stockEntry.setSupplierId(supplierId);
-        stockEntry.setEmployeeId(employeeId);
-        stockEntry.setEntryDate(entryDate);
+            // Kiểm tra ngày nhập không được trong tương lai
+            if (localDate.isAfter(LocalDate.now())) {
+                JOptionPane.showMessageDialog(null, "Ngày nhập hàng không được trong tương lai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                entryDateTextField.requestFocus();
+                return;
+            }
+
+            // Tạo đối tượng StockEntry
+            stockEntry = new StockEntry();
+            stockEntry.setSupplierId(supplierId);
+            stockEntry.setEmployeeId(employeeId);
+            stockEntry.setEntryDate(entryDate);
+
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ! Vui lòng nhập theo định dạng dd/MM/yyyy", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            entryDateTextField.requestFocus();
+            return;
+        }
 
         try {
             // Kiểm tra xem stockEntryId đã tồn tại chưa
@@ -1389,18 +1536,35 @@ public class StockEntryPanel extends javax.swing.JPanel {
                     StockEntryDetail existingDetail = stockEntryDetailController.getStockEntryDetailByStockEntryIdAndProductId(stockEntryId, detail.getProductId());
 
                     if (existingDetail != null) {
-                        // Nếu chi tiết đã tồn tại, cập nhật
-                        existingDetail.setQuantity(detail.getQuantity());
-                        existingDetail.setPurchasePrice(detail.getPurchasePrice());
-                        boolean isUpdated = stockEntryDetailController.updateStockEntryDetail(existingDetail);
+                        // Lấy giá trị MỚI từ bảng (table model) thay vì từ tempStockEntryDetails
+                        for (int i = 0; i < stockEntryDetailTableModel.getRowCount(); i++) {
+                            int productId = (int) stockEntryDetailTableModel.getValueAt(i, 0); // Cột mã SP
+                            if (productId == detail.getProductId()) {
+                                // Lấy giá trị mới từ table
+                                int newQuantity = (int) stockEntryDetailTableModel.getValueAt(i, 5); // Cột số lượng
+                                double newPrice = (double) stockEntryDetailTableModel.getValueAt(i, 6); // Cột giá nhập
 
+                                // Cập nhật cả temp detail và existing detail
+                                detail.setQuantity(newQuantity);
+                                detail.setPurchasePrice(newPrice);
+                                existingDetail.setQuantity(newQuantity);
+                                existingDetail.setPurchasePrice(newPrice);
+
+                                System.out.println("Updating product ID " + productId
+                                        + " with new quantity: " + newQuantity
+                                        + " and price: " + newPrice);
+
+                                break;
+                            }
+                        }
+
+                        boolean isUpdated = stockEntryDetailController.updateStockEntryDetail(existingDetail);
                         if (!isUpdated) {
                             System.out.println("❌ Lỗi khi cập nhật chi tiết nhập kho cho Product ID: " + detail.getProductId());
                         }
                     } else {
                         // Nếu chi tiết chưa tồn tại, thêm mới
                         boolean isAdded = stockEntryDetailController.addStockEntryDetail(detail);
-
                         if (!isAdded) {
                             System.out.println("❌ Lỗi khi thêm chi tiết nhập kho cho Product ID: " + detail.getProductId());
                         }
@@ -1523,10 +1687,13 @@ public class StockEntryPanel extends javax.swing.JPanel {
         // Lấy thông tin từ các trường nhập liệu
         String productIdText = productIdTextField.getText().trim();
         String productName = productNameTextField.getText().trim();
+        String category = (String) categoryComboBox.getSelectedItem();
+        String unit = (String) unitComboBox.getSelectedItem();
+        String barcode = barcodeTextField.getText().trim();
         String quantityText = quantityTextField.getText().trim();
         String priceText = priceTextField.getText().trim();
 
-        if (productIdText.isEmpty() || productName.isEmpty() || quantityText.isEmpty() || priceText.isEmpty()) {
+        if (productIdText.isEmpty() || productName.isEmpty() || quantityText.isEmpty() || priceText.isEmpty() || barcode.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -1539,8 +1706,11 @@ public class StockEntryPanel extends javax.swing.JPanel {
             // Cập nhật lại dữ liệu trong bảng tại đúng vị trí hàng đã chọn
             stockEntryDetailTableModel.setValueAt(productId, selectedRow, 0);
             stockEntryDetailTableModel.setValueAt(productName, selectedRow, 1);
-            stockEntryDetailTableModel.setValueAt(quantity, selectedRow, 2);
-            stockEntryDetailTableModel.setValueAt(purchasePrice, selectedRow, 3);
+            stockEntryDetailTableModel.setValueAt(category, selectedRow, 2);
+            stockEntryDetailTableModel.setValueAt(unit, selectedRow, 3);
+            stockEntryDetailTableModel.setValueAt(barcode, selectedRow, 4);
+            stockEntryDetailTableModel.setValueAt(quantity, selectedRow, 5);
+            stockEntryDetailTableModel.setValueAt(purchasePrice, selectedRow, 6);
 
             // Tính toán và cập nhật totalPrice
             updateTotalPrice();

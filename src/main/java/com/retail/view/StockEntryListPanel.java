@@ -166,7 +166,7 @@ public class StockEntryListPanel extends javax.swing.JPanel {
         }
     }
 
-    private void loadStockEntryData() {
+    public void loadStockEntryData() {
         DefaultTableModel model = (DefaultTableModel) stockEntryTable.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ
 

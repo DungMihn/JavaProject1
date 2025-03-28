@@ -30,11 +30,9 @@ public class StockEntryDetailDAOImpl implements StockEntryDetailDAO {
             cstmt.setInt(2, stockEntryDetail.getProductId());
             cstmt.setInt(3, stockEntryDetail.getQuantity());
             cstmt.setDouble(4, stockEntryDetail.getPurchasePrice());
+            cstmt.executeUpdate();
 
-            int affectedRows = cstmt.executeUpdate();
-            System.out.println("🚀 Số dòng bị ảnh hưởng: " + affectedRows);
-
-            return affectedRows > 0;
+            return true;
 
         } catch (SQLException e) {
             System.out.println("❌ Lỗi thêm chi tiết nhập kho: " + e.getMessage());

@@ -14,6 +14,7 @@ D:\JavaProject1\JavaProject\src\main\java\com\retail\view\ProductPanel.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\StockEntry.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\ReportPanelService.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\view\Main.java
+D:\JavaProject1\JavaProject\src\main\java\com\retail\model\CurrentUser.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\model\Product.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\StockEntryDAO.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\ReportPanelController.java
@@ -53,7 +54,6 @@ D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\InventoryDAO.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\EmployeeController.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\dao\CustomerDAOImpl.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\controller\InventoryController.java
-D:\JavaProject1\JavaProject\src\main\java\com\retail\model\SessionManager.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\main\Main.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\service\EmployeeService.java
 D:\JavaProject1\JavaProject\src\main\java\com\retail\view\StockEntryPanel.java

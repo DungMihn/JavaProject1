@@ -568,11 +568,15 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_ProductButtonMouseClicked
 
     private void ImportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportButtonActionPerformed
-        cardLayout.show(ContentPanel, "Import");
+
     }//GEN-LAST:event_ImportButtonActionPerformed
 
     private void ImportButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ImportButtonMouseClicked
-        cardLayout.show(ContentPanel, "Stock");
+       if ("manager".equalsIgnoreCase(userRole)|| "stock_keeper".equalsIgnoreCase(userRole)) {
+            cardLayout.show(ContentPanel, "Stock");
+        } else {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập vào kho hàng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_ImportButtonMouseClicked
 
     private void SupplierButton10SupplierButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupplierButton10SupplierButtonMouseClicked
