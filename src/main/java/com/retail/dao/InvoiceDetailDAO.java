@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InvoiceDetailDAO {
-    private static final String INSERT_INVOICE_DETAIL = "INSERT INTO Invoice_Detail (invoice_id, product_id, quantity, price, subtotal) VALUES (?, ?, ?, ?, ?)";
-    private static final String SELECT_DETAILS_BY_INVOICE = "SELECT * FROM Invoice_Detail WHERE invoice_id = ?";
+    private static final String INSERT_INVOICE_DETAIL = "INSERT INTO InvoiceDetail (invoice_id, product_id, quantity, price, subtotal) VALUES (?, ?, ?, ?, ?)";
+    private static final String SELECT_DETAILS_BY_INVOICE = "SELECT * FROM InvoiceDetail WHERE invoice_id = ?";
 
     public boolean addInvoiceDetail(InvoiceDetail detail) {
         try (Connection conn = DatabaseConnection.getConnection();
@@ -64,7 +64,7 @@ public class InvoiceDetailDAO {
         return details;
     }
     public boolean deleteInvoiceDetailsByInvoiceId(int invoiceId) {
-    String sql = "DELETE FROM Invoice_Detail WHERE invoice_id = ?";
+    String sql = "DELETE FROM InvoiceDetail WHERE invoice_id = ?";
     try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
         stmt.setInt(1, invoiceId);
@@ -80,11 +80,12 @@ public class InvoiceDetailDAO {
 public List<InvoiceDetail> getBestSellingProductsByDate() {
     List<InvoiceDetail> invoiceDetails = new ArrayList<>();
     String query = "SELECT TOP 10 d.product_id, SUM(d.quantity) AS total_quantity, SUM(d.price * d.quantity) AS total_revenue " +
-                   "FROM Invoice_Detail d " +
+                   "FROM InvoiceDetail d " +
                    "JOIN Invoice i ON d.invoice_id = i.invoice_id " +
                    "WHERE CAST(i.created_at AS DATE) = CAST(GETDATE() AS DATE) " +
                    "GROUP BY d.product_id " +
                    "ORDER BY total_quantity DESC";
+    
     try (Connection conn = DatabaseConnection.getConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(query)) {
@@ -106,7 +107,7 @@ public List<InvoiceDetail> getBestSellingProductsByDate() {
 public List<InvoiceDetail> getBestSellingProductsByMonth() {
     List<InvoiceDetail> invoiceDetails = new ArrayList<>();
     String query = "SELECT TOP 10 d.product_id, SUM(d.quantity) AS total_quantity, SUM(d.price * d.quantity) AS total_revenue " +
-                   "FROM Invoice_Detail d " +
+                   "FROM InvoiceDetail d " +
                    "JOIN Invoice i ON d.invoice_id = i.invoice_id " +
                    "WHERE YEAR(i.created_at) = YEAR(GETDATE()) AND MONTH(i.created_at) = MONTH(GETDATE()) " +
                    "GROUP BY d.product_id " +

@@ -448,74 +448,94 @@ public class InvoicePanelDialog {
         InvoicePanelDetail.showInvoiceDetail(JOptionPane.getFrameForComponent(invoicePanel), invoiceId);
     }
     
-    private void editSelectedInvoice() {
-        int selectedRow = invoicePanel.getInvoiceListTable().getSelectedRow();
-        if (selectedRow == -1) {
-            showMessage("Vui lòng chọn hóa đơn cần sửa!");
-            return;
-        }
-        int invoiceId = Integer.parseInt(invoicePanel.getInvoiceListTableModel().getValueAt(selectedRow, 0).toString());
-        InvoiceDAO invoiceDAO = new InvoiceDAO();
-        Invoice invoice = invoiceDAO.getInvoiceById(invoiceId);
-        InvoiceDetailDAO detailDAO = new InvoiceDetailDAO();
-        List<InvoiceDetail> details = detailDAO.getInvoiceDetailsByInvoiceId(invoiceId);
-        
-        // Phục hồi tồn kho cho hóa đơn cũ
-        InventoryDAO inventoryDAO = new InventoryDAO();
-        for (InvoiceDetail detail : details) {
-            Inventory inv = inventoryDAO.getInventoryByProductId(detail.getProductId());
-            if (inv != null) {
-                int newStock = inv.getStockQuantity() + detail.getQuantity();
-                inv.setStockQuantity(newStock);
-                inventoryDAO.updateInventory(inv);
-            }
-        }
-        
+    public void fetchCustomerInfoByPhone() {
+    String phone = invoicePanel.getTxtCustomerPhone().getText().trim();
+    if (!phone.isEmpty()) {
         CustomerDAO customerDAO = new CustomerDAO();
-        Customer cust = customerDAO.getCustomerById(invoice.getCustomerId());
+        Customer cust = customerDAO.getCustomerByPhone(phone);
         if (cust != null) {
             selectedCustomer = cust;
-            invoicePanel.getTxtCustomerPhone().setText(cust.getPhone());
             invoicePanel.getLblCustomerName().setText(cust.getName());
             invoicePanel.getLblCustomerEmail().setText(cust.getEmail());
             invoicePanel.getLblCustomerAddress().setText(cust.getAddress());
+        } else {
+            JOptionPane.showMessageDialog(invoicePanel, "Không tìm thấy khách hàng với SĐT này!");
+            selectedCustomer = null;
         }
-        
-        EmployeeDAO empDAO = new EmployeeDAO();
-        Employee emp = empDAO.getEmployeeById(invoice.getEmployeeId());
-        if (emp != null) {
-            invoicePanel.getCmbEmployee().setSelectedItem(emp);
         }
-        
-        invoicePanel.getCmbPaymentMethod().setSelectedItem(invoice.getPaymentMethod());
-        invoicePanel.getTxtDiscount().setText(invoice.getDiscount().toString());
-        
-        invoicePanel.getDetailTableModel().setRowCount(0);
-        for (InvoiceDetail detail : details) {
-            Product product = new ProductDAO().getProductById(detail.getProductId());
-            int stock = 0;
-            Inventory inv = inventoryDAO.getInventoryByProductId(detail.getProductId());
-            if (inv != null) {
-                stock = inv.getStockQuantity();
-            }
-            BigDecimal price = BigDecimal.valueOf(product.getPrice());
-            BigDecimal subtotal = price.multiply(new BigDecimal(detail.getQuantity()));
-            Object[] rowData = new Object[]{
-                product.getProductId(),
-                product.getName(),
-                stock,
-                detail.getQuantity(),
-                price,
-                subtotal,
-                "Xóa"
-            };
-            invoicePanel.getDetailTableModel().addRow(rowData);
-        }
-        updateSummary();
-        currentInvoiceId = invoice.getInvoiceId();
-        invoicePanel.getBtnCreateInvoice().setText("Cập nhật hóa đơn");
     }
-    
+
+    private void editSelectedInvoice() {
+    int selectedRow = invoicePanel.getInvoiceListTable().getSelectedRow();
+    if (selectedRow == -1) {
+        showMessage("Vui lòng chọn hóa đơn cần sửa!");
+        return;
+    }
+
+    int invoiceId = Integer.parseInt(invoicePanel.getInvoiceListTableModel().getValueAt(selectedRow, 0).toString());
+    InvoiceDAO invoiceDAO = new InvoiceDAO();
+    Invoice invoice = invoiceDAO.getInvoiceById(invoiceId);
+    InvoiceDetailDAO detailDAO = new InvoiceDetailDAO();
+    List<InvoiceDetail> details = detailDAO.getInvoiceDetailsByInvoiceId(invoiceId);
+
+    // Phục hồi tồn kho cho hóa đơn cũ
+    InventoryDAO inventoryDAO = new InventoryDAO();
+    for (InvoiceDetail detail : details) {
+        Inventory inv = inventoryDAO.getInventoryByProductId(detail.getProductId());
+        if (inv != null) {
+            int newStock = inv.getStockQuantity() + detail.getQuantity();
+            inv.setStockQuantity(newStock);
+            inventoryDAO.updateInventory(inv);
+        }
+    }
+
+    if (invoice != null) {
+        CustomerDAO customerDAO = new CustomerDAO();
+        Customer cust = customerDAO.getCustomerById(invoice.getCustomerId());
+        if (cust != null) {
+            invoicePanel.getTxtCustomerPhone().setText(cust.getPhone());
+
+            // 👉 Gọi lại như bấm "Lấy thông tin"
+            fetchCustomerInfoByPhone();
+        }
+    }
+
+    EmployeeDAO empDAO = new EmployeeDAO();
+    Employee emp = empDAO.getEmployeeById(invoice.getEmployeeId());
+    if (emp != null) {
+        invoicePanel.getCmbEmployee().setSelectedItem(emp);
+    }
+
+    invoicePanel.getCmbPaymentMethod().setSelectedItem(invoice.getPaymentMethod());
+    invoicePanel.getTxtDiscount().setText(invoice.getDiscount().toString());
+
+    invoicePanel.getDetailTableModel().setRowCount(0);
+    for (InvoiceDetail detail : details) {
+        Product product = new ProductDAO().getProductById(detail.getProductId());
+        int stock = 0;
+        Inventory inv = inventoryDAO.getInventoryByProductId(detail.getProductId());
+        if (inv != null) {
+            stock = inv.getStockQuantity();
+        }
+        BigDecimal price = BigDecimal.valueOf(product.getPrice());
+        BigDecimal subtotal = price.multiply(new BigDecimal(detail.getQuantity()));
+        Object[] rowData = new Object[]{
+            product.getProductId(),
+            product.getName(),
+            stock,
+            detail.getQuantity(),
+            price,
+            subtotal,
+            "Xóa"
+        };
+        invoicePanel.getDetailTableModel().addRow(rowData);
+    }
+
+    updateSummary();
+    currentInvoiceId = invoice.getInvoiceId();
+    invoicePanel.getBtnCreateInvoice().setText("Cập nhật hóa đơn");
+}
+  
     private void searchInvoiceByPhone() {
         String phone = invoicePanel.getTxtCustomerPhone().getText().trim();
         if (phone.isEmpty()) {

@@ -71,9 +71,27 @@ public class InvoicePanel extends JPanel {
         // Tạo JSplitPane chia top (60%) và danh sách (40%)
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topContainer, invoiceListPanel);
         splitPane.setResizeWeight(0.6);
+//        splitPane.setDividerLocation(0.6)
         splitPane.setDividerSize(8);
         splitPane.setOneTouchExpandable(true);
         add(splitPane, BorderLayout.CENTER);
+        // ⚠️ Set lại divider sau khi layout xong
+SwingUtilities.invokeLater(() -> {
+    splitPane.setDividerLocation(0.6); 
+});
+//// Gói splitPane trong một JPanel để đảm bảo layout chính xác khi scroll
+//JPanel wrapperPanel = new JPanel(new BorderLayout());
+//wrapperPanel.add(splitPane, BorderLayout.CENTER);
+//wrapperPanel.setPreferredSize(new Dimension(1100, 800)); // 👈 chỉnh kích thước bạn mong muốn
+//
+//// Đặt wrapperPanel vào JScrollPane
+//JScrollPane scrollPane = new JScrollPane(wrapperPanel);
+//scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//
+//// Thêm scrollPane vào chính InvoicePanel
+//add(scrollPane, BorderLayout.CENTER);
+
 
         initLogic();
         new InvoiceController(new InvoiceService(), this);
